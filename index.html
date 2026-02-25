@@ -243,81 +243,64 @@
     .notice strong { font-weight: 700; }
 
     /* ─── WELCOME SCREEN ─── */
+    .welcome-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      padding: 40px 0 32px;
+    }
+
     .welcome-hero {
-      text-align: center;
-      padding: 8px 0 16px;
+      text-align: left;
+      padding: 0;
+      position: sticky;
+      top: 40px;
     }
 
     .welcome-logo-wrap {
-      display: inline-flex; align-items: center; gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .welcome-logomark {
-      width: 52px; height: 52px;
-      background: var(--navy);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .welcome-logo-text {
-      font-size: 22px; font-weight: 800; color: var(--navy);
-      letter-spacing: -0.5px;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
     }
 
     .welcome-title {
-      font-size: 40px; font-weight: 900;
+      font-size: 44px; font-weight: 900;
       color: var(--navy);
-      letter-spacing: -1.5px;
+      letter-spacing: -2px;
       line-height: 1.05;
       margin-bottom: 16px;
     }
 
     .welcome-sub {
-      font-size: 16px; color: var(--gray-600);
-      line-height: 1.7;
-      max-width: 560px; margin: 0 auto 24px;
+      font-size: 15px; color: var(--gray-600);
+      line-height: 1.75;
+      margin-bottom: 28px;
     }
 
-    @media (max-width: 520px) {
-      .welcome-title { font-size: 28px; }
+    @media (max-width: 680px) {
+      .welcome-layout { grid-template-columns: 1fr; gap: 32px; }
+      .welcome-hero { position: static; }
+      .welcome-title { font-size: 32px; }
       .geo-grid { grid-template-columns: 1fr !important; }
     }
 
     /* ─── INFO LIST ─── */
     .welcome-info-list {
-      display: flex; flex-direction: column;
-      text-align: left;
-      margin-bottom: 28px;
       border-top: 1px solid var(--gray-200);
     }
     .welcome-info-item {
+      padding: 18px 0;
       border-bottom: 1px solid var(--gray-200);
     }
-    .welcome-info-trigger {
-      display: flex; gap: 16px; align-items: center;
-      padding: 13px 4px; cursor: pointer;
-      user-select: none;
-    }
-    .welcome-info-trigger:hover .welcome-info-label { color: var(--navy-mid); }
-    .welcome-info-icon { font-size: 18px; flex-shrink: 0; }
-    .welcome-info-content { flex: 1; }
+    .welcome-info-icon { font-size: 16px; margin-bottom: 6px; }
     .welcome-info-label {
-      font-size: 12px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.7px;
-      color: var(--navy); transition: color 0.15s;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--navy); margin-bottom: 6px;
     }
-    .welcome-info-arrow {
-      font-size: 14px; color: var(--gray-400);
-      transition: transform 0.2s; flex-shrink: 0;
-    }
-    .welcome-info-item.open .welcome-info-arrow { transform: rotate(90deg); }
-    .welcome-info-body {
-      display: none;
-      padding: 0 4px 18px 38px;
+    .welcome-info-text {
       font-size: 13px; color: var(--gray-600); line-height: 1.7;
     }
-    .welcome-info-item.open .welcome-info-body { display: block; }
 
     /* ─── GEOGRAPHY CARDS ─── */
     .geo-grid {
@@ -884,57 +867,47 @@ function startOver() {
 function renderWelcome() {
   return `
   <div class="step-wrap">
-    <div class="welcome-hero">
-      <div class="welcome-logo-wrap">
-        ${logoSVG('wlc', 220, 37, '#1A2AEB')}
+    <div class="welcome-layout">
+
+      <div class="welcome-hero">
+        <div class="welcome-logo-wrap">
+          ${logoSVG('wlc', 180, 30, '#1A2AEB')}
+        </div>
+        <h1 class="welcome-title">Financed Emissions Calculator</h1>
+        <p class="welcome-sub">
+          Estimate your organization's financed emissions (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. New to financed emissions? Check out our <a href="#" onclick="return false;" style="color:var(--navy);font-weight:600;text-decoration:underline;">guide</a> built for treasury teams.
+        </p>
+        <button class="btn btn-primary btn-lg" onclick="go(1)">Get Started →</button>
+        <div class="notice notice-soft" style="margin-top:24px;text-align:left;">
+          <strong>Data limitations:</strong> Emission factors are illustrative, based on publicly available PCAF methodology.
+          Actual financed emissions vary by bank, loan book composition, and reporting year.
+          <span style="color: hotpink; font-weight: 600;">BEX and JOEL, Here would be a good place for us to link any sort of legal documentation.</span>
+        </div>
       </div>
 
-      <h1 class="welcome-title">Financed Emissions Calculator</h1>
-      <p class="welcome-sub">
-        Estimate your organization's financed emissions (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. New to financed emissions? Check out our <a href="#" onclick="return false;" style="color:var(--navy);font-weight:600;text-decoration:underline;">guide</a> built for treasury teams.
-      </p>
-      <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:20px">Get Started →</button>
-    </div>
+      <div class="welcome-info-list">
+        <div class="welcome-info-item">
+          <div class="welcome-info-icon">📐</div>
+          <div class="welcome-info-label">What this covers</div>
+          <div class="welcome-info-text">This calculator estimates your company's Scope 3 Category 15 financed emissions — the carbon embedded in your banking deposits, money market funds, and sovereign bond holdings. It is designed to give a high-level picture of your treasury's climate exposure — a starting point for understanding the scale and distribution of your financed emissions, not a line-by-line audit.</div>
+        </div>
+        <div class="welcome-info-item">
+          <div class="welcome-info-icon">⚠️</div>
+          <div class="welcome-info-label">What it is not</div>
+          <div class="welcome-info-text">This tool produces indicative estimates, not verified disclosures. Emission factors are sector-wide averages based on publicly available PCAF methodology — your actual figures will vary depending on your specific banks, their lending portfolios, and the reporting year in question. Results are not intended for submission as part of any regulatory filing, third-party audit, or formal emissions inventory. Think of this as a diagnostic: it tells you the order of magnitude of your exposure and where to focus attention, not the precise figure for disclosure.</div>
+        </div>
+        <div class="welcome-info-item">
+          <div class="welcome-info-icon">🔒</div>
+          <div class="welcome-info-label">Your data stays private</div>
+          <div class="welcome-info-text">Everything runs locally in your browser — your inputs are never transmitted to a server, stored in a database, or shared with any third party. When you close or refresh the page, all data is gone. Nothing is tracked or logged.</div>
+        </div>
+        <div class="welcome-info-item">
+          <div class="welcome-info-icon">📬</div>
+          <div class="welcome-info-label">Want deeper analysis?</div>
+          <div class="welcome-info-text">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis. That might mean a detailed breakdown of your financed emissions by institution, a strategy for engaging your banks on their lending and investment practices, or support in aligning your treasury with your broader climate commitments. Whatever your starting point, Topo Finance can help you move from understanding your exposure to acting on it.</div>
+        </div>
+      </div>
 
-    <div class="welcome-info-list">
-      <div class="welcome-info-item open" id="info-covers">
-        <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
-          <span class="welcome-info-icon">📐</span>
-          <div class="welcome-info-content"><div class="welcome-info-label">What this covers</div></div>
-          <span class="welcome-info-arrow">›</span>
-        </div>
-        <div class="welcome-info-body">This calculator estimates your company's Scope 3 Category 15 financed emissions — the carbon embedded in your banking deposits, money market funds, and sovereign bond holdings. It is designed to give a high-level picture of your treasury's climate exposure — a starting point for understanding the scale and distribution of your financed emissions, not a line-by-line audit.</div>
-      </div>
-      <div class="welcome-info-item" id="info-not">
-        <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
-          <span class="welcome-info-icon">⚠️</span>
-          <div class="welcome-info-content"><div class="welcome-info-label">What it is not</div></div>
-          <span class="welcome-info-arrow">›</span>
-        </div>
-        <div class="welcome-info-body">This tool produces indicative estimates, not verified disclosures. Emission factors are sector-wide averages based on publicly available PCAF methodology — your actual figures will vary depending on your specific banks, their lending portfolios, and the reporting year in question. Results are not intended for submission as part of any regulatory filing, third-party audit, or formal emissions inventory. Think of this as a diagnostic: it tells you the order of magnitude of your exposure and where to focus attention, not the precise figure for disclosure.</div>
-      </div>
-      <div class="welcome-info-item" id="info-privacy">
-        <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
-          <span class="welcome-info-icon">🔒</span>
-          <div class="welcome-info-content"><div class="welcome-info-label">Your data stays private</div></div>
-          <span class="welcome-info-arrow">›</span>
-        </div>
-        <div class="welcome-info-body">Everything runs locally in your browser — your inputs are never transmitted to a server, stored in a database, or shared with any third party. When you close or refresh the page, all data is gone. Nothing is tracked or logged.</div>
-      </div>
-      <div class="welcome-info-item" id="info-deeper">
-        <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
-          <span class="welcome-info-icon">📬</span>
-          <div class="welcome-info-content"><div class="welcome-info-label">Want deeper analysis?</div></div>
-          <span class="welcome-info-arrow">›</span>
-        </div>
-        <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis. That might mean a detailed breakdown of your financed emissions by institution, a strategy for engaging your banks on their lending and investment practices, or support in aligning your treasury with your broader climate commitments. Whatever your starting point, Topo Finance can help you move from understanding your exposure to acting on it.</div>
-      </div>
-    </div>
-
-    <div class="notice notice-soft">
-      <strong>Data limitations:</strong> Emission factors are illustrative, based on publicly available PCAF methodology.
-      Actual financed emissions vary by bank, loan book composition, and reporting year.
-      <span style="color: hotpink; font-weight: 600;">BEX and JOEL, Here would be a good place for us to link any sort of legal documentation.</span>
     </div>
   </div>`;
 }
