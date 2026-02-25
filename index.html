@@ -245,7 +245,7 @@
     /* ─── WELCOME SCREEN ─── */
     .welcome-hero {
       text-align: center;
-      padding: 8px 0 32px;
+      padding: 8px 0 16px;
     }
 
     .welcome-logo-wrap {
@@ -266,17 +266,17 @@
     }
 
     .welcome-title {
-      font-size: 56px; font-weight: 900;
+      font-size: 40px; font-weight: 900;
       color: var(--navy);
-      letter-spacing: -2.5px;
+      letter-spacing: -1.5px;
       line-height: 1.05;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .welcome-sub {
       font-size: 16px; color: var(--gray-600);
       line-height: 1.7;
-      max-width: 480px; margin: 0 auto 32px;
+      max-width: 560px; margin: 0 auto 24px;
     }
 
     @media (max-width: 520px) {
@@ -296,7 +296,7 @@
     }
     .welcome-info-trigger {
       display: flex; gap: 16px; align-items: center;
-      padding: 18px 4px; cursor: pointer;
+      padding: 13px 4px; cursor: pointer;
       user-select: none;
     }
     .welcome-info-trigger:hover .welcome-info-label { color: var(--navy-mid); }
@@ -893,7 +893,7 @@ function renderWelcome() {
       <p class="welcome-sub">
         Estimate your organization's financed emissions (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. New to financed emissions? Check out our <a href="#" onclick="return false;" style="color:var(--navy);font-weight:600;text-decoration:underline;">guide</a> built for treasury teams.
       </p>
-      <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:40px">Get Started →</button>
+      <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:20px">Get Started →</button>
     </div>
 
     <div class="welcome-info-list">
