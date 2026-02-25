@@ -249,42 +249,32 @@
     .notice strong { font-weight: 700; }
 
     /* ─── WELCOME SCREEN ─── */
-    .welcome-hero-section {
-      background: var(--navy);
-      padding: 52px 32px 60px;
+    .welcome-hero {
       text-align: center;
+      padding: 32px 0 24px;
     }
-    .welcome-hero-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
+
     .welcome-logo-wrap {
-      display: inline-flex; align-items: center;
-      margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
     }
+
     .welcome-title {
       font-size: 48px; font-weight: 900;
-      color: #ffffff;
+      color: var(--navy);
       letter-spacing: -2px;
       line-height: 1.05;
       margin-bottom: 16px;
     }
+
     .welcome-sub {
-      font-size: 16px; color: rgba(255,255,255,0.75);
+      font-size: 16px; color: var(--gray-600);
       line-height: 1.7;
-      max-width: 460px; margin: 0 auto 32px;
-    }
-    .welcome-sub a { color: #ffffff; font-weight: 600; }
-    .welcome-body {
-      max-width: 660px;
-      margin: 0 auto;
-      padding: 32px 32px 48px;
+      max-width: 480px; margin: 0 auto 28px;
     }
 
     @media (max-width: 520px) {
       .welcome-title { font-size: 32px; }
-      .welcome-hero-section { padding: 40px 24px 48px; }
-      .welcome-body { padding: 24px 20px 40px; }
       .geo-grid { grid-template-columns: 1fr !important; }
     }
 
@@ -886,20 +876,18 @@ function startOver() {
 // ══════════════════════════════════════════
 function renderWelcome() {
   return `
-  <div class="welcome-hero-section">
-    <div class="welcome-hero-inner">
+  <div class="welcome-wrap">
+    <div class="welcome-hero">
       <div class="welcome-logo-wrap">
-        ${logoSVG('wlc', 200, 34, '#ffffff')}
+        ${logoSVG('wlc', 200, 34, '#1A2AEB')}
       </div>
       <h1 class="welcome-title">Financed Emissions Calculator</h1>
       <p class="welcome-sub">
-        Estimate your organization's financed emissions (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. New to financed emissions? Check out our <a href="#" onclick="return false;">guide</a> built for treasury teams.
+        Estimate your organization's financed emissions (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. New to financed emissions? Check out our <a href="#" onclick="return false;" style="color:var(--navy);font-weight:600;text-decoration:underline;">guide</a> built for treasury teams.
       </p>
-      <button class="btn btn-accent btn-lg" onclick="go(1)">Get Started →</button>
+      <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:28px">Get Started →</button>
     </div>
-  </div>
 
-  <div class="welcome-body">
     <div class="welcome-info-list">
       <div class="welcome-info-item open">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -940,8 +928,7 @@ function renderWelcome() {
       Actual financed emissions vary by bank, loan book composition, and reporting year.
       <span style="color: hotpink; font-weight: 600;">BEX and JOEL, Here would be a good place for us to link any sort of legal documentation.</span>
     </div>
-  </div>
-  `;
+  </div>`;
 }
 
 function renderGeography() {
