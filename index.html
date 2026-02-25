@@ -1217,7 +1217,8 @@ function render() {
   const btnNext = document.getElementById('btn-next');
   const btnSkip = document.getElementById('btn-skip');
 
-  document.getElementById('site-footer').style.display = isWelcome ? 'none' : 'flex';
+  const hideFooter = isWelcome || (stepId === 'geography' && !data.geography);
+  document.getElementById('site-footer').style.display = hideFooter ? 'none' : 'flex';
   btnBack.style.display = isWelcome ? 'none' : 'inline-flex';
 
   if (isWelcome) {
