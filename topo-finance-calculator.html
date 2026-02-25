@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Emissions Calculator — Topo Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #1A2AEB;
+      --navy-mid: #3040f0;
+      --accent: #C4E635;
+      --accent-dark: #a8c42a;
+      --bg: #ffffff;
+      --white: #ffffff;
+      --gray-50: #f7f8ff;
+      --gray-100: #f0f1fa;
+      --gray-200: #e2e4f0;
+      --gray-400: #9399b8;
+      --gray-600: #4b5280;
+      --gray-800: #1a1d35;
+      --text: #0d0f24;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 2px 20px rgba(26,42,235,0.07);
+      --shadow-md: 0 8px 40px rgba(26,42,235,0.11);
+      --transition: all 0.18s ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    #site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: var(--navy);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg { display: block; }
+
+    .logo-text {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+    }
+
+    .header-step-label {
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── PROGRESS ─── */
+    #progress-track {
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      z-index: 199;
+      display: none;
+    }
+
+    #progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+
+    /* ─── MAIN ─── */
+    #main {
+      padding-top: 83px;
+      padding-bottom: 96px;
+      min-height: 100vh;
+    }
+
+    .step-wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 40px 24px 24px;
+      animation: stepIn 0.3s ease;
+    }
+
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── FOOTER NAV ─── */
+    #site-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(26,42,235,0.08);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      z-index: 200;
+    }
+
+    .footer-left { display: flex; gap: 8px; align-items: center; }
+    .footer-right { display: flex; gap: 8px; align-items: center; }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      text-decoration: none;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: var(--navy); color: var(--white); border-color: var(--navy);
+    }
+    .btn-primary:hover { background: var(--navy-mid); border-color: var(--navy-mid); }
+    .btn-primary:disabled {
+      background: var(--gray-200); border-color: var(--gray-200);
+      color: var(--gray-400); cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: transparent; color: var(--navy); border-color: var(--gray-200);
+    }
+    .btn-secondary:hover { border-color: var(--navy); background: var(--gray-50); }
+
+    .btn-accent {
+      background: var(--accent); color: var(--navy); border-color: var(--accent);
+    }
+    .btn-accent:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+    .btn-ghost {
+      background: transparent; color: var(--gray-600); border-color: transparent;
+    }
+    .btn-ghost:hover { color: var(--navy); }
+
+    .btn-lg { padding: 14px 36px; font-size: 16px; }
+
+    /* Footer nav buttons — 50% larger than base */
+    #site-footer .btn { padding: 15px 36px; font-size: 21px; }
+
+    /* ─── TYPOGRAPHY ─── */
+    .step-eyebrow {
+      display: inline-block;
+      background: rgba(26,42,235,0.08);
+      color: var(--navy);
+      padding: 5px 13px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-size: 30px; font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+    }
+
+    .step-subtitle {
+      font-size: 15px; color: var(--gray-600);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    .optional-badge {
+      display: inline-block;
+      background: var(--gray-100); color: var(--gray-600);
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      margin-left: 8px; vertical-align: middle;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    /* ─── NOTICE ─── */
+    .notice {
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px; line-height: 1.65;
+    }
+    .notice-soft {
+      background: rgba(15,32,64,0.04);
+      border: 1px solid var(--gray-200);
+      color: var(--gray-600);
+    }
+    .notice-green {
+      background: rgba(196,230,53,0.12);
+      border: 1px solid rgba(196,230,53,0.4);
+      color: #3a4712;
+    }
+    .notice strong { font-weight: 700; }
+
+    /* ─── WELCOME SCREEN ─── */
+    .welcome-hero {
+      text-align: center;
+      padding: 8px 0 32px;
+    }
+
+    .welcome-logo-wrap {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .welcome-logomark {
+      width: 52px; height: 52px;
+      background: var(--navy);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .welcome-logo-text {
+      font-size: 22px; font-weight: 800; color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .welcome-title {
+      font-size: 56px; font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -2.5px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+
+    .welcome-sub {
+      font-size: 16px; color: var(--gray-600);
+      line-height: 1.7;
+      max-width: 480px; margin: 0 auto 36px;
+    }
+
+    .welcome-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; text-align: left;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 520px) {
+      .welcome-cards { grid-template-columns: 1fr; }
+      .welcome-title { font-size: 28px; }
+      .geo-grid { grid-template-columns: 1fr !important; }
+    }
+
+    .welcome-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: var(--transition);
+    }
+    .welcome-card:hover {
+      box-shadow: var(--shadow);
+      border-color: rgba(26,42,235,0.2);
+    }
+
+    .welcome-card-icon { font-size: 22px; margin-bottom: 8px; }
+    .welcome-card-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--navy); margin-bottom: 6px;
+    }
+    .welcome-card-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+    /* ─── GEOGRAPHY CARDS ─── */
+    .geo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .geo-card {
+      cursor: pointer;
+      text-align: center;
+      padding: 36px 20px 28px;
+      border-radius: var(--radius);
+      border: 2px solid var(--gray-200);
+      background: var(--gray-50);
+      transition: all 0.22s ease;
+      user-select: none;
+    }
+    .geo-card:hover {
+      border-color: var(--navy);
+      background: var(--white);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .geo-card.selected {
+      border-color: var(--navy);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(26,42,235,0.1);
+    }
+    .geo-card.selected .geo-label { color: var(--navy); }
+
+    .geo-emoji { font-size: 42px; display: block; margin-bottom: 14px; }
+    .geo-label { font-size: 15px; font-weight: 700; color: var(--navy); }
+    .geo-sub { font-size: 12px; color: var(--gray-400); margin-top: 5px; }
+
+    /* ─── BANK INPUTS ─── */
+    .bank-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .bank-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      transition: var(--transition);
+    }
+    .bank-row:focus-within {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(15,32,64,0.07);
+    }
+
+    .bank-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); min-width: 0; }
+
+    .bank-field {
+      display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .bank-field input {
+      width: 80px; padding: 5px 8px;
+      border: 1.5px solid var(--gray-200); border-radius: 6px;
+      font-size: 13px; color: var(--text);
+      background: var(--gray-50);
+      outline: none; text-align: right;
+      transition: var(--transition);
+    }
+    .bank-field input:focus { border-color: var(--navy); background: var(--white); }
+    .bank-field .unit { font-size: 11px; color: var(--gray-400); font-weight: 600; }
+
+    .total-preview {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 14px;
+      background: rgba(15,32,64,0.04);
+      border-radius: var(--radius-sm);
+      margin-top: 10px;
+      font-size: 13px; color: var(--gray-600);
+    }
+    .total-preview strong { color: var(--navy); font-size: 15px; font-weight: 800; }
+
+    /* ─── SINGLE VALUE INPUT ─── */
+    .big-input-wrap { margin-top: 4px; }
+
+    .big-input-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--white);
+      border: 2.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: var(--transition);
+    }
+    .big-input-row:focus-within { border-color: var(--navy); }
+
+    .big-input-row input {
+      flex: 1; border: none; outline: none;
+      font-size: 28px; font-weight: 700; color: var(--navy);
+      background: transparent; min-width: 0;
+    }
+    .big-input-row input::placeholder { color: var(--gray-200); font-weight: 400; }
+    .big-input-unit { font-size: 13px; color: var(--gray-600); font-weight: 600; flex-shrink: 0; }
+
+    /* ─── PILL BUTTONS ─── */
+    .pill-group { display: flex; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
+
+    .pill-opt {
+      flex: 1; min-width: 160px;
+      padding: 18px 24px;
+      border-radius: 14px;
+      border: 2.5px solid var(--gray-200);
+      background: var(--white);
+      font-size: 15px; font-weight: 600; color: var(--navy);
+      cursor: pointer; text-align: center;
+      transition: var(--transition); user-select: none;
+    }
+    .pill-opt:hover { border-color: var(--navy); box-shadow: var(--shadow); }
+    .pill-opt.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+    /* ─── INFO EXPAND ─── */
+    .info-expand {
+      margin-top: 20px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .info-trigger {
+      width: 100%; padding: 13px 16px;
+      background: rgba(15,32,64,0.03); border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; font-size: 13px; font-weight: 600; color: var(--navy);
+      text-align: left;
+    }
+    .info-trigger:hover { background: rgba(15,32,64,0.06); }
+
+    .info-icon {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--navy);
+      flex-shrink: 0; transition: transform 0.2s ease;
+    }
+    .info-trigger.open .info-icon { transform: rotate(45deg); }
+
+    .info-body {
+      padding: 0 16px;
+      font-size: 13px; color: var(--gray-600); line-height: 1.7;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .info-body.open { max-height: 300px; padding: 0 16px 16px; }
+    .info-body p + p { margin-top: 8px; }
+
+    /* ─── RESULTS ─── */
+    .results-hero {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .results-hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: rgba(196,230,53,0.07);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .results-tag {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+    }
+
+    .results-number {
+      font-size: 58px; font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -3px; line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .results-unit {
+      font-size: 15px; color: rgba(255,255,255,0.6);
+      margin-bottom: 16px;
+    }
+
+    .results-scope-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 14px; color: rgba(255,255,255,0.9);
+    }
+    .results-scope-pill strong { color: var(--accent); }
+
+    .results-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-400);
+      font-size: 15px;
+    }
+
+    /* ─── BAR CHART ─── */
+    .chart-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .chart-heading {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--navy); margin-bottom: 20px;
+    }
+
+    .bar-item { margin-bottom: 18px; }
+    .bar-item:last-child { margin-bottom: 0; }
+
+    .bar-meta {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .bar-label { font-size: 13px; font-weight: 500; color: var(--text); }
+    .bar-value { font-size: 13px; font-weight: 700; color: var(--navy); }
+
+    .bar-track {
+      height: 9px; background: var(--gray-100); border-radius: 100px; overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%; background: var(--navy);
+      border-radius: 100px;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+    .bar-fill.hi { background: var(--accent); }
+
+    /* ─── METHODOLOGY ─── */
+    .method-box {
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-size: 12px; color: var(--gray-600); line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .method-box strong { color: var(--gray-800); }
+
+    /* ─── EMAIL CTA ─── */
+    .email-cta-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+
+    .email-cta-title {
+      font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 7px;
+    }
+    .email-cta-sub {
+      font-size: 14px; color: var(--gray-600); line-height: 1.65; margin-bottom: 20px;
+    }
+
+    .email-row { display: flex; gap: 10px; }
+    @media (max-width: 460px) { .email-row { flex-direction: column; } }
+
+    .email-field {
+      flex: 1; padding: 11px 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 100px; font-size: 14px;
+      outline: none; transition: var(--transition);
+    }
+    .email-field:focus { border-color: var(--navy); }
+
+    .email-success-note {
+      padding: 12px 16px;
+      background: rgba(196,230,53,0.14);
+      border: 1px solid rgba(196,230,53,0.45);
+      border-radius: var(--radius-sm);
+      font-size: 14px; color: #3a4712; font-weight: 500;
+    }
+
+    /* ─── RESULTS FOOTER ACTIONS ─── */
+    .results-actions {
+      display: flex; gap: 10px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 32px;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider { height: 1px; background: var(--gray-200); margin: 24px 0; }
+
+    /* ─── PRINT ─── */
+    @media print {
+      #site-header, #site-footer, #progress-track,
+      .email-cta-card, .results-actions, .no-print { display: none !important; }
+      #main { padding: 0; }
+      .step-wrap { max-width: 100%; padding: 20px; }
+      body { background: white; }
+      .results-hero { background: #1a2a4a !important; -webkit-print-color-adjust: exact; }
+      .chart-card, .method-box { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="site-header">
+  <div class="logo" id="header-logo"></div>
+  <span class="header-title">Financed Emissions Calculator</span>
+  <span class="header-step-label" id="header-step-label"></span>
+</header>
+
+<!-- PROGRESS -->
+<div id="progress-track">
+  <div id="progress-fill"></div>
+</div>
+
+<!-- MAIN -->
+<main id="main">
+  <div id="app"></div>
+</main>
+
+<!-- FOOTER -->
+<footer id="site-footer">
+  <div class="footer-left">
+    <button class="btn btn-secondary" id="btn-back" onclick="go(-1)">← Back</button>
+  </div>
+  <div class="footer-right">
+    <button class="btn btn-ghost" id="btn-skip" onclick="skip()" style="display:none">Skip</button>
+    <button class="btn btn-primary" id="btn-next" onclick="go(1)">Next →</button>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const BANKS = {
+  euGsibs:  ['BNP Paribas', 'HSBC', 'Deutsche Bank', 'Barclays', 'UBS', 'Société Générale', 'UniCredit', 'ING'],
+  euDsibs:  ['ABN AMRO', 'Commerzbank', 'Santander', 'CaixaBank', 'Erste Group'],
+  usGsibs:  ['JPMorgan', 'Bank of America', 'Citigroup', 'Wells Fargo', 'Goldman Sachs', 'Morgan Stanley']
+};
+
+const FACTORS = {
+  euGsibs: 130, euDsibs: 105, euRegional: 85,
+  mmfEuSovereign: 45, mmfUsSovereign: 70,
+  euSovereignDebt: 55, usSovereignDebt: 80,
+  usGsibs: 160, usRegional: 115
+};
+
+function freshData() {
+  return {
+    geography:        null,   // 'europe' | 'us' | 'both'
+    primaryRegion:    null,   // 'europe' | 'us'  — only used when geography === 'both'
+    euGsibs:          BANKS.euGsibs.map(() => ''),
+    euDsibs:          BANKS.euDsibs.map(() => ''),
+    euRegional:       '',
+    mmfEuSovereign:   '',
+    mmfUsSovereign:   '',
+    sovereignGate:    null,
+    euSovereignDebt:  '',
+    usSovereignDebt:  '',
+    usGsibs:          BANKS.usGsibs.map(() => ''),
+    usRegional:       '',
+    scope123:         '',
+    email:            ''
+  };
+}
+
+let data = freshData();
+let stepId = 'welcome';
+
+// ══════════════════════════════════════════
+// STEPS
+// ══════════════════════════════════════════
+const OPTIONAL = new Set(['mmf-eu','mmf-us','eu-sovereign','us-sovereign','scope123']);
+
+// ── Build the ordered visible step list dynamically ──────────────────────────
+// Steps are ordered: welcome → geography → [primary-region?] →
+//   [primary-region bank steps] → [secondary-region bank steps] →
+//   mmf-eu → mmf-us → sovereign-gate → [sovereign debt] → scope123 → results
+function visible() {
+  const s = [];
+
+  s.push({ id: 'welcome',        label: 'Welcome' });
+  s.push({ id: 'geography',      label: 'Where you bank' });
+
+  if (data.geography === 'both') {
+    s.push({ id: 'primary-region', label: 'Primary region' });
+  }
+
+  // Determine region order
+  let regions = [];
+  if (data.geography === 'europe') {
+    regions = ['europe'];
+  } else if (data.geography === 'us') {
+    regions = ['us'];
+  } else if (data.geography === 'both' && data.primaryRegion) {
+    regions = data.primaryRegion === 'europe' ? ['europe','us'] : ['us','europe'];
+  }
+
+  for (const r of regions) {
+    if (r === 'europe') {
+      s.push({ id: 'eu-gsibs',    label: 'European Global Banks'    });
+      s.push({ id: 'eu-dsibs',    label: 'European Domestic Banks'  });
+      s.push({ id: 'eu-regional', label: 'European Regional Banks'  });
+    } else {
+      s.push({ id: 'us-gsibs',    label: 'US Global Banks'    });
+      s.push({ id: 'us-regional', label: 'US Regional Banks'  });
+    }
+  }
+
+  s.push({ id: 'mmf-eu',         label: 'MMF: European Sovereign' });
+  s.push({ id: 'mmf-us',         label: 'MMF: US Sovereign'  });
+  s.push({ id: 'sovereign-gate', label: 'Sovereign Bonds'    });
+
+  if (data.sovereignGate === 'yes') {
+    s.push({ id: 'eu-sovereign', label: 'European Sovereign Debt'   });
+    s.push({ id: 'us-sovereign', label: 'US Treasury Bonds'   });
+  }
+
+  s.push({ id: 'scope123', label: 'Reported Emissions' });
+  s.push({ id: 'results',  label: 'Your Results'       });
+
+  return s;
+}
+
+function curIdx()      { return visible().findIndex(s => s.id === stepId); }
+function curStep()     { return visible().find(s => s.id === stepId); }
+function workingTotal(){ return visible().length - 2; } // excl. welcome + results
+function stepNum()     { return curIdx(); } // visible[0]=welcome → 0; visible[1]=step 1 → 1-based display
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function go(dir) {
+  const vis = visible();
+  const next = curIdx() + dir;
+  if (next >= 0 && next < vis.length) {
+    stepId = vis[next].id;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function skip() { go(1); }
+
+function pickGeo(geo) {
+  data.geography    = geo;
+  data.primaryRegion = null; // reset whenever Q1 changes
+  render();
+}
+
+function pickPrimary(region) {
+  data.primaryRegion = region;
+  render();
+}
+
+function pickSovGate(val) {
+  data.sovereignGate = val;
+  render();
+}
+
+// ══════════════════════════════════════════
+// BANK INPUTS
+// ══════════════════════════════════════════
+function setBank(group, idx, val) {
+  data[group][idx] = val;
+  const el = document.getElementById('total-' + group);
+  if (el) el.textContent = '$' + sumArr(data[group]).toLocaleString() + 'M';
+}
+
+function setField(key, val) { data[key] = val; }
+
+function sumArr(arr) { return arr.reduce((a,b) => a + (parseFloat(b)||0), 0); }
+
+function isEU() { return data.geography === 'europe' || data.geography === 'both'; }
+function isUS() { return data.geography === 'us'     || data.geography === 'both'; }
+
+// ══════════════════════════════════════════
+// CALCULATIONS
+// ══════════════════════════════════════════
+function calcEmissions() {
+  const cats = [];
+
+  if (isEU()) {
+    const eg = sumArr(data.euGsibs); if (eg) cats.push({ label: 'European Global Banks (GSIBs)', val: eg * FACTORS.euGsibs });
+    const ed = sumArr(data.euDsibs); if (ed) cats.push({ label: 'European Domestic Banks (DSIBs)', val: ed * FACTORS.euDsibs });
+    const er = parseFloat(data.euRegional)||0; if (er) cats.push({ label: 'European Regional Banks', val: er * FACTORS.euRegional });
+  }
+  const me = parseFloat(data.mmfEuSovereign)||0; if (me) cats.push({ label: 'MMF: European Sovereign', val: me * FACTORS.mmfEuSovereign });
+  const mu = parseFloat(data.mmfUsSovereign)||0; if (mu) cats.push({ label: 'MMF: US Sovereign', val: mu * FACTORS.mmfUsSovereign });
+
+  if (data.sovereignGate === 'yes') {
+    const es = parseFloat(data.euSovereignDebt)||0; if (es) cats.push({ label: 'European Sovereign Bonds', val: es * FACTORS.euSovereignDebt });
+    const us = parseFloat(data.usSovereignDebt)||0; if (us) cats.push({ label: 'US Treasury Bonds', val: us * FACTORS.usSovereignDebt });
+  }
+  if (isUS()) {
+    const ug = sumArr(data.usGsibs); if (ug) cats.push({ label: 'US Global Banks (GSIBs)', val: ug * FACTORS.usGsibs });
+    const ur = parseFloat(data.usRegional)||0; if (ur) cats.push({ label: 'US Regional Banks', val: ur * FACTORS.usRegional });
+  }
+
+  cats.sort((a,b) => b.val - a.val);
+  return cats;
+}
+
+function fmtNum(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1000)    return (n/1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return Math.round(n).toLocaleString();
+}
+
+// ══════════════════════════════════════════
+// INFO TOGGLE
+// ══════════════════════════════════════════
+function toggleInfo(id) {
+  const body = document.getElementById('info-body-' + id);
+  const btn  = document.getElementById('info-btn-' + id);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+// ══════════════════════════════════════════
+// EMAIL
+// ══════════════════════════════════════════
+function submitEmail() {
+  const input = document.getElementById('email-input');
+  if (!input) return;
+  const val = input.value.trim();
+  if (val && val.includes('@') && val.includes('.')) {
+    data.email = val;
+    document.getElementById('email-form').style.display = 'none';
+    document.getElementById('email-done').style.display  = 'block';
+  } else {
+    input.style.borderColor = '#ef4444';
+    input.focus();
+  }
+}
+
+// ══════════════════════════════════════════
+// START OVER
+// ══════════════════════════════════════════
+function startOver() {
+  data  = freshData();
+  stepId = 'welcome';
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+// ══════════════════════════════════════════
+// STEP RENDERERS
+// ══════════════════════════════════════════
+function renderWelcome() {
+  return `
+  <div class="step-wrap">
+    <div class="welcome-hero">
+      <div class="welcome-logo-wrap">
+        ${logoSVG('wlc', 220, 37, '#1A2AEB')}
+      </div>
+
+      <h1 class="welcome-title">Financed Emissions Calculator</h1>
+      <p class="welcome-sub">
+        Estimate your company's <strong>financed emissions</strong> — Scope 3 Category 15 —
+        across banking relationships, money market funds, and sovereign bond holdings.
+      </p>
+    </div>
+
+    <div class="welcome-cards">
+      <div class="welcome-card">
+        <div class="welcome-card-icon">📐</div>
+        <div class="welcome-card-label">What this covers</div>
+        <div class="welcome-card-text">Scope 3 Cat. 15 financed emissions from bank deposits, MMFs, and sovereign debt — using PCAF-aligned illustrative emission factors.</div>
+      </div>
+      <div class="welcome-card">
+        <div class="welcome-card-icon">⚠️</div>
+        <div class="welcome-card-label">What it is not</div>
+        <div class="welcome-card-text">Not a bank-level audit, not GHG Protocol certified, and not a substitute for verified disclosure. Results are <em>indicative only</em>.</div>
+      </div>
+      <div class="welcome-card">
+        <div class="welcome-card-icon">🔒</div>
+        <div class="welcome-card-label">Your data stays private</div>
+        <div class="welcome-card-text">All calculations run locally in your browser. No data is sent to any server.</div>
+      </div>
+      <div class="welcome-card">
+        <div class="welcome-card-icon">📬</div>
+        <div class="welcome-card-label">Want deeper analysis?</div>
+        <div class="welcome-card-text">Topo Finance offers confidential, bank-grade assessments. Connect with us at the end for an SDA/TFO engagement.</div>
+      </div>
+    </div>
+
+    <div class="notice notice-soft">
+      <strong>Data limitations:</strong> Emission factors are illustrative, based on publicly available PCAF methodology.
+      Actual financed emissions vary by bank, loan book composition, and reporting year.
+    </div>
+  </div>`;
+}
+
+function renderGeography() {
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step 1 of ${workingTotal()}</div>
+    <h2 class="step-title">Does your company hold cash or investments in European banks, US banks, or both?</h2>
+    <p class="step-subtitle">We'll use your answer to determine which banking categories to ask about. Select everything that applies to your treasury.</p>
+
+    <div class="geo-grid">
+      <div class="geo-card ${data.geography==='europe'?'selected':''}" onclick="pickGeo('europe')">
+        <span class="geo-emoji">🌍</span>
+        <div class="geo-label">European banks</div>
+        <div class="geo-sub">European-headquartered banks</div>
+      </div>
+      <div class="geo-card ${data.geography==='us'?'selected':''}" onclick="pickGeo('us')">
+        <span class="geo-emoji">🇺🇸</span>
+        <div class="geo-label">US banks</div>
+        <div class="geo-sub">US-headquartered banks</div>
+      </div>
+      <div class="geo-card ${data.geography==='both'?'selected':''}" onclick="pickGeo('both')">
+        <span class="geo-emoji">🌐</span>
+        <div class="geo-label">Both</div>
+        <div class="geo-sub">Banks in both regions</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderPrimaryRegion() {
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step 2 of ${workingTotal()}</div>
+    <h2 class="step-title">Where is the majority of your cash and investments held?</h2>
+    <p class="step-subtitle">
+      We'll walk through that region first, then come back to cover the other.
+      Either way, both regions will be included in your results.
+    </p>
+
+    <div class="pill-group">
+      <div class="pill-opt ${data.primaryRegion==='europe'?'selected':''}" onclick="pickPrimary('europe')">
+        🌍&nbsp; Majority in European banks
+      </div>
+      <div class="pill-opt ${data.primaryRegion==='us'?'selected':''}" onclick="pickPrimary('us')">
+        🇺🇸&nbsp; Majority in US banks
+      </div>
+    </div>
+
+    ${data.primaryRegion ? `
+      <div class="notice notice-green" style="margin-top:18px; font-size:13px;">
+        ✓ We'll start with
+        <strong>${data.primaryRegion === 'europe' ? 'European' : 'US'} banks</strong>,
+        then circle back to cover
+        <strong>${data.primaryRegion === 'europe' ? 'US' : 'European'} banks</strong>.
+      </div>` : ''}
+  </div>`;
+}
+
+function renderBankStep(title, subtitle, group, banks, factor, infoQ, infoA) {
+  const rows = banks.map((name, i) => `
+    <div class="bank-row">
+      <span class="bank-name">${name}</span>
+      <div class="bank-field">
+        <input type="number" min="0" placeholder="0"
+          value="${data[group][i]||''}"
+          oninput="setBank('${group}',${i},this.value)">
+        <span class="unit">$M</span>
+      </div>
+    </div>`).join('');
+
+  const total = sumArr(data[group]);
+
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
+    <h2 class="step-title">${title}</h2>
+    <p class="step-subtitle">${subtitle}</p>
+
+    <div class="bank-grid">${rows}</div>
+
+    <div class="total-preview">
+      <span>Total entered across all banks</span>
+      <strong id="total-${group}">$${total>0?total.toLocaleString():'0'}M</strong>
+    </div>
+
+    <div class="info-expand">
+      <button class="info-trigger" id="info-btn-${group}" onclick="toggleInfo('${group}')">
+        <span>💡 ${infoQ}</span>
+        <div class="info-icon">+</div>
+      </button>
+      <div class="info-body" id="info-body-${group}">${infoA}</div>
+    </div>
+  </div>`;
+}
+
+function renderSingleStep(title, subtitle, field, optional, emoji) {
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
+    <h2 class="step-title">${emoji} ${title}${optional?'<span class="optional-badge">Optional</span>':''}</h2>
+    <p class="step-subtitle">${subtitle}</p>
+
+    <div class="big-input-wrap">
+      <div class="big-input-row">
+        <input type="number" min="0" placeholder="0"
+          value="${data[field]||''}"
+          oninput="setField('${field}',this.value)">
+        <span class="big-input-unit">USD millions</span>
+      </div>
+    </div>
+    ${optional ? `<div class="notice notice-soft" style="margin-top:14px; font-size:13px;">
+      Leave blank or click <strong>Skip</strong> if this doesn't apply. It won't affect other calculations.
+    </div>` : ''}
+  </div>`;
+}
+
+function renderSovereignGate() {
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
+    <h2 class="step-title">Does your company directly hold sovereign bonds?</h2>
+    <p class="step-subtitle">This includes government bonds held directly in your treasury portfolio — not through money market funds or other intermediaries.</p>
+
+    <div class="pill-group">
+      <div class="pill-opt ${data.sovereignGate==='yes'?'selected':''}" onclick="pickSovGate('yes')">
+        ✓ Yes, we hold sovereign bonds
+      </div>
+      <div class="pill-opt ${data.sovereignGate==='no'?'selected':''}" onclick="pickSovGate('no')">
+        ✗ No direct holdings
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderScope123() {
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
+    <h2 class="step-title">Reported Scope 1, 2 &amp; 3 Emissions <span class="optional-badge">Optional</span></h2>
+    <p class="step-subtitle">
+      If your company has publicly reported total Scope 1, 2 &amp; 3 emissions, enter that figure here.
+      We'll show your financed emissions as a share of your total reported footprint.
+    </p>
+
+    <div class="big-input-wrap">
+      <div class="big-input-row">
+        <input type="number" min="0" placeholder="0"
+          value="${data.scope123||''}"
+          oninput="setField('scope123',this.value)">
+        <span class="big-input-unit">tCO₂e</span>
+      </div>
+    </div>
+
+    <div class="notice notice-green" style="margin-top:14px;">
+      💡 This is optional — your financed emissions will still be calculated without it. Click <strong>Skip</strong> if you don't have this handy.
+    </div>
+  </div>`;
+}
+
+function renderResults() {
+  const cats  = calcEmissions();
+  const total = cats.reduce((s,c) => s + c.val, 0);
+  const maxV  = cats.length ? Math.max(...cats.map(c => c.val)) : 1;
+
+  const scope = parseFloat(data.scope123)||0;
+  const pct   = scope > 0 ? ((total/scope)*100).toFixed(1) : null;
+
+  const heroContent = total > 0 ? `
+    <div class="results-tag">Estimated Financed Emissions</div>
+    <div class="results-number">${fmtNum(total)}</div>
+    <div class="results-unit">tCO₂e / year &nbsp;·&nbsp; Scope 3 Category 15</div>
+    ${pct ? `<div class="results-scope-pill">≈ <strong>${pct}%</strong> of your reported Scope 1, 2 &amp; 3 emissions</div>` : ''}
+  ` : `
+    <div class="results-tag">Estimated Financed Emissions</div>
+    <div class="results-number" style="font-size:36px; letter-spacing:-1px; color:rgba(255,255,255,0.4)">—</div>
+    <div class="results-unit">No values entered yet</div>
+  `;
+
+  const chartHtml = cats.length > 0
+    ? cats.map((c,i) => `
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-label">${c.label}</span>
+          <span class="bar-value">${fmtNum(c.val)} tCO₂e</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill ${i===0?'hi':''}" style="width:${(c.val/maxV*100).toFixed(1)}%"></div>
+        </div>
+      </div>`).join('')
+    : `<div class="results-empty">No emissions entered — go back and add dollar amounts to see a breakdown.</div>`;
+
+  return `
+  <div class="step-wrap">
+    <div class="results-hero">${heroContent}</div>
+
+    <div class="chart-card">
+      <div class="chart-heading">Breakdown by Category</div>
+      ${chartHtml}
+    </div>
+
+    <div class="method-box">
+      <strong>Methodology note:</strong> Emission factors are illustrative, based on PCAF (Partnership for Carbon Accounting Financials)
+      methodology. Factors applied (tCO₂e per $1M): European GSIBs 130 · European DSIBs 105 · European Regional 85 · MMF European Sov. 45 ·
+      MMF US Sov. 70 · European Sov. Debt 55 · US Sov. Debt 80 · US GSIBs 160 · US Regional 115.
+      Results are <strong>for indicative purposes only</strong> and should not be used for regulatory or GHG Protocol reporting.
+    </div>
+
+    <div class="email-cta-card">
+      <div class="email-cta-title">Want a granular, confidential analysis?</div>
+      <div class="email-cta-sub">
+        The Topo Finance team can provide a detailed, bank-level financed emissions assessment
+        tailored to your specific treasury portfolio — fully confidential and PCAF-aligned.
+        Enter your work email and we'll be in touch.
+      </div>
+      <div id="email-form">
+        <div class="email-row">
+          <input type="email" class="email-field" id="email-input"
+            placeholder="you@company.com" value="${data.email}">
+          <button class="btn btn-accent" onclick="submitEmail()">Get in Touch →</button>
+        </div>
+      </div>
+      <div id="email-done" class="email-success-note" style="display:none">
+        ✓ Thanks! The Topo Finance team will reach out shortly.
+      </div>
+    </div>
+
+    <div class="results-actions no-print">
+      <button class="btn btn-secondary" onclick="window.print()">📄 Download / Print Summary</button>
+      <button class="btn btn-ghost" onclick="startOver()">← Start Over</button>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// MAIN RENDER
+// ══════════════════════════════════════════
+function render() {
+  const app  = document.getElementById('app');
+  const vis  = visible();
+  const idx  = curIdx();
+  const isWelcome = stepId === 'welcome';
+  const isResults = stepId === 'results';
+
+  // Header label
+  document.getElementById('header-step-label').textContent =
+    isWelcome ? '' : (curStep()?.label || '');
+
+  // Header visibility
+  const header = document.getElementById('site-header');
+  header.style.display = isWelcome ? 'none' : 'flex';
+  document.getElementById('main').style.paddingTop = isWelcome ? '0' : '83px';
+
+  // Progress
+  const track = document.getElementById('progress-track');
+  const fill  = document.getElementById('progress-fill');
+  if (isWelcome) {
+    track.style.display = 'none';
+  } else {
+    track.style.display = 'block';
+    fill.style.width = (idx / (vis.length - 1) * 100) + '%';
+  }
+
+  // Footer buttons
+  const btnBack = document.getElementById('btn-back');
+  const btnNext = document.getElementById('btn-next');
+  const btnSkip = document.getElementById('btn-skip');
+
+  btnBack.style.display = isWelcome ? 'none' : 'inline-flex';
+
+  if (isWelcome) {
+    btnNext.textContent = 'Get Started →';
+    btnNext.className   = 'btn btn-primary btn-lg';
+    btnNext.disabled    = false;
+    btnSkip.style.display = 'none';
+  } else if (isResults) {
+    btnNext.style.display = 'none';
+    btnSkip.style.display = 'none';
+  } else {
+    btnNext.textContent = 'Next →';
+    btnNext.className   = 'btn btn-primary';
+    btnNext.style.display = 'inline-flex';
+    btnSkip.style.display = OPTIONAL.has(stepId) ? 'inline-flex' : 'none';
+    btnNext.disabled =
+      (stepId === 'geography'       && !data.geography)     ||
+      (stepId === 'primary-region'  && !data.primaryRegion) ||
+      (stepId === 'sovereign-gate'  && !data.sovereignGate);
+  }
+
+  // Content
+  let html = '';
+  switch (stepId) {
+    case 'welcome':      html = renderWelcome(); break;
+    case 'geography':       html = renderGeography();     break;
+    case 'primary-region':  html = renderPrimaryRegion(); break;
+
+    case 'eu-gsibs':
+      html = renderBankStep(
+        'Cash held in European Global Banks (GSIBs)',
+        'Enter the approximate USD equivalent of deposits held at each bank. Leave blank or enter 0 if none.',
+        'euGsibs', BANKS.euGsibs, FACTORS.euGsibs,
+        'What is a GSIB?',
+        `<p>A <strong>Global Systemically Important Bank (GSIB)</strong> is a bank whose failure would pose systemic risk to
+        the global financial system — designated annually by the Financial Stability Board (FSB).</p>
+        <p>European GSIBs carry a factor of <strong>130 tCO₂e per $1M deposited</strong>, reflecting their average portfolio
+        carbon intensity based on publicly available PCAF data.</p>`
+      ); break;
+
+    case 'eu-dsibs':
+      html = renderBankStep(
+        'Cash held in European Domestic Banks (DSIBs)',
+        'Domestic Systemically Important Banks — major national banks not on the global GSIB list.',
+        'euDsibs', BANKS.euDsibs, FACTORS.euDsibs,
+        'What is a DSIB?',
+        `<p>A <strong>Domestic Systemically Important Bank (DSIB)</strong> is designated critical to its national financial
+        system, subject to similar enhanced oversight as GSIBs at the national level.</p>
+        <p>European DSIBs carry a factor of <strong>105 tCO₂e per $1M</strong> — slightly lower than GSIBs due to a
+        less carbon-intensive average loan book.</p>`
+      ); break;
+
+    case 'eu-regional':
+      html = renderSingleStep(
+        'Cash in European Regional Banks',
+        'Enter the total USD equivalent held across all smaller European regional or community banks not listed above.',
+        'euRegional', false, '🏦'
+      ); break;
+
+    case 'mmf-eu':
+      html = renderSingleStep(
+        'MMF: European Sovereign',
+        'Enter the total USD value of money market fund investments that primarily invest in European government securities.',
+        'mmfEuSovereign', true, '💶'
+      ); break;
+
+    case 'mmf-us':
+      html = renderSingleStep(
+        'MMF: US Sovereign',
+        'Enter the total USD value of money market fund investments that primarily invest in US Treasury securities.',
+        'mmfUsSovereign', true, '💵'
+      ); break;
+
+    case 'sovereign-gate':
+      html = renderSovereignGate(); break;
+
+    case 'eu-sovereign':
+      html = renderSingleStep(
+        'European Sovereign Bond Holdings',
+        'Enter the total USD equivalent value of European government bonds held directly in your treasury portfolio.',
+        'euSovereignDebt', true, '🇪🇺'
+      ); break;
+
+    case 'us-sovereign':
+      html = renderSingleStep(
+        'US Treasury Bond Holdings',
+        'Enter the total USD value of US Treasury bonds held directly in your treasury portfolio.',
+        'usSovereignDebt', true, '🏛️'
+      ); break;
+
+    case 'us-gsibs':
+      html = renderBankStep(
+        'Cash held in US Global Banks (GSIBs)',
+        'Enter the approximate USD equivalent of deposits held at each US bank.',
+        'usGsibs', BANKS.usGsibs, FACTORS.usGsibs,
+        'Why do US GSIBs have a higher emission factor?',
+        `<p>US GSIBs carry a factor of <strong>160 tCO₂e per $1M</strong> — higher than European peers — reflecting
+        historically greater exposure to domestic oil & gas, coal, and other high-emission sectors.</p>
+        <p>This is an illustrative aggregate. Individual bank emission intensities vary based on specific
+        loan books, sectoral exposure, and financed emissions reporting.</p>`
+      ); break;
+
+    case 'us-regional':
+      html = renderSingleStep(
+        'Cash in US Regional Banks',
+        'Enter the total USD equivalent held across all smaller US regional or community banks not listed above.',
+        'usRegional', false, '🏦'
+      ); break;
+
+    case 'scope123':
+      html = renderScope123(); break;
+
+    case 'results':
+      html = renderResults(); break;
+
+    default:
+      html = '<div class="step-wrap"><p>Unknown step.</p></div>';
+  }
+
+  app.innerHTML = html;
+
+  // Animate bar fills on results
+  if (stepId === 'results') {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.bar-fill').forEach(el => {
+          const target = el.style.width;
+          el.style.width = '0%';
+          requestAnimationFrame(() => { el.style.width = target; });
+        });
+      });
+    });
+  }
+}
+
+// ══════════════════════════════════════════
+// LOGO
+// ══════════════════════════════════════════
+const LOGO_B64 = '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';
+
+function logoSVG(uid, w, h, color) {
+  return `<svg width="${w}" height="${h}" viewBox="0 0 1500 254" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><mask id="m${uid}" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1500" height="254"><rect width="1500" height="254" fill="url(#p${uid})"/></mask><g mask="url(#m${uid})"><rect x="-39" y="-54" width="1624" height="433" fill="${color}"/></g><defs><pattern id="p${uid}" patternContentUnits="objectBoundingBox" width="1" height="1"><use xlink:href="#i${uid}" transform="scale(0.000666667 0.00393701)"/></pattern><image id="i${uid}" width="1500" height="254" preserveAspectRatio="none" xlink:href="data:image/png;base64,${LOGO_B64}"/></defs></svg>`;
+}
+
+// ══════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════
+document.getElementById('header-logo').innerHTML = logoSVG('hdr', 130, 22, '#ffffff');
+render();
+</script>
+</body>
+</html>
