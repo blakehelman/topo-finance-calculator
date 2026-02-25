@@ -1337,7 +1337,10 @@ function logoSVG(uid, w, h, color) {
 // ══════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════
-document.getElementById('header-logo').innerHTML = logoSVG('hdr', 130, 22, '#ffffff');
+const headerLogo = document.getElementById('header-logo');
+headerLogo.innerHTML = logoSVG('hdr', 130, 22, '#ffffff');
+headerLogo.style.cursor = 'pointer';
+headerLogo.addEventListener('click', () => { stepId = 'welcome'; data = freshData(); render(); });
 render();
 </script>
 </body>
