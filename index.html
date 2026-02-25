@@ -122,7 +122,12 @@
     .step-wrap {
       max-width: 660px;
       margin: 0 auto;
-      padding: 40px 24px 24px;
+      padding: 24px 24px 24px;
+    }
+
+    .step-wrap:has(.welcome-layout) {
+      max-width: 860px;
+      padding-top: 16px;
     }
 
     /* ─── FOOTER NAV ─── */
@@ -248,7 +253,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 64px;
       align-items: start;
-      padding: 40px 0 32px;
+      padding: 0 0 32px;
     }
 
     .welcome-hero {
