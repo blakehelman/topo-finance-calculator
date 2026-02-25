@@ -122,7 +122,13 @@
     .step-wrap {
       max-width: 660px;
       margin: 0 auto;
-      padding: 24px 24px 24px;
+      padding: 24px 32px 24px;
+    }
+
+    .welcome-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 32px 40px;
     }
 
     /* ─── FOOTER NAV ─── */
@@ -245,30 +251,30 @@
     /* ─── WELCOME SCREEN ─── */
     .welcome-hero {
       text-align: center;
-      padding: 0 0 20px;
+      padding: 32px 0 24px;
     }
 
     .welcome-logo-wrap {
       display: inline-flex; align-items: center; gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .welcome-title {
-      font-size: 40px; font-weight: 900;
+      font-size: 48px; font-weight: 900;
       color: var(--navy);
-      letter-spacing: -1.5px;
+      letter-spacing: -2px;
       line-height: 1.05;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .welcome-sub {
-      font-size: 15px; color: var(--gray-600);
-      line-height: 1.75;
-      max-width: 520px; margin: 0 auto 24px;
+      font-size: 16px; color: var(--gray-600);
+      line-height: 1.7;
+      max-width: 480px; margin: 0 auto 28px;
     }
 
     @media (max-width: 520px) {
-      .welcome-title { font-size: 28px; }
+      .welcome-title { font-size: 32px; }
       .geo-grid { grid-template-columns: 1fr !important; }
     }
 
@@ -870,7 +876,7 @@ function startOver() {
 // ══════════════════════════════════════════
 function renderWelcome() {
   return `
-  <div class="step-wrap">
+  <div class="welcome-wrap">
     <div class="welcome-hero">
       <div class="welcome-logo-wrap">
         ${logoSVG('wlc', 200, 34, '#1A2AEB')}
