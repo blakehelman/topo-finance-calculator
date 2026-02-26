@@ -720,6 +720,87 @@
       .equiv-strip { grid-template-columns: 1fr; }
       .insight-grid { grid-template-columns: 1fr; }
       .scope-compare-grid { grid-template-columns: 1fr; }
+      .risk-row { grid-template-columns: 1fr; }
+    }
+
+    /* ─── RISK OVERVIEW ROW ─── */
+    .risk-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .risk-tile {
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      border: 1.5px solid;
+    }
+    .risk-tile-high    { background: rgba(220,38,38,0.06);   border-color: rgba(220,38,38,0.2); }
+    .risk-tile-medium  { background: rgba(245,158,11,0.06);  border-color: rgba(245,158,11,0.2); }
+    .risk-tile-low     { background: rgba(34,197,94,0.06);   border-color: rgba(34,197,94,0.2); }
+    .risk-tile-monitor { background: rgba(26,42,235,0.05);   border-color: rgba(26,42,235,0.18); }
+    .risk-tile-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--gray-400); margin-bottom: 6px;
+    }
+    .risk-tile-level { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; margin-bottom: 5px; }
+    .risk-tile-high    .risk-tile-level { color: #991b1b; }
+    .risk-tile-medium  .risk-tile-level { color: #92400e; }
+    .risk-tile-low     .risk-tile-level { color: #166534; }
+    .risk-tile-monitor .risk-tile-level { color: var(--navy); }
+    .risk-tile-sub { font-size: 12px; color: var(--gray-500); line-height: 1.4; }
+
+    /* ─── TRANSITION RISK DETAIL ─── */
+    .trans-risk-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .trans-risk-note {
+      font-size: 12px; color: var(--gray-400);
+      margin-bottom: 16px; margin-top: -10px;
+    }
+    .bank-risk-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .bank-risk-row:last-child { border-bottom: none; }
+    .bank-risk-name { font-size: 14px; font-weight: 600; color: var(--text); min-width: 130px; flex-shrink: 0; }
+    .bank-risk-note { font-size: 12px; color: var(--gray-400); flex: 1; line-height: 1.4; }
+    .bank-risk-pill {
+      font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    .bank-risk-pill-high   { background: rgba(220,38,38,0.1);  color: #991b1b; }
+    .bank-risk-pill-medium { background: rgba(245,158,11,0.1); color: #92400e; }
+    .bank-risk-pill-low    { background: rgba(34,197,94,0.1);  color: #166534; }
+
+    /* ─── TOPO TEASER ─── */
+    .topo-teaser-card {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+    .topo-teaser-heading {
+      font-size: 17px; font-weight: 800;
+      color: var(--white); margin-bottom: 14px;
+    }
+    .topo-teaser-list { margin: 0 0 18px 18px; padding: 0; }
+    .topo-teaser-list li {
+      font-size: 14px; color: rgba(255,255,255,0.75);
+      line-height: 1.65; margin-bottom: 8px;
+    }
+    .topo-teaser-list li strong { color: var(--accent); font-weight: 600; }
+    .topo-teaser-cta {
+      font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.65;
+      border-top: 1px solid rgba(255,255,255,0.15); padding-top: 16px;
     }
 
     /* ─── PRINT ─── */
@@ -779,6 +860,29 @@ const FACTORS = {
   mmfEuSovereign: 45, mmfUsSovereign: 70,
   euSovereignDebt: 55, usSovereignDebt: 80,
   usGsibs: 160, usRegional: 115
+};
+
+// Transition risk ratings based on publicly available fossil fuel financing data (illustrative)
+const TRANSITION_RISK = {
+  'BNP Paribas':      { level: 'medium', note: 'Paris-aligned pledge; moderate fossil fuel exposure' },
+  'HSBC':             { level: 'high',   note: 'Net-zero pledge under scrutiny; ongoing fossil fuel financing' },
+  'Deutsche Bank':    { level: 'medium', note: 'Reducing coal exposure; ongoing fossil fuel financing' },
+  'Barclays':         { level: 'high',   note: "One of Europe's largest fossil fuel financiers" },
+  'UBS':              { level: 'low',    note: 'Lower fossil fuel exposure relative to peers' },
+  'Société Générale': { level: 'medium', note: 'Active fossil fuel reduction commitments' },
+  'UniCredit':        { level: 'medium', note: 'Moderate transition risk; EU-focused loan book' },
+  'ING':              { level: 'low',    note: 'Terra approach; below-average fossil fuel exposure' },
+  'ABN AMRO':         { level: 'low',    note: 'Strong sustainability commitments; Dutch regulatory environment' },
+  'Commerzbank':      { level: 'medium', note: 'Moderate fossil fuel exposure; improving trajectory' },
+  'Santander':        { level: 'medium', note: 'Significant LatAm exposure including fossil fuels' },
+  'CaixaBank':        { level: 'low',    note: 'Primarily domestic Spanish market; lower fossil exposure' },
+  'Erste Group':      { level: 'low',    note: 'Central European focus; limited fossil fuel lending' },
+  'JPMorgan':         { level: 'high',   note: "World's largest fossil fuel financier since Paris Agreement" },
+  'Bank of America':  { level: 'medium', note: 'Net-zero commitment; ongoing fossil fuel financing' },
+  'Citigroup':        { level: 'high',   note: 'Top-5 global fossil fuel financier' },
+  'Wells Fargo':      { level: 'high',   note: 'Significant fossil fuel lending; limited public disclosure' },
+  'Goldman Sachs':    { level: 'medium', note: 'Investment banking exposure to fossil fuel sectors' },
+  'Morgan Stanley':   { level: 'medium', note: 'Net-zero commitment; active transition finance' },
 };
 
 function freshData() {
@@ -1240,6 +1344,21 @@ function renderResults() {
   const usGsibDeposits = sumArr(data.usGsibs);
   const whatIfSaving   = usGsibDeposits > 0 ? Math.round(usGsibDeposits * (FACTORS.usGsibs - FACTORS.euGsibs)) : 0;
 
+  // ─── Risk calculations ───
+  const topPct    = (total > 0 && cats.length > 0) ? Math.round((cats[0].val / total) * 100) : 0;
+  const concLevel = topPct >= 60 ? 'high' : topPct >= 35 ? 'medium' : 'low';
+  const concLabel = topPct >= 60 ? 'HIGH' : topPct >= 35 ? 'MEDIUM' : 'LOW';
+
+  // Collect only banks the user has entered deposits for
+  const heldBanks = [];
+  BANKS.euGsibs.forEach((b, i) => { if ((parseFloat(data.euGsibs[i])||0) > 0) heldBanks.push(b); });
+  BANKS.euDsibs.forEach((b, i) => { if ((parseFloat(data.euDsibs[i])||0) > 0) heldBanks.push(b); });
+  BANKS.usGsibs.forEach((b, i) => { if ((parseFloat(data.usGsibs[i])||0) > 0) heldBanks.push(b); });
+
+  const highRiskCount = heldBanks.filter(b => TRANSITION_RISK[b] && TRANSITION_RISK[b].level === 'high').length;
+  const transLevel = highRiskCount > 0 ? 'high' : heldBanks.some(b => TRANSITION_RISK[b] && TRANSITION_RISK[b].level === 'medium') ? 'medium' : 'low';
+  const transLabel = transLevel === 'high' ? 'HIGH' : transLevel === 'medium' ? 'MEDIUM' : 'LOW';
+
   // ─── Hero ───
   const heroContent = total > 0 ? `
     <div class="results-tag">Estimated Financed Emissions</div>
@@ -1313,6 +1432,56 @@ function renderResults() {
     ${rightCard}
   </div>` : '';
 
+  // ─── Risk overview row ───
+  const riskRowHtml = total > 0 ? `
+  <div class="risk-row">
+    <div class="risk-tile risk-tile-${concLevel}">
+      <div class="risk-tile-label">Concentration Risk</div>
+      <div class="risk-tile-level">${concLabel}</div>
+      <div class="risk-tile-sub">${topPct > 0 ? `${topPct}% of emissions from one relationship` : 'Enter values to assess'}</div>
+    </div>
+    <div class="risk-tile risk-tile-${transLevel}">
+      <div class="risk-tile-label">Transition Risk</div>
+      <div class="risk-tile-level">${heldBanks.length > 0 ? transLabel : '—'}</div>
+      <div class="risk-tile-sub">${highRiskCount > 0 ? `${highRiskCount} high-risk bank${highRiskCount > 1 ? 's' : ''} identified` : heldBanks.length > 0 ? 'No high-risk banks held' : 'Enter named banks to assess'}</div>
+    </div>
+    <div class="risk-tile risk-tile-monitor">
+      <div class="risk-tile-label">Regulatory Exposure</div>
+      <div class="risk-tile-level">MONITOR</div>
+      <div class="risk-tile-sub">CSRD & SEC climate disclosure rules apply to Scope 3 Cat. 15</div>
+    </div>
+  </div>` : '';
+
+  // ─── Transition risk detail ───
+  const transDetailHtml = heldBanks.length > 0 ? `
+  <div class="trans-risk-card">
+    <div class="chart-heading">Transition Risk by Banking Relationship</div>
+    <div class="trans-risk-note">Based on publicly available fossil fuel financing data. Illustrative — Topo Finance can provide proprietary bank-level assessments.</div>
+    ${heldBanks.map(b => {
+      const r = TRANSITION_RISK[b] || { level: 'medium', note: 'Insufficient public data' };
+      const labels = { high: 'High', medium: 'Medium', low: 'Low' };
+      return `
+    <div class="bank-risk-row">
+      <div class="bank-risk-name">${b}</div>
+      <div class="bank-risk-note">${r.note}</div>
+      <div class="bank-risk-pill bank-risk-pill-${r.level}">${labels[r.level]}</div>
+    </div>`;
+    }).join('')}
+  </div>` : '';
+
+  // ─── Topo teaser ───
+  const topoTeaserHtml = `
+  <div class="topo-teaser-card">
+    <div class="topo-teaser-heading">What this tool can't tell you</div>
+    <ul class="topo-teaser-list">
+      <li>Which of your high-risk banks are <strong>actually reducing fossil fuel exposure</strong> — vs just making pledges</li>
+      <li>How your financed emissions compare to <strong>peer treasury teams</strong> at companies your size</li>
+      <li>Which specific relationships create the most <strong>CSRD reporting risk</strong> in 2025 and beyond</li>
+      <li>What a realistic <strong>decarbonisation pathway</strong> looks like for your treasury portfolio without sacrificing yield or liquidity</li>
+    </ul>
+    <div class="topo-teaser-cta">Topo Finance provides confidential, bank-level transition risk analysis built specifically for corporate treasury. The answers above are in our data.</div>
+  </div>`;
+
   // ─── Bar chart ───
   const chartHtml = cats.length > 0
     ? cats.map((c,i) => `
@@ -1365,13 +1534,16 @@ function renderResults() {
   <div class="step-wrap">
     <div class="results-hero">${heroContent}</div>
     ${equivHtml}
+    ${riskRowHtml}
     ${insightHtml}
     <div class="chart-card">
       <div class="chart-heading">Breakdown by Category</div>
       ${chartHtml}
     </div>
+    ${transDetailHtml}
     ${whatIfHtml}
     ${scopeContextHtml}
+    ${topoTeaserHtml}
     <div class="method-box">
       <strong>Methodology note:</strong> Emission factors are illustrative, based on PCAF (Partnership for Carbon Accounting Financials)
       methodology. Factors applied (tCO₂e per $1M): European GSIBs 130 · European DSIBs 105 · European Regional 85 · MMF European Sov. 45 ·
