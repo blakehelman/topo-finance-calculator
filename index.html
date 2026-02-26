@@ -612,6 +612,116 @@
     /* ─── DIVIDER ─── */
     .divider { height: 1px; background: var(--gray-200); margin: 24px 0; }
 
+    /* ─── EQUIVALENTS STRIP ─── */
+    .equiv-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .equiv-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .equiv-icon { font-size: 22px; margin-bottom: 8px; }
+    .equiv-number {
+      font-size: 28px; font-weight: 900;
+      color: var(--navy); letter-spacing: -1px; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .equiv-label { font-size: 12px; color: var(--gray-500); line-height: 1.4; }
+
+    /* ─── INSIGHT CARDS ─── */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .insight-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .insight-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--gray-400); margin-bottom: 8px;
+    }
+    .insight-value {
+      font-size: 22px; font-weight: 900;
+      color: var(--navy); letter-spacing: -0.5px;
+      line-height: 1.2; margin-bottom: 6px;
+    }
+    .insight-sub { font-size: 13px; color: var(--gray-500); line-height: 1.55; }
+
+    /* ─── SPLIT BAR ─── */
+    .split-bar-wrap { margin-top: 12px; }
+    .split-bar-track {
+      height: 8px; background: var(--gray-100);
+      border-radius: 100px; overflow: hidden;
+      display: flex;
+    }
+    .split-bar-eu {
+      background: var(--navy); height: 100%;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+    .split-bar-us {
+      background: var(--accent); height: 100%;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+    .split-legend { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+    .split-legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--gray-600);
+    }
+    .split-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── WHAT-IF CARD ─── */
+    .whatif-card {
+      background: rgba(196,230,53,0.08);
+      border: 1.5px solid rgba(196,230,53,0.45);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .whatif-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: #5a6a00; margin-bottom: 8px;
+    }
+    .whatif-value {
+      font-size: 26px; font-weight: 900;
+      color: #2a4000; letter-spacing: -0.5px;
+      margin-bottom: 6px; line-height: 1.1;
+    }
+    .whatif-sub { font-size: 13px; color: #4a5a10; line-height: 1.6; }
+
+    /* ─── SCOPE COMPARE ─── */
+    .scope-compare-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin: 10px 0 14px;
+    }
+    .scope-compare-sublabel { font-size: 11px; color: var(--gray-400); margin-bottom: 4px; }
+    .scope-compare-number {
+      font-size: 22px; font-weight: 900;
+      letter-spacing: -0.5px; line-height: 1.1;
+    }
+    .scope-compare-unit { font-size: 12px; color: var(--gray-400); }
+    .scope-compare-note { font-size: 13px; color: var(--gray-500); line-height: 1.65; }
+
+    @media (max-width: 560px) {
+      .equiv-strip { grid-template-columns: 1fr; }
+      .insight-grid { grid-template-columns: 1fr; }
+      .scope-compare-grid { grid-template-columns: 1fr; }
+    }
+
     /* ─── PRINT ─── */
     @media print {
       #site-header, #site-footer, #progress-track,
@@ -1096,6 +1206,41 @@ function renderResults() {
   const scope = parseFloat(data.scope123)||0;
   const pct   = scope > 0 ? ((total/scope)*100).toFixed(1) : null;
 
+  // ─── Equivalents ───
+  const cars    = total > 0 ? Math.round(total / 4.6) : 0;
+  const flights = total > 0 ? Math.round(total / 1.7) : 0;
+  const homes   = total > 0 ? Math.round(total / 2.7) : 0;
+
+  // ─── EU / US split ───
+  const euTotal =
+    (sumArr(data.euGsibs) * FACTORS.euGsibs) +
+    (sumArr(data.euDsibs) * FACTORS.euDsibs) +
+    ((parseFloat(data.euRegional)||0) * FACTORS.euRegional) +
+    ((parseFloat(data.mmfEuSovereign)||0) * FACTORS.mmfEuSovereign) +
+    ((parseFloat(data.euSovereignDebt)||0) * FACTORS.euSovereignDebt);
+  const usTotal =
+    (sumArr(data.usGsibs) * FACTORS.usGsibs) +
+    ((parseFloat(data.usRegional)||0) * FACTORS.usRegional) +
+    ((parseFloat(data.mmfUsSovereign)||0) * FACTORS.mmfUsSovereign) +
+    ((parseFloat(data.usSovereignDebt)||0) * FACTORS.usSovereignDebt);
+
+  const showSplit = euTotal > 0 && usTotal > 0;
+  const euPct = showSplit ? Math.round(euTotal / total * 100) : null;
+  const usPct = showSplit ? (100 - euPct) : null;
+
+  // ─── Intensity ───
+  const totalExp =
+    sumArr(data.euGsibs) + sumArr(data.euDsibs) + (parseFloat(data.euRegional)||0) +
+    (parseFloat(data.mmfEuSovereign)||0) + (parseFloat(data.mmfUsSovereign)||0) +
+    (parseFloat(data.euSovereignDebt)||0) + (parseFloat(data.usSovereignDebt)||0) +
+    sumArr(data.usGsibs) + (parseFloat(data.usRegional)||0);
+  const intensity = (totalExp > 0 && total > 0) ? Math.round(total / totalExp) : null;
+
+  // ─── What-if (US GSIBs → EU GSIBs) ───
+  const usGsibDeposits = sumArr(data.usGsibs);
+  const whatIfSaving   = usGsibDeposits > 0 ? Math.round(usGsibDeposits * (FACTORS.usGsibs - FACTORS.euGsibs)) : 0;
+
+  // ─── Hero ───
   const heroContent = total > 0 ? `
     <div class="results-tag">Estimated Financed Emissions</div>
     <div class="results-number">${fmtNum(total)}</div>
@@ -1107,6 +1252,68 @@ function renderResults() {
     <div class="results-unit">No values entered yet</div>
   `;
 
+  // ─── Equivalents strip ───
+  const equivHtml = total > 0 ? `
+  <div class="equiv-strip">
+    <div class="equiv-card">
+      <div class="equiv-icon">🚗</div>
+      <div class="equiv-number">${fmtNum(cars)}</div>
+      <div class="equiv-label">cars driven for a year</div>
+    </div>
+    <div class="equiv-card">
+      <div class="equiv-icon">✈️</div>
+      <div class="equiv-number">${fmtNum(flights)}</div>
+      <div class="equiv-label">return flights New York – London</div>
+    </div>
+    <div class="equiv-card">
+      <div class="equiv-icon">🏠</div>
+      <div class="equiv-number">${fmtNum(homes)}</div>
+      <div class="equiv-label">UK homes' annual energy use</div>
+    </div>
+  </div>` : '';
+
+  // ─── Insight cards ───
+  const topCat = cats[0];
+  const topEmitterCard = topCat ? `
+    <div class="insight-card">
+      <div class="insight-label">Highest-Impact Relationship</div>
+      <div class="insight-value">${fmtNum(topCat.val)} tCO₂e</div>
+      <div class="insight-sub">${topCat.label} — your single largest source of financed emissions</div>
+    </div>` : '';
+
+  let rightCard = '';
+  if (showSplit) {
+    rightCard = `
+    <div class="insight-card">
+      <div class="insight-label">European vs US Split</div>
+      <div class="insight-value">${euPct}% European · ${usPct}% US</div>
+      <div class="split-bar-wrap">
+        <div class="split-bar-track">
+          <div class="split-bar-eu" data-target="${euPct}"></div>
+          <div class="split-bar-us" data-target="${usPct}"></div>
+        </div>
+        <div class="split-legend">
+          <div class="split-legend-item"><div class="split-dot" style="background:var(--navy)"></div>${fmtNum(euTotal)} tCO₂e European</div>
+          <div class="split-legend-item"><div class="split-dot" style="background:var(--accent)"></div>${fmtNum(usTotal)} tCO₂e US</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (intensity) {
+    rightCard = `
+    <div class="insight-card">
+      <div class="insight-label">Emissions Intensity</div>
+      <div class="insight-value">${intensity} tCO₂e / $1M</div>
+      <div class="insight-sub">Average emission factor across your $${fmtNum(totalExp)}M total exposure</div>
+    </div>`;
+  }
+
+  const insightHtml = (topEmitterCard || rightCard) ? `
+  <div class="insight-grid">
+    ${topEmitterCard}
+    ${rightCard}
+  </div>` : '';
+
+  // ─── Bar chart ───
   const chartHtml = cats.length > 0
     ? cats.map((c,i) => `
       <div class="bar-item">
@@ -1120,20 +1327,57 @@ function renderResults() {
       </div>`).join('')
     : `<div class="results-empty">No emissions entered — go back and add dollar amounts to see a breakdown.</div>`;
 
+  // ─── What-if ───
+  const whatIfHtml = whatIfSaving > 500 ? `
+  <div class="whatif-card">
+    <div class="whatif-label">Scenario: European Banking Switch</div>
+    <div class="whatif-value">−${fmtNum(whatIfSaving)} tCO₂e</div>
+    <div class="whatif-sub">
+      If your US GSIB deposits were held at European-equivalent banks, your estimated financed emissions
+      could be approximately <strong>${fmtNum(whatIfSaving)} tCO₂e lower</strong> — a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
+      US GSIBs carry a 23% higher emission factor per dollar than European GSIBs.
+    </div>
+  </div>` : '';
+
+  // ─── Scope context ───
+  const scopeContextHtml = (scope > 0 && total > 0) ? `
+  <div class="insight-card" style="margin-bottom:16px;">
+    <div class="insight-label">Financed vs Operational Emissions</div>
+    <div class="scope-compare-grid">
+      <div>
+        <div class="scope-compare-sublabel">Reported Scope 1, 2 &amp; 3</div>
+        <div class="scope-compare-number" style="color:var(--gray-500)">${fmtNum(scope)}</div>
+        <div class="scope-compare-unit">tCO₂e</div>
+      </div>
+      <div>
+        <div class="scope-compare-sublabel">Financed Emissions</div>
+        <div class="scope-compare-number" style="color:var(--navy)">${fmtNum(total)}</div>
+        <div class="scope-compare-unit">tCO₂e · ${pct}% of total</div>
+      </div>
+    </div>
+    <div class="scope-compare-note">
+      For most companies, financed emissions are a small but increasingly scrutinised portion of total footprint —
+      and are now reportable under GHG Protocol Scope 3, Category 15.
+    </div>
+  </div>` : '';
+
   return `
   <div class="step-wrap">
     <div class="results-hero">${heroContent}</div>
-
+    ${equivHtml}
+    ${insightHtml}
     <div class="chart-card">
       <div class="chart-heading">Breakdown by Category</div>
       ${chartHtml}
     </div>
-
+    ${whatIfHtml}
+    ${scopeContextHtml}
     <div class="method-box">
       <strong>Methodology note:</strong> Emission factors are illustrative, based on PCAF (Partnership for Carbon Accounting Financials)
       methodology. Factors applied (tCO₂e per $1M): European GSIBs 130 · European DSIBs 105 · European Regional 85 · MMF European Sov. 45 ·
       MMF US Sov. 70 · European Sov. Debt 55 · US Sov. Debt 80 · US GSIBs 160 · US Regional 115.
       Results are <strong>for indicative purposes only</strong> and should not be used for regulatory or GHG Protocol reporting.
+      Real-world equivalents: 4.6 tCO₂e/car/year (EPA), 1.7 tCO₂e/transatlantic return flight, 2.7 tCO₂e/UK home/year.
     </div>
 
     <div class="email-cta-card">
@@ -1316,12 +1560,17 @@ function render() {
 
   app.innerHTML = html;
 
-  // Animate bar fills on results
+  // Animate bar fills and split bars on results
   if (stepId === 'results') {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         document.querySelectorAll('.bar-fill').forEach(el => {
           const target = el.style.width;
+          el.style.width = '0%';
+          requestAnimationFrame(() => { el.style.width = target; });
+        });
+        document.querySelectorAll('.split-bar-eu, .split-bar-us').forEach(el => {
+          const target = (el.dataset.target || '0') + '%';
           el.style.width = '0%';
           requestAnimationFrame(() => { el.style.width = target; });
         });
