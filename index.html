@@ -1237,11 +1237,8 @@ function render() {
         'Cash held in European Global Banks (GSIBs)',
         'Enter the approximate USD equivalent of deposits held at each bank. Leave blank or enter 0 if none.',
         'euGsibs', BANKS.euGsibs, FACTORS.euGsibs,
-        'What is a GSIB?',
-        `<p>A <strong>Global Systemically Important Bank (GSIB)</strong> is a bank whose failure would pose systemic risk to
-        the global financial system — designated annually by the Financial Stability Board (FSB).</p>
-        <p>European GSIBs carry a factor of <strong>130 tCO₂e per $1M deposited</strong>, reflecting their average portfolio
-        carbon intensity based on publicly available PCAF data.</p>`
+        'About this emission factor',
+        `<p>European GSIBs carry a factor of <strong>130 tCO₂e per $1M deposited</strong>, reflecting their average portfolio carbon intensity based on publicly available PCAF data. Individual bank intensities vary by loan book composition and sectoral exposure.</p>`
       ); break;
 
     case 'eu-dsibs':
@@ -1249,11 +1246,8 @@ function render() {
         'Cash held in European Domestic Banks (DSIBs)',
         'Domestic Systemically Important Banks — major national banks not on the global GSIB list.',
         'euDsibs', BANKS.euDsibs, FACTORS.euDsibs,
-        'What is a DSIB?',
-        `<p>A <strong>Domestic Systemically Important Bank (DSIB)</strong> is designated critical to its national financial
-        system, subject to similar enhanced oversight as GSIBs at the national level.</p>
-        <p>European DSIBs carry a factor of <strong>105 tCO₂e per $1M</strong> — slightly lower than GSIBs due to a
-        less carbon-intensive average loan book.</p>`
+        'About this emission factor',
+        `<p>European DSIBs carry a factor of <strong>105 tCO₂e per $1M deposited</strong> — slightly lower than GSIBs, reflecting a less carbon-intensive average loan book composition based on publicly available PCAF data.</p>`
       ); break;
 
     case 'eu-regional':
@@ -1299,11 +1293,8 @@ function render() {
         'Cash held in US Global Banks (GSIBs)',
         'Enter the approximate USD equivalent of deposits held at each US bank.',
         'usGsibs', BANKS.usGsibs, FACTORS.usGsibs,
-        'Why do US GSIBs have a higher emission factor?',
-        `<p>US GSIBs carry a factor of <strong>160 tCO₂e per $1M</strong> — higher than European peers — reflecting
-        historically greater exposure to domestic oil & gas, coal, and other high-emission sectors.</p>
-        <p>This is an illustrative aggregate. Individual bank emission intensities vary based on specific
-        loan books, sectoral exposure, and financed emissions reporting.</p>`
+        'About this emission factor',
+        `<p>US GSIBs carry a factor of <strong>160 tCO₂e per $1M deposited</strong> — higher than European peers, reflecting greater historical exposure to domestic oil & gas, coal, and other high-emission sectors. Individual bank intensities vary by loan book and sectoral exposure.</p>`
       ); break;
 
     case 'us-regional':
