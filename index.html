@@ -1760,9 +1760,6 @@ function renderResults() {
       <div class="chart-heading">Breakdown by Category</div>
       ${chartHtml}
     </div>
-    <div class="notice notice-soft" style="margin-bottom:20px;">
-      <strong>Save your results now.</strong> When you close or refresh this page, all data is gone. Nothing is stored or transmitted. Use the Download button below to capture a copy before you leave.
-    </div>
     <div class="method-box">
       <strong>How these figures are calculated:</strong> Wherever possible, emission factors are drawn from each bank's own public disclosures. Where institution-level data is unavailable, we apply PCAF-aligned regional averages. All figures are indicative estimates and should not be used for regulatory filing or formal GHG reporting. <a href="https://topofinance.org" target="_blank" style="color:var(--navy)">Learn more at topofinance.org</a>
     </div>
@@ -1784,9 +1781,12 @@ function renderResults() {
       </div>
     </div>
 
+    <div class="notice notice-soft no-print" style="margin-bottom:16px;">
+      <strong>Save your results now.</strong> When you close or refresh this page, all data is gone. Nothing is stored or transmitted.
+    </div>
     <div class="results-actions no-print">
-      <button class="btn btn-secondary" onclick="window.print()">Download / Print Summary</button>
-      <button class="btn btn-ghost" onclick="startOver()">← Start Over</button>
+      <button class="btn btn-primary" onclick="window.print()" style="width:100%; padding:18px; font-size:18px; letter-spacing:0.01em;">Download Your Results</button>
+      <button class="btn btn-ghost" onclick="startOver()" style="margin-top:10px;">← Start Over</button>
     </div>
   </div>`;
 }
