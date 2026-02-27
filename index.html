@@ -126,7 +126,7 @@
     }
 
     .welcome-wrap {
-      max-width: 1080px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 48px;
       height: 100vh;
@@ -137,20 +137,13 @@
     .welcome-columns {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 160px 1fr;
-      gap: 0;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
       min-height: 0;
-    }
-    .welcome-divider {
-      width: 1px;
-      background: var(--gray-200);
-      align-self: stretch;
-      margin: 40px auto;
     }
     @media (max-width: 720px) {
       .welcome-wrap { height: auto; min-height: 100vh; padding-bottom: 40px; }
-      .welcome-columns { grid-template-columns: 1fr; }
-      .welcome-divider { display: none; }
+      .welcome-columns { grid-template-columns: 1fr; gap: 32px; }
       .welcome-info-list { overflow-y: visible !important; max-height: none !important; }
     }
 
@@ -1287,8 +1280,6 @@ function renderWelcome() {
       </p>
       <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:28px">Get Started \u2192</button>
     </div>
-
-    <div class="welcome-divider"></div>
 
     <div class="welcome-info-list">
     <div class="welcome-info-inner">
