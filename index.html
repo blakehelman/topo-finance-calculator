@@ -533,24 +533,36 @@
 
     .results-number {
       font-size: 58px; font-weight: 900;
-      color: var(--accent);
+      color: var(--white);
       letter-spacing: -3px; line-height: 1;
       margin-bottom: 6px;
     }
 
     .results-unit {
       font-size: 15px; color: rgba(255,255,255,0.6);
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
-    .results-scope-pill {
-      display: inline-block;
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-      padding: 8px 18px;
-      font-size: 14px; color: rgba(255,255,255,0.9);
+    .results-scope-block {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 20px;
+      margin-top: 4px;
     }
-    .results-scope-pill strong { color: var(--accent); }
+    .results-scope-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 6px;
+    }
+    .results-scope-pct {
+      font-size: 42px; font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -2px; line-height: 1;
+    }
+    .results-scope-sub {
+      font-size: 14px; color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
 
     .results-empty {
       text-align: center;
@@ -1632,7 +1644,12 @@ function renderResults() {
     <div class="results-tag">Estimated Financed Emissions</div>
     <div class="results-number">${fmtNum(total)}</div>
     <div class="results-unit">tCO\u2082e / year (indicative estimate)</div>
-    ${pct ? `<div class="results-scope-pill">≈ <strong>${pct}%</strong> of your reported Scope 1, 2 &amp; 3 emissions</div>` : ''}
+    ${pct ? `
+    <div class="results-scope-block">
+      <div class="results-scope-label">of your reported Scope 1, 2 &amp; 3 emissions</div>
+      <div class="results-scope-pct">≈ ${pct}%</div>
+      <div class="results-scope-sub">Your financed emissions represent ${pct}% of your total reported emissions</div>
+    </div>` : ''}
   ` : `
     <div class="results-tag">Estimated Financed Emissions</div>
     <div class="results-number" style="font-size:36px; letter-spacing:-1px; color:rgba(255,255,255,0.4)">-</div>
@@ -1949,6 +1966,15 @@ const headerLogo = document.getElementById('header-logo');
 headerLogo.innerHTML = logoSVG('hdr', 130, 22, '#ffffff');
 headerLogo.style.cursor = 'pointer';
 headerLogo.addEventListener('click', () => { stepId = 'welcome'; data = freshData(); render(); });
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (e.target.tagName === 'TEXTAREA') return;
+  if (stepId === 'results') return;
+  const btn = document.getElementById('btn-next');
+  if (btn && !btn.disabled && btn.style.display !== 'none') btn.click();
+});
+
 render();
 </script>
 </body>
