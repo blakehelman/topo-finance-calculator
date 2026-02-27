@@ -1862,7 +1862,8 @@ function render() {
   // Header visibility
   const header = document.getElementById('site-header');
   header.style.display = isWelcome ? 'none' : 'flex';
-  document.getElementById('main').style.paddingTop = isWelcome ? '0' : '83px';
+  document.getElementById('main').style.paddingTop    = isWelcome ? '0' : '83px';
+  document.getElementById('main').style.paddingBottom = isWelcome ? '0' : '96px';
 
   // Progress
   const track = document.getElementById('progress-track');
