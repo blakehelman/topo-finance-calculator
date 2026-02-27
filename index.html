@@ -128,17 +128,23 @@
     .welcome-wrap {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 0 40px 60px;
+      padding: 0 48px;
+      height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     .welcome-columns {
+      flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-      margin-bottom: 32px;
+      gap: 72px;
+      min-height: 0;
     }
     @media (max-width: 720px) {
+      .welcome-wrap { height: auto; min-height: 100vh; padding-bottom: 40px; }
       .welcome-columns { grid-template-columns: 1fr; gap: 32px; }
+      .welcome-info-list { overflow-y: visible !important; max-height: none !important; }
     }
 
     /* ─── FOOTER NAV ─── */
@@ -260,10 +266,11 @@
 
     /* ─── WELCOME SCREEN ─── */
     .welcome-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 40px 0 24px;
-      position: sticky;
-      top: 24px;
     }
 
     .welcome-logo-wrap {
@@ -293,8 +300,9 @@
     /* ─── ACCORDION ─── */
     .welcome-info-list {
       border-top: 1px solid var(--gray-200);
-      margin-bottom: 20px;
-      padding-top: 40px;
+      overflow-y: auto;
+      padding: 32px 0 24px;
+      align-self: stretch;
     }
     .welcome-info-item {
       border-bottom: 1px solid var(--gray-200);
