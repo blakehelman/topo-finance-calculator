@@ -260,14 +260,14 @@
 
     /* ─── WELCOME SCREEN ─── */
     .welcome-hero {
-      text-align: left;
+      text-align: center;
       padding: 40px 0 24px;
       position: sticky;
       top: 24px;
     }
 
     .welcome-logo-wrap {
-      display: inline-flex; align-items: center; gap: 12px;
+      display: flex; justify-content: center; align-items: center; gap: 12px;
       margin-bottom: 28px;
     }
 
@@ -282,7 +282,7 @@
     .welcome-sub {
       font-size: 17px; color: var(--gray-600);
       line-height: 1.75;
-      max-width: 100%; margin: 0 0 32px;
+      max-width: 100%; margin: 0 auto 32px;
     }
 
     @media (max-width: 520px) {
@@ -1295,11 +1295,10 @@ function renderWelcome() {
         </div>
         <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis, including a detailed breakdown by institution, a strategy for engaging your banks, or support aligning your treasury with your broader climate commitments. Reach out to the team at any point. There is no cost for an initial conversation.</div>
       </div>
+      <div class="notice notice-soft" style="margin-top:20px;">
+        <strong>Data limitations:</strong> Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology. Actual financed emissions vary by institution, loan book composition, and reporting year. Results should be treated as indicative estimates only.
+      </div>
     </div>
-    </div>
-
-    <div class="notice notice-soft">
-      <strong>Data limitations:</strong> Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology. Actual financed emissions vary by institution, loan book composition, and reporting year. Results should be treated as indicative estimates only.
     </div>
   </div>`;
 }
