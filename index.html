@@ -1419,7 +1419,7 @@ function renderGsibInput() {
     <div class="bank-row">
       <span class="bank-name">${flag}\u2002${name}</span>
       <div class="bank-field">
-        <input type="number" min="0" placeholder="0"
+        <input type="number" inputmode="decimal" min="0" placeholder="0"
           value="${data.gsibDeposits[name] || ''}"
           oninput="setGsibDeposit('${name}', this.value)">
         <span class="unit">$M</span>
@@ -1455,7 +1455,7 @@ function renderDsib() {
     <div class="bank-row">
       <span class="bank-name">${r.flag}\u2002${r.label}</span>
       <div class="bank-field">
-        <input type="number" min="0" placeholder="0"
+        <input type="number" inputmode="decimal" min="0" placeholder="0"
           value="${data.dsibDeposits[r.id] || ''}"
           oninput="setDsibDeposit('${r.id}', this.value)">
         <span class="unit">$M</span>
@@ -1486,7 +1486,7 @@ function renderMmf() {
     <div class="bank-row">
       <span class="bank-name">${c.flag}\u2002${c.label}</span>
       <div class="bank-field">
-        <input type="number" min="0" placeholder="0"
+        <input type="number" inputmode="decimal" min="0" placeholder="0"
           value="${data.mmfDeposits[c.id] || ''}"
           oninput="setMmfDeposit('${c.id}', this.value)">
         <span class="unit">${c.symbol}M</span>
@@ -1591,7 +1591,7 @@ function renderScope123() {
     ${!isSplit ? `
     <div class="big-input-wrap">
       <div class="big-input-row">
-        <input type="number" min="0" placeholder="0"
+        <input type="number" inputmode="decimal" min="0" placeholder="0"
           value="${data.scopeTotal || ''}"
           oninput="setField('scopeTotal', this.value)">
         <span class="big-input-unit">tCO\u2082e</span>
@@ -1605,7 +1605,7 @@ function renderScope123() {
           <div style="font-size:12px; color:#888; line-height:1.4;">${s.desc}</div>
         </div>
         <div class="bank-field" style="margin-top:4px;">
-          <input type="number" min="0" placeholder="0"
+          <input type="number" inputmode="decimal" min="0" placeholder="0"
             value="${data[s.key] || ''}"
             oninput="setField('${s.key}', this.value)">
           <span class="unit">tCO\u2082e</span>
