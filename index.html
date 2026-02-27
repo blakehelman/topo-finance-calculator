@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Finance Emissions Calculator | Topo Finance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -964,6 +964,26 @@
 
     @media (max-width: 560px) {
       .dsib-region-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      /* Header: hide centered title and step label, just show logo */
+      .header-title { display: none; }
+      .header-step-label { display: none; }
+
+      /* Footer: smaller buttons so Next doesn't overflow */
+      #site-footer {
+        padding: 10px 16px;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+      }
+      #site-footer .btn { padding: 11px 20px; font-size: 16px; }
+
+      /* Bank rows: single column, allow label to wrap or truncate */
+      .bank-grid { grid-template-columns: 1fr; }
+      .bank-name { white-space: normal; }
+
+      /* Step wrap: less horizontal padding */
+      .step-wrap { padding: 20px 20px; }
     }
     /* ─── PRINT ─── */
     @media print {
