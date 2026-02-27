@@ -853,9 +853,26 @@
       display: flex; align-items: center; gap: 10px;
     }
     .dsib-region-card:hover { border-color: var(--navy); background: rgba(26,42,235,0.02); }
-    .dsib-region-card.selected { border-color: var(--navy); background: rgba(26,42,235,0.05); }
+    .dsib-region-card.selected { border-color: var(--navy); background: rgba(26,42,235,0.05); flex-wrap: wrap; }
     .dsib-region-flag { font-size: 20px; flex-shrink: 0; }
-    .dsib-region-label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .dsib-region-label { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .dsib-region-card .card-deselect {
+      background: none; border: none; cursor: pointer;
+      color: #aaa; font-size: 16px; line-height: 1; padding: 0 2px;
+      flex-shrink: 0;
+    }
+    .dsib-region-card .card-deselect:hover { color: #666; }
+    .dsib-card-input-row {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(26,42,235,0.12);
+    }
+    .dsib-card-input-row input {
+      flex: 1; border: 1.5px solid var(--gray-200); border-radius: 6px;
+      padding: 7px 10px; font-size: 14px; outline: none;
+    }
+    .dsib-card-input-row input:focus { border-color: var(--navy); }
+    .dsib-card-input-row .unit { font-size: 13px; color: #888; font-weight: 500; flex-shrink: 0; }
 
     /* ─── REVIEW SCREEN ─── */
     .review-block {
@@ -1357,24 +1374,23 @@ function renderGsibInput() {
 function renderDsib() {
   const regionCards = DSIB_REGIONS.map(r => {
     const sel = data.selectedDsibRegions.includes(r.id);
-    return `<div class="dsib-region-card${sel ? ' selected' : ''}" onclick="toggleDsibRegion('${r.id}')">
+    if (sel) {
+      return `<div class="dsib-region-card selected">
+        <span class="dsib-region-flag">${r.flag}</span>
+        <div class="dsib-region-label">${r.label}</div>
+        <button class="card-deselect" onclick="event.stopPropagation(); toggleDsibRegion('${r.id}')" title="Remove">✕</button>
+        <div class="dsib-card-input-row">
+          <input type="number" min="0" placeholder="0"
+            value="${data.dsibDeposits[r.id] || ''}"
+            oninput="setDsibDeposit('${r.id}', this.value)"
+            onclick="event.stopPropagation()">
+          <span class="unit">$M</span>
+        </div>
+      </div>`;
+    }
+    return `<div class="dsib-region-card" onclick="toggleDsibRegion('${r.id}')">
       <span class="dsib-region-flag">${r.flag}</span>
       <div class="dsib-region-label">${r.label}</div>
-    </div>`;
-  }).join('');
-
-  const inputRows = data.selectedDsibRegions.map(id => {
-    const region = DSIB_REGIONS.find(r => r.id === id);
-    if (!region) return '';
-    return `
-    <div class="bank-row">
-      <span class="bank-name">${region.flag}\u2002${region.label}</span>
-      <div class="bank-field">
-        <input type="number" min="0" placeholder="0"
-          value="${data.dsibDeposits[id] || ''}"
-          oninput="setDsibDeposit('${id}', this.value)">
-        <span class="unit">$M</span>
-      </div>
     </div>`;
   }).join('');
 
@@ -1384,8 +1400,6 @@ function renderDsib() {
     <h2 class="step-title">Do you bank with regional or domestic banks? <span class="optional-badge">Optional</span></h2>
     <p class="step-subtitle">Select any regions where you hold cash at banks not on the G-SIB list. Skip this if you only bank with G-SIBs.</p>
     <div class="dsib-region-grid">${regionCards}</div>
-    ${data.selectedDsibRegions.length > 0 ? `
-    <div class="bank-grid" style="margin-top:4px;">${inputRows}</div>` : ''}
     <div class="info-expand">
       <button class="info-trigger" id="info-btn-dsib" onclick="toggleInfo('dsib')">
         <span>\ud83d\udca1 About these emission factors</span>
