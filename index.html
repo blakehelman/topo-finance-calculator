@@ -1171,11 +1171,9 @@ function calcEmissions() {
     if (dep > 0) cats.push({ label: name, val: dep * fac });
   });
 
-  data.selectedDsibRegions.forEach(id => {
-    const region = DSIB_REGIONS.find(r => r.id === id);
-    if (!region) return;
-    const dep = parseFloat(data.dsibDeposits[id]) || 0;
-    if (dep > 0) cats.push({ label: region.label + ' Regional Banks', val: dep * region.factor });
+  DSIB_REGIONS.forEach(r => {
+    const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
+    if (dep > 0) cats.push({ label: r.label + ' Regional Banks', val: dep * r.factor });
   });
 
   MMF_CURRENCIES.forEach(c => {
@@ -1372,34 +1370,24 @@ function renderGsibInput() {
 }
 
 function renderDsib() {
-  const regionCards = DSIB_REGIONS.map(r => {
-    const sel = data.selectedDsibRegions.includes(r.id);
-    if (sel) {
-      return `<div class="dsib-region-card selected">
-        <span class="dsib-region-flag">${r.flag}</span>
-        <div class="dsib-region-label">${r.label}</div>
-        <button class="card-deselect" onclick="event.stopPropagation(); toggleDsibRegion('${r.id}')" title="Remove">✕</button>
-        <div class="dsib-card-input-row">
-          <input type="number" min="0" placeholder="0"
-            value="${data.dsibDeposits[r.id] || ''}"
-            oninput="setDsibDeposit('${r.id}', this.value)"
-            onclick="event.stopPropagation()">
-          <span class="unit">$M</span>
-        </div>
-      </div>`;
-    }
-    return `<div class="dsib-region-card" onclick="toggleDsibRegion('${r.id}')">
-      <span class="dsib-region-flag">${r.flag}</span>
-      <div class="dsib-region-label">${r.label}</div>
-    </div>`;
-  }).join('');
+  const sorted = [...DSIB_REGIONS].sort((a, b) => a.label.localeCompare(b.label));
+  const rows = sorted.map(r => `
+    <div class="bank-row">
+      <span class="bank-name">${r.flag}\u2002${r.label}</span>
+      <div class="bank-field">
+        <input type="number" min="0" placeholder="0"
+          value="${data.dsibDeposits[r.id] || ''}"
+          oninput="setDsibDeposit('${r.id}', this.value)">
+        <span class="unit">$M</span>
+      </div>
+    </div>`).join('');
 
   return `
   <div class="step-wrap">
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
-    <h2 class="step-title">Do you bank with regional or domestic banks? <span class="optional-badge">Optional</span></h2>
-    <p class="step-subtitle">Select any regions where you hold cash at banks not on the G-SIB list. Skip this if you only bank with G-SIBs.</p>
-    <div class="dsib-region-grid">${regionCards}</div>
+    <h2 class="step-title">Regional &amp; domestic banks <span class="optional-badge">Optional</span></h2>
+    <p class="step-subtitle">Enter deposits at regional or domestic banks not on the G-SIB list. Leave any region blank if it doesn't apply.</p>
+    <div class="bank-grid">${rows}</div>
     <div class="info-expand">
       <button class="info-trigger" id="info-btn-dsib" onclick="toggleInfo('dsib')">
         <span>\ud83d\udca1 About these emission factors</span>
@@ -1450,11 +1438,11 @@ function renderReview() {
       }).join('')
     : '<div class="review-empty">No G-SIBs selected</div>';
 
-  const dsibRows = data.selectedDsibRegions.length > 0
-    ? data.selectedDsibRegions.map(id => {
-        const region = DSIB_REGIONS.find(r => r.id === id);
-        const dep = parseFloat(data.dsibDeposits[id]) || 0;
-        return `<div class="review-row"><span class="review-label">${region.flag}\u2002${region.label}</span><span class="review-value">${dep > 0 ? '$' + dep.toLocaleString() + 'M' : '\u2014'}</span></div>`;
+  const dsibHasEntries = DSIB_REGIONS.some(r => parseFloat(data.dsibDeposits[r.id]) > 0);
+  const dsibRows = dsibHasEntries
+    ? DSIB_REGIONS.filter(r => parseFloat(data.dsibDeposits[r.id]) > 0).map(r => {
+        const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
+        return `<div class="review-row"><span class="review-label">${r.flag}\u2002${r.label}</span><span class="review-value">$${dep.toLocaleString()}M</span></div>`;
       }).join('')
     : '<div class="review-empty">No regional banking entered</div>';
 
@@ -1564,7 +1552,7 @@ function renderResults() {
   // ─── Intensity ───
   const totalExp =
     data.selectedGsibs.reduce((s, n) => s + (parseFloat(data.gsibDeposits[n]) || 0), 0) +
-    data.selectedDsibRegions.reduce((s, id) => s + (parseFloat(data.dsibDeposits[id]) || 0), 0) +
+    DSIB_REGIONS.reduce((s, r) => s + (parseFloat(data.dsibDeposits[r.id]) || 0), 0) +
     MMF_CURRENCIES.reduce((s, c) => s + (parseFloat(data.mmfDeposits[c.id]) || 0), 0);
   const intensity = (totalExp > 0 && total > 0) ? Math.round(total / totalExp) : null;
 
