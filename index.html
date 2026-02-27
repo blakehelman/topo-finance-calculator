@@ -1071,6 +1071,7 @@ function freshData() {
     scope2:              '',
     scope3:              '',
     scopeTotal:          '',
+    scopeMode:           'total',  // 'total' | 'split'
     email:               '',
   };
 }
@@ -1490,7 +1491,12 @@ function renderReview() {
 }
 
 function renderScope123() {
-  const showSplit = !!(data.scope1 || data.scope2 || data.scope3);
+  const isSplit = data.scopeMode === 'split';
+  const scopeDefs = [
+    { key: 'scope1', label: 'Scope 1', desc: 'Direct emissions from sources your company owns or controls — combustion in boilers, furnaces, vehicles, and similar.' },
+    { key: 'scope2', label: 'Scope 2', desc: 'Indirect emissions from purchased electricity, heat, steam, or cooling consumed by your company.' },
+    { key: 'scope3', label: 'Scope 3', desc: 'All other indirect emissions across your value chain — supply chain, business travel, employee commuting, and financed emissions.' },
+  ];
   return `
   <div class="step-wrap">
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
@@ -1500,11 +1506,11 @@ function renderScope123() {
     </p>
 
     <div class="scope-tabs">
-      <div class="scope-tab${!showSplit ? ' active' : ''}" onclick="setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">One total figure</div>
-      <div class="scope-tab${showSplit ? ' active' : ''}" onclick="setField('scopeTotal',''); render();">Scope 1, 2 &amp; 3 separately</div>
+      <div class="scope-tab${!isSplit ? ' active' : ''}" onclick="data.scopeMode='total'; setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">One total figure</div>
+      <div class="scope-tab${isSplit ? ' active' : ''}" onclick="data.scopeMode='split'; setField('scopeTotal',''); render();">Scope 1, 2 &amp; 3 separately</div>
     </div>
 
-    ${!showSplit ? `
+    ${!isSplit ? `
     <div class="big-input-wrap">
       <div class="big-input-row">
         <input type="number" min="0" placeholder="0"
@@ -1513,21 +1519,24 @@ function renderScope123() {
         <span class="big-input-unit">tCO\u2082e</span>
       </div>
     </div>` : `
-    <div class="bank-grid">
-      ${[['scope1','Scope 1'],['scope2','Scope 2'],['scope3','Scope 3']].map(([k, l]) => `
-      <div class="bank-row">
-        <span class="bank-name">${l}</span>
-        <div class="bank-field">
+    <div class="bank-grid" style="gap:14px;">
+      ${scopeDefs.map(s => `
+      <div class="bank-row" style="flex-wrap:wrap; align-items:flex-start; gap:6px;">
+        <div style="flex:1; min-width:160px;">
+          <div class="bank-name" style="margin-bottom:2px;">${s.label}</div>
+          <div style="font-size:12px; color:#888; line-height:1.4;">${s.desc}</div>
+        </div>
+        <div class="bank-field" style="margin-top:4px;">
           <input type="number" min="0" placeholder="0"
-            value="${data[k] || ''}"
-            oninput="setField('${k}', this.value)">
+            value="${data[s.key] || ''}"
+            oninput="setField('${s.key}', this.value)">
           <span class="unit">tCO\u2082e</span>
         </div>
       </div>`).join('')}
     </div>`}
 
     <div class="notice notice-green" style="margin-top:14px;">
-      \ud83d\udca1 Entirely optional. Your financed emissions will still be calculated without this. Click Skip if you don't have this to hand.
+      Entirely optional. Your financed emissions will still be calculated without this. Click Skip if you don't have this to hand.
     </div>
   </div>`;
 }
