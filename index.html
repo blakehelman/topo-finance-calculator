@@ -126,9 +126,19 @@
     }
 
     .welcome-wrap {
-      max-width: 680px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 0 32px 40px;
+      padding: 0 40px 60px;
+    }
+    .welcome-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 720px) {
+      .welcome-columns { grid-template-columns: 1fr; gap: 32px; }
     }
 
     /* ─── FOOTER NAV ─── */
@@ -250,27 +260,29 @@
 
     /* ─── WELCOME SCREEN ─── */
     .welcome-hero {
-      text-align: center;
-      padding: 32px 0 24px;
+      text-align: left;
+      padding: 40px 0 24px;
+      position: sticky;
+      top: 24px;
     }
 
     .welcome-logo-wrap {
       display: inline-flex; align-items: center; gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
     .welcome-title {
-      font-size: 52px; font-weight: 900;
+      font-size: 48px; font-weight: 900;
       color: var(--navy);
       letter-spacing: -2px;
       line-height: 1.05;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .welcome-sub {
-      font-size: 18px; color: var(--gray-600);
-      line-height: 1.7;
-      max-width: 500px; margin: 0 auto 32px;
+      font-size: 17px; color: var(--gray-600);
+      line-height: 1.75;
+      max-width: 100%; margin: 0 0 32px;
     }
 
     @media (max-width: 520px) {
@@ -282,6 +294,7 @@
     .welcome-info-list {
       border-top: 1px solid var(--gray-200);
       margin-bottom: 20px;
+      padding-top: 40px;
     }
     .welcome-info-item {
       border-bottom: 1px solid var(--gray-200);
@@ -1237,6 +1250,7 @@ function startOver() {
 function renderWelcome() {
   return `
   <div class="welcome-wrap">
+    <div class="welcome-columns">
     <div class="welcome-hero">
       <div class="welcome-logo-wrap">
         ${logoSVG('wlc', 200, 34, '#1A2AEB')}
@@ -1281,6 +1295,7 @@ function renderWelcome() {
         </div>
         <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis, including a detailed breakdown by institution, a strategy for engaging your banks, or support aligning your treasury with your broader climate commitments. Reach out to the team at any point. There is no cost for an initial conversation.</div>
       </div>
+    </div>
     </div>
 
     <div class="notice notice-soft">
