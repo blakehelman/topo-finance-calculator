@@ -243,7 +243,7 @@
     .step-subtitle {
       font-size: 17px; color: var(--gray-600);
       line-height: 1.65;
-      margin-bottom: 32px;
+      margin-bottom: 40px;
     }
 
     .optional-badge {
@@ -389,31 +389,31 @@
     /* ─── BANK INPUTS ─── */
     .bank-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 10px;
-      margin-top: 4px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
     }
 
     .bank-row {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 12px;
       background: var(--white);
       border: 1.5px solid var(--gray-200);
       border-radius: var(--radius-sm);
-      padding: 11px 14px;
+      padding: 14px 18px;
       transition: var(--transition);
     }
     .bank-row:focus-within {
       border-color: var(--navy);
     }
 
-    .bank-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); min-width: 0; }
+    .bank-name { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); min-width: 0; white-space: nowrap; }
 
     .bank-field {
       display: flex; align-items: center; gap: 5px; flex-shrink: 0;
     }
     .bank-field input {
-      width: 100px; padding: 7px 10px;
-      border: 1.5px solid var(--gray-200); border-radius: 6px;
+      width: 120px; padding: 8px 12px;
+      border: 1.5px solid var(--gray-200); border-radius: 4px;
       font-size: 16px; color: var(--text);
       background: var(--gray-50);
       outline: none; text-align: left;
@@ -1323,7 +1323,7 @@ function renderWelcome() {
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
-          <span class="welcome-info-icon" style="font-size:20px;font-weight:800;letter-spacing:-1px">&#x2248;</span>
+          <span class="welcome-info-icon">\ud83d\udea7</span>
           <div class="welcome-info-content"><div class="welcome-info-label">Data limitations</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
