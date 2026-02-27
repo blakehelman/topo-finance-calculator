@@ -1242,7 +1242,7 @@ function renderWelcome() {
       </div>
       <h1 class="welcome-title">Financed Emissions Calculator</h1>
       <p class="welcome-sub">
-        Estimate the carbon emissions embedded in your company's cash deposits and money market fund holdings. This is one component of your treasury's total financed emissions — a high-level, indicative starting point, not a line-by-line audit.
+        This calculator estimates the carbon emissions enabled by your company's cash and short-term investments (bank deposits and money market funds). It is designed to give you a high-level, indicative picture of your treasury's climate exposure — a starting point for understanding the scale and distribution of your financed emissions. It is not intended to be a line-by-line audit.
       </p>
       <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:28px">Get Started \u2192</button>
     </div>
@@ -1254,7 +1254,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What this covers</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">This tool covers your company's cash at banks and money market fund holdings — a critical component of your total financed emissions. It gives a high-level, indicative picture of your treasury's climate exposure: a starting point for understanding the scale and distribution of those emissions, not a line-by-line audit.<br><br>Important: your company's total financed emissions include all financial assets — fixed income, equity, and more. This tool covers cash and cash equivalents only. Other instruments carry a substantial carbon footprint that can be calculated, but are outside the scope of this version. If you'd like a complete picture, the Topo Finance team can help.</div>
+        <div class="welcome-info-body">This tool covers cash deposits at banks and money market fund holdings. These are a critical component of your company's total financed emissions — the emissions your organisation indirectly enables through its financial relationships.<br><br>Your total financed emissions include all financial assets: deposits, funds, bonds, equity, and more. This tool covers cash and cash equivalents only. Other instruments carry a substantial carbon footprint that can be calculated separately. If you would like a complete picture, the Topo Finance team can help.<br><br>Measuring and managing financed emissions is increasingly expected of organisations with commitments under the UN Principles for Responsible Investment (UN PRI) and the Net Zero Asset Managers Alliance, as well as under emerging disclosure frameworks such as CSRD and the GHG Protocol.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1262,7 +1262,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What it is not</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">This tool produces indicative, estimated figures — not verified disclosures. Wherever possible, emission factors are based on banks' own public disclosures; where that data is unavailable, we use PCAF-aligned regional averages. Your actual figures will vary.<br><br>Results are not intended for regulatory filing, third-party audit, or formal emissions inventory.<br><br>This tool assumes you hold standard banking and fund products. If you use ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than the estimates shown here.</div>
+        <div class="welcome-info-body">The figures this tool produces are indicative estimates. They are a useful starting point, not a verified disclosure. Wherever possible, emission factors are drawn from banks' own public disclosures. Where that data is not available, we apply PCAF-aligned regional averages. Your actual figures will vary depending on your specific banking relationships and the composition of your holdings.<br><br>Results are not suitable for regulatory filing, third-party audit, or formal emissions inventory. If you need that level of rigour, the Topo Finance team can provide it.<br><br>This tool assumes standard banking and fund products. If you hold ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than shown.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1572,7 +1572,7 @@ function renderResults() {
   const heroContent = total > 0 ? `
     <div class="results-tag">Estimated Financed Emissions</div>
     <div class="results-number">${fmtNum(total)}</div>
-    <div class="results-unit">tCO₂e / year &nbsp;·&nbsp; Scope 3 Category 15</div>
+    <div class="results-unit">tCO\u2082e / year (indicative estimate)</div>
     ${pct ? `<div class="results-scope-pill">≈ <strong>${pct}%</strong> of your reported Scope 1, 2 &amp; 3 emissions</div>` : ''}
   ` : `
     <div class="results-tag">Estimated Financed Emissions</div>
