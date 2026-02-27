@@ -1316,7 +1316,7 @@ function renderGsibSelect() {
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
     <h2 class="step-title">Which Global Banks (G-SIBs) do you bank with?</h2>
     <p class="step-subtitle">Select all banks where your company holds cash deposits. You'll enter specific amounts on the next screen.</p>
-    <div class="gsib-select-count${count > 0 ? ' has-selection' : ''}">${count > 0 ? count + ' bank' + (count > 1 ? 's' : '') + ' selected' : 'No banks selected yet \u2014 tap any bank to add it'}</div>
+    <div class="gsib-select-count${count > 0 ? ' has-selection' : ''}">${count > 0 ? count + ' bank' + (count > 1 ? 's' : '') + ' selected' : 'No banks selected yet. Tap any bank to add it.'}</div>
     <div class="gsib-list">${listHtml}</div>
     <div class="info-expand">
       <button class="info-trigger" id="info-btn-gsib" onclick="toggleInfo('gsib')">
@@ -1324,7 +1324,7 @@ function renderGsibSelect() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-gsib">
-        <p>Global Systemically Important Banks (G-SIBs) are the 29 banks designated annually by the Financial Stability Board as critical to the global financial system. Topo Finance has individual emission factor data for every G-SIB on this list \u2014 so your calculation here is bank-specific, not averaged.</p>
+        <p>Global Systemically Important Banks (G-SIBs) are the 29 banks designated annually by the Financial Stability Board as critical to the global financial system. Topo Finance has individual emission factor data for every G-SIB on this list, so your calculation here is bank-specific, not averaged.</p>
       </div>
     </div>
   </div>`;
@@ -1362,7 +1362,7 @@ function renderGsibInput() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-gsib-factor">
-        <p>Unlike other sections of this tool, G-SIB emission factors are calculated on a bank-by-bank basis using each institution's publicly disclosed financed emissions data. Factors range from ~90 to ~165 tCO\u2082e per $1M deposited. These are illustrative \u2014 Topo Finance uses verified proprietary data for client analysis.</p>
+        <p>Unlike other sections of this tool, G-SIB emission factors are calculated on a bank-by-bank basis using each institution's publicly disclosed financed emissions data. Factors range from ~90 to ~165 tCO\u2082e per $1M deposited. These are illustrative. Topo Finance uses verified proprietary data for client analysis.</p>
       </div>
     </div>
   </div>`;
@@ -1393,7 +1393,7 @@ function renderDsib() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-dsib">
-        <p>Globally there are over 300 Domestic Systemically Important Banks (D-SIBs), and thousands more regional and community banks. Because granular public data is not available for most, we apply regional averages \u2014 indicative figures based on the typical carbon intensity of banking in each geography. For a specific analysis of your regional bank relationships, <a href="mailto:hello@topofinance.org" style="color:var(--navy)">contact the Topo Finance team</a>.</p>
+        <p>Globally there are over 300 Domestic Systemically Important Banks (D-SIBs), and thousands more regional and community banks. Because granular public data is not available for most, we apply regional averages, indicative figures based on the typical carbon intensity of banking in each geography. For a specific analysis of your regional bank relationships, <a href="mailto:hello@topofinance.org" style="color:var(--navy)">contact the Topo Finance team</a>.</p>
       </div>
     </div>
   </div>`;
@@ -1422,7 +1422,7 @@ function renderMmf() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-mmf">
-        <p>There are thousands of money market fund products with highly variable underlying compositions \u2014 some sovereign-heavy, others holding more commercial paper and bank instruments. Because analysing each specific fund is impossible without knowing its exact holdings, we apply currency-level averages as a high-level proxy. If you'd like a specific analysis of your MMF holdings, <a href="mailto:hello@topofinance.org" style="color:var(--navy)">contact the Topo Finance team</a> \u2014 this is something we can do on a product-by-product basis.</p>
+        <p>There are thousands of money market fund products with highly variable underlying compositions: some sovereign-heavy, others holding more commercial paper and bank instruments. Because analysing each specific fund is impossible without knowing its exact holdings, we apply currency-level averages as a high-level proxy. If you'd like a specific analysis of your MMF holdings, <a href="mailto:hello@topofinance.org" style="color:var(--navy)">contact the Topo Finance team</a>. This is something we can do on a product-by-product basis.</p>
       </div>
     </div>
   </div>`;
@@ -1433,7 +1433,7 @@ function renderReview() {
     ? data.selectedGsibs.map(name => {
         const dep = parseFloat(data.gsibDeposits[name]) || 0;
         const bank = GSIBS.find(b => b.name === name);
-        return `<div class="review-row"><span class="review-label">${bank ? bank.flag + '\u2002' : ''}${name}</span><span class="review-value">${dep > 0 ? '$' + dep.toLocaleString() + 'M' : '\u2014'}</span></div>`;
+        return `<div class="review-row"><span class="review-label">${bank ? bank.flag + '\u2002' : ''}${name}</span><span class="review-value">${dep > 0 ? '$' + dep.toLocaleString() + 'M' : '-'}</span></div>`;
       }).join('')
     : '<div class="review-empty">No G-SIBs selected</div>';
 
@@ -1523,7 +1523,7 @@ function renderScope123() {
     </div>`}
 
     <div class="notice notice-green" style="margin-top:14px;">
-      \ud83d\udca1 Entirely optional \u2014 your financed emissions will still be calculated without this. Click Skip if you don't have this to hand.
+      \ud83d\udca1 Entirely optional. Your financed emissions will still be calculated without this. Click Skip if you don't have this to hand.
     </div>
   </div>`;
 }
