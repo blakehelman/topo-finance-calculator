@@ -1242,7 +1242,7 @@ function renderWelcome() {
       </div>
       <h1 class="welcome-title">Financed Emissions Calculator</h1>
       <p class="welcome-sub">
-        Estimate the carbon emissions enabled by your company's cash and short-term investments — bank deposits and money market funds. New to financed emissions? Check out our <a href="#" onclick="return false;" style="color:var(--navy);font-weight:600;text-decoration:underline;">guide</a> built for treasury teams.
+        Estimate the carbon emissions embedded in your company's cash deposits and money market fund holdings. This is one component of your treasury's total financed emissions — a high-level, indicative starting point, not a line-by-line audit.
       </p>
       <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:28px">Get Started \u2192</button>
     </div>
@@ -1254,7 +1254,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What this covers</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">This calculator estimates the carbon embedded in your company's cash deposits and money market fund holdings — a component of your Scope 3 financed emissions. It is designed to give a high-level, indicative picture of your treasury's climate exposure: a starting point for understanding the scale and distribution of your financed emissions, not a line-by-line audit. Note: this tool covers bank deposits and money market funds only. Other instruments such as sovereign bonds, corporate bonds, and other fixed income are not included in this version.</div>
+        <div class="welcome-info-body">This tool covers your company's cash at banks and money market fund holdings — a critical component of your total financed emissions. It gives a high-level, indicative picture of your treasury's climate exposure: a starting point for understanding the scale and distribution of those emissions, not a line-by-line audit.<br><br>Important: your company's total financed emissions include all financial assets — fixed income, equity, and more. This tool covers cash and cash equivalents only. Other instruments carry a substantial carbon footprint that can be calculated, but are outside the scope of this version. If you'd like a complete picture, the Topo Finance team can help.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1262,7 +1262,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What it is not</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">This tool produces indicative estimates, not verified disclosures. Emission factors are based on banks' own public disclosures and publicly available PCAF methodology — your actual figures will vary. Results are not intended for regulatory filing, third-party audit, or formal emissions inventory. This tool assumes standard banking products: if you hold ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than shown here.</div>
+        <div class="welcome-info-body">This tool produces indicative, estimated figures — not verified disclosures. Wherever possible, emission factors are based on banks' own public disclosures; where that data is unavailable, we use PCAF-aligned regional averages. Your actual figures will vary.<br><br>Results are not intended for regulatory filing, third-party audit, or formal emissions inventory.<br><br>This tool assumes you hold standard banking and fund products. If you use ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than the estimates shown here.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1283,9 +1283,7 @@ function renderWelcome() {
     </div>
 
     <div class="notice notice-soft">
-      <strong>Data limitations:</strong> Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology.
-      Actual financed emissions vary by bank, loan book composition, and reporting year.
-      <span style="color: hotpink; font-weight: 600;">BEX and JOEL, Here would be a good place for us to link any sort of legal documentation.</span>
+      <strong>Data limitations:</strong> Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology. Actual financed emissions vary by institution, loan book composition, and reporting year. Results should be treated as indicative estimates only.
     </div>
   </div>`;
 }
