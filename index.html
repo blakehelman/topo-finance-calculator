@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finance Emissions Calculator — Topo Finance</title>
+  <title>Finance Emissions Calculator | Topo Finance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -190,7 +190,7 @@
 
     .btn-lg { padding: 16px 40px; font-size: 18px; }
 
-    /* Footer nav buttons — 50% larger than base */
+    /* Footer nav buttons - 50% larger than base */
     #site-footer .btn { padding: 15px 36px; font-size: 21px; }
 
     /* ─── TYPOGRAPHY ─── */
@@ -997,7 +997,7 @@ const GSIBS = [
 ];
 
 // Illustrative per-bank emission factors (tCO2e per $1M deposited)
-// Based on publicly available PCAF-aligned data — Topo Finance to replace with verified figures
+// Based on publicly available PCAF-aligned data - Topo Finance to replace with verified figures
 const GSIB_FACTORS = {
   'JPMorgan Chase': 165, 'Bank of America': 145, 'Citigroup': 158,
   'Goldman Sachs': 140, 'Morgan Stanley': 125, 'Wells Fargo': 155,
@@ -1011,7 +1011,7 @@ const GSIB_FACTORS = {
   'Royal Bank of Canada': 135, 'TD Bank': 130,
 };
 
-// Regional DSIB averages (tCO2e per $1M) — Topo Finance to replace with verified figures
+// Regional DSIB averages (tCO2e per $1M) - Topo Finance to replace with verified figures
 const DSIB_REGIONS = [
   { id: 'north-america', label: 'North America',        flag: '🌎', factor: 115 },
   { id: 'europe',        label: 'Europe (incl. UK)',    flag: '🌍', factor: 90  },
@@ -1020,14 +1020,14 @@ const DSIB_REGIONS = [
   { id: 'mena',          label: 'Middle East & Africa', flag: '🌍', factor: 105 },
 ];
 
-// MMF factors by currency (tCO2e per $1M) — Topo Finance to replace with verified figures
+// MMF factors by currency (tCO2e per $1M) - Topo Finance to replace with verified figures
 const MMF_CURRENCIES = [
   { id: 'usd', label: 'US Dollar (USD)', symbol: '$', flag: '🇺🇸', factor: 70 },
   { id: 'gbp', label: 'British Pound (GBP)', symbol: '\u00a3', flag: '🇬🇧', factor: 55 },
   { id: 'eur', label: 'Euro (EUR)', symbol: '\u20ac', flag: '🇪🇺', factor: 45 },
 ];
 
-// Transition risk ratings — illustrative, based on publicly available fossil fuel financing data
+// Transition risk ratings - illustrative, based on publicly available fossil fuel financing data
 const TRANSITION_RISK = {
   'JPMorgan Chase':               { level: 'high',   note: "World's largest fossil fuel financier since the Paris Agreement" },
   'Bank of America':              { level: 'medium', note: 'Net-zero commitment; ongoing fossil fuel financing' },
@@ -1243,7 +1243,7 @@ function renderWelcome() {
       </div>
       <h1 class="welcome-title">Financed Emissions Calculator</h1>
       <p class="welcome-sub">
-        This calculator estimates the carbon emissions enabled by your company's cash and short-term investments (bank deposits and money market funds). It is designed to give you a high-level, indicative picture of your treasury's climate exposure — a starting point for understanding the scale and distribution of your financed emissions. It is not intended to be a line-by-line audit.
+        This calculator estimates the carbon emissions enabled by your company's cash and short-term investments (bank deposits and money market funds). It is designed to give you a high-level, indicative picture of your treasury's climate exposure, a starting point for understanding the scale and distribution of your financed emissions. It is not intended to be a line-by-line audit.
       </p>
       <button class="btn btn-primary btn-lg" onclick="go(1)" style="margin-bottom:28px">Get Started \u2192</button>
     </div>
@@ -1255,7 +1255,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What this covers</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">This tool covers cash deposits at banks and money market fund holdings. These are a critical component of your company's total financed emissions — the emissions your organisation indirectly enables through its financial relationships.<br><br>Your total financed emissions include all financial assets: deposits, funds, bonds, equity, and more. This tool covers cash and cash equivalents only. Other instruments carry a substantial carbon footprint that can be calculated separately. If you would like a complete picture, the Topo Finance team can help.<br><br>Measuring and managing financed emissions is increasingly expected of organisations with commitments under the UN Principles for Responsible Investment (UN PRI) and the Net Zero Asset Managers Alliance, as well as under emerging disclosure frameworks such as CSRD and the GHG Protocol.</div>
+        <div class="welcome-info-body">This tool covers cash deposits at banks and money market fund holdings. These are a critical component of your company's total financed emissions. The emissions your organisation indirectly enables through its financial relationships.<br><br>Your total financed emissions include all financial assets: deposits, funds, bonds, equity, and more. This tool covers cash and cash equivalents only. Other instruments carry a substantial carbon footprint that can be calculated separately. If you would like a complete picture, the Topo Finance team can help.<br><br>Measuring and managing financed emissions is increasingly expected of organisations with commitments under the UN Principles for Responsible Investment (UN PRI) and the Net Zero Asset Managers Alliance, as well as under emerging disclosure frameworks such as CSRD and the GHG Protocol.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1271,7 +1271,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">Your data stays private</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">Everything runs locally in your browser — your inputs are never transmitted to a server, stored in a database, or shared with any third party. When you close or refresh the page, all data is gone. Nothing is tracked or logged.</div>
+        <div class="welcome-info-body">Everything runs locally in your browser. Your inputs are never transmitted to a server, stored in a database, or shared with any third party. When you close or refresh the page, all data is gone. Nothing is tracked or logged.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1279,7 +1279,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">Want deeper analysis?</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis — a detailed breakdown by institution, a strategy for engaging your banks, or support aligning your treasury with your broader climate commitments. Reach out to the team at any point. There is no cost for an initial conversation.</div>
+        <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis, including a detailed breakdown by institution, a strategy for engaging your banks, or support aligning your treasury with your broader climate commitments. Reach out to the team at any point. There is no cost for an initial conversation.</div>
       </div>
     </div>
 
@@ -1325,7 +1325,7 @@ function renderGsibSelect() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-gsib">
-        <p>Global Systemically Important Banks (G-SIBs) are the 29 largest banks in the world, designated annually by the Financial Stability Board. Because these institutions publicly disclose their financed emissions data, Topo Finance can calculate an individual emission factor for each one — so your result here is bank-specific, not a regional average.</p>
+        <p>Global Systemically Important Banks (G-SIBs) are the 29 largest banks in the world, designated annually by the Financial Stability Board. Because these institutions publicly disclose their financed emissions data, Topo Finance can calculate an individual emission factor for each one, so your result here is bank-specific, not a regional average.</p>
         <p style="margin-top:10px;">If you would like verified, up-to-date factors based on Topo's proprietary data rather than these illustrative figures, <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">the team can help</a>. There is no cost for an initial conversation.</p>
       </div>
     </div>
@@ -1365,7 +1365,7 @@ function renderGsibInput() {
       </button>
       <div class="info-body" id="info-body-gsib-factor">
         <p>Each bank's emission factor is based on its own publicly disclosed financed emissions data, so the figures here are bank-specific rather than averaged. Factors range from approximately 90 to 165 tCO\u2082e per $1M deposited depending on the institution.</p>
-        <p style="margin-top:10px;">Topo Finance uses verified, proprietary data for client analysis — more granular and more current than the illustrative figures used here. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Reach out to the team</a> for a confidential assessment. There is no cost for an initial conversation.</p>
+        <p style="margin-top:10px;">Topo Finance uses verified, proprietary data for client analysis, more granular and more current than the illustrative figures used here. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Reach out to the team</a> for a confidential assessment. There is no cost for an initial conversation.</p>
       </div>
     </div>
   </div>`;
@@ -1396,8 +1396,8 @@ function renderDsib() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-dsib">
-        <p>Globally there are over 300 domestic and regional banks for which granular public emissions data is not available. For these, we apply regional averages based on the typical carbon intensity of banking in each geography — a practical proxy given the data limitations.</p>
-        <p style="margin-top:10px;">Topo Finance can provide institution-level analysis for specific regional bank relationships. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch</a> — there is no cost for an initial conversation.</p>
+        <p>Globally there are over 300 domestic and regional banks for which granular public emissions data is not available. For these, we apply regional averages based on the typical carbon intensity of banking in each geography, a practical proxy given the data limitations.</p>
+        <p style="margin-top:10px;">Topo Finance can provide institution-level analysis for specific regional bank relationships. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch</a>. There is no cost for an initial conversation.</p>
       </div>
     </div>
   </div>`;
@@ -1426,8 +1426,8 @@ function renderMmf() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-mmf">
-        <p>There are thousands of money market fund products with widely varying underlying compositions — some sovereign-heavy, others concentrated in commercial paper or bank instruments. Because the portfolio of any given fund changes almost daily, we use currency-level averages as a practical proxy.</p>
-        <p style="margin-top:10px;">Topo Finance can analyse your specific fund products on a product-by-product basis. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch</a> — there is no cost for an initial conversation.</p>
+        <p>There are thousands of money market fund products with widely varying underlying compositions: some sovereign-heavy, others concentrated in commercial paper or bank instruments. Because the portfolio of any given fund changes almost daily, we use currency-level averages as a practical proxy.</p>
+        <p style="margin-top:10px;">Topo Finance can analyse your specific fund products on a product-by-product basis. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch</a>. There is no cost for an initial conversation.</p>
       </div>
     </div>
   </div>`;
@@ -1493,9 +1493,9 @@ function renderReview() {
 function renderScope123() {
   const isSplit = data.scopeMode === 'split';
   const scopeDefs = [
-    { key: 'scope1', label: 'Scope 1', desc: 'Direct emissions from sources your company owns or controls — combustion in boilers, furnaces, vehicles, and similar.' },
+    { key: 'scope1', label: 'Scope 1', desc: 'Direct emissions from sources your company owns or controls, including combustion in boilers, furnaces, vehicles, and similar.' },
     { key: 'scope2', label: 'Scope 2', desc: 'Indirect emissions from purchased electricity, heat, steam, or cooling consumed by your company.' },
-    { key: 'scope3', label: 'Scope 3', desc: 'All other indirect emissions across your value chain — supply chain, business travel, employee commuting, and financed emissions.' },
+    { key: 'scope3', label: 'Scope 3', desc: 'All other indirect emissions across your value chain, including supply chain, business travel, employee commuting, and financed emissions.' },
   ];
   return `
   <div class="step-wrap">
@@ -1568,7 +1568,7 @@ function renderResults() {
     MMF_CURRENCIES.reduce((s, c) => s + (parseFloat(data.mmfDeposits[c.id]) || 0), 0);
   const intensity = (totalExp > 0 && total > 0) ? Math.round(total / totalExp) : null;
 
-  const whatIfSaving = 0; // simplified — what-if scenario pending new data structure
+  const whatIfSaving = 0; // simplified - what-if scenario pending new data structure
 
   // ─── Risk calculations ───
   const topPct    = (total > 0 && cats.length > 0) ? Math.round((cats[0].val / total) * 100) : 0;
@@ -1589,7 +1589,7 @@ function renderResults() {
     ${pct ? `<div class="results-scope-pill">≈ <strong>${pct}%</strong> of your reported Scope 1, 2 &amp; 3 emissions</div>` : ''}
   ` : `
     <div class="results-tag">Estimated Financed Emissions</div>
-    <div class="results-number" style="font-size:36px; letter-spacing:-1px; color:rgba(255,255,255,0.4)">—</div>
+    <div class="results-number" style="font-size:36px; letter-spacing:-1px; color:rgba(255,255,255,0.4)">-</div>
     <div class="results-unit">No values entered yet</div>
   `;
 
@@ -1619,7 +1619,7 @@ function renderResults() {
     <div class="insight-card">
       <div class="insight-label">Highest-Impact Relationship</div>
       <div class="insight-value">${fmtNum(topCat.val)} tCO₂e</div>
-      <div class="insight-sub">${topCat.label} — your single largest source of financed emissions</div>
+      <div class="insight-sub">${topCat.label}, your single largest source of financed emissions</div>
     </div>` : '';
 
   let rightCard = '';
@@ -1664,7 +1664,7 @@ function renderResults() {
     </div>
     <div class="risk-tile risk-tile-${transLevel}">
       <div class="risk-tile-label">Transition Risk</div>
-      <div class="risk-tile-level">${heldBanks.length > 0 ? transLabel : '—'}</div>
+      <div class="risk-tile-level">${heldBanks.length > 0 ? transLabel : '-'}</div>
       <div class="risk-tile-sub">${highRiskCount > 0 ? `${highRiskCount} high-risk bank${highRiskCount > 1 ? 's' : ''} identified` : heldBanks.length > 0 ? 'No high-risk banks held' : 'Enter named banks to assess'}</div>
     </div>
     <div class="risk-tile risk-tile-monitor">
@@ -1678,7 +1678,7 @@ function renderResults() {
   const transDetailHtml = heldBanks.length > 0 ? `
   <div class="trans-risk-card">
     <div class="chart-heading">Transition Risk by Banking Relationship</div>
-    <div class="trans-risk-note">Based on publicly available fossil fuel financing data. Illustrative — Topo Finance can provide proprietary bank-level assessments.</div>
+    <div class="trans-risk-note">Based on publicly available fossil fuel financing data. Illustrative. Topo Finance can provide proprietary bank-level assessments.</div>
     ${heldBanks.map(b => {
       const r = TRANSITION_RISK[b] || { level: 'medium', note: 'Insufficient public data' };
       const labels = { high: 'High', medium: 'Medium', low: 'Low' };
@@ -1696,7 +1696,7 @@ function renderResults() {
   <div class="topo-teaser-card">
     <div class="topo-teaser-heading">What this tool can't tell you</div>
     <ul class="topo-teaser-list">
-      <li>Which of your high-risk banks are <strong>actually reducing fossil fuel exposure</strong> — vs just making pledges</li>
+      <li>Which of your high-risk banks are <strong>actually reducing fossil fuel exposure</strong>, not just pledges</li>
       <li>How your financed emissions compare to <strong>peer treasury teams</strong> at companies your size</li>
       <li>Which specific relationships create the most <strong>CSRD reporting risk</strong> in 2025 and beyond</li>
       <li>What a realistic <strong>decarbonisation pathway</strong> looks like for your treasury portfolio without sacrificing yield or liquidity</li>
@@ -1716,7 +1716,7 @@ function renderResults() {
           <div class="bar-fill ${i===0?'hi':''}" style="width:${(c.val/maxV*100).toFixed(1)}%"></div>
         </div>
       </div>`).join('')
-    : `<div class="results-empty">No emissions entered — go back and add dollar amounts to see a breakdown.</div>`;
+    : `<div class="results-empty">No emissions entered. Go back and add dollar amounts to see a breakdown.</div>`;
 
   // ─── What-if ───
   const whatIfHtml = whatIfSaving > 500 ? `
@@ -1725,7 +1725,7 @@ function renderResults() {
     <div class="whatif-value">−${fmtNum(whatIfSaving)} tCO₂e</div>
     <div class="whatif-sub">
       If your US GSIB deposits were held at European-equivalent banks, your estimated financed emissions
-      could be approximately <strong>${fmtNum(whatIfSaving)} tCO₂e lower</strong> — a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
+      could be approximately <strong>${fmtNum(whatIfSaving)} tCO₂e lower</strong>, a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
       US GSIBs carry a 23% higher emission factor per dollar than European GSIBs.
     </div>
   </div>` : '';
@@ -1747,8 +1747,8 @@ function renderResults() {
       </div>
     </div>
     <div class="scope-compare-note">
-      For most companies, financed emissions are a small but increasingly scrutinised portion of total footprint —
-      and are now reportable under GHG Protocol Scope 3, Category 15.
+      For most companies, financed emissions are a small but increasingly scrutinised portion of total footprint,
+      now reportable under GHG Protocol Scope 3, Category 15.
     </div>
   </div>` : '';
 
@@ -1765,7 +1765,7 @@ function renderResults() {
     </div>
 
     <div class="email-cta-card">
-      <div class="email-cta-title">Go deeper with Topo Finance — at no cost</div>
+      <div class="email-cta-title">Go deeper with Topo Finance, at no cost</div>
       <div class="email-cta-sub">
         Topo Finance is a nonprofit. We offer treasury teams free access to deeper calculations, verified bank-level data, and practical strategies for engaging your banks on emissions reduction. If you'd like a confidential, institution-specific analysis or want to understand your options, get in touch. There is no cost.
       </div>
