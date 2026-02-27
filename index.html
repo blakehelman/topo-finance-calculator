@@ -822,23 +822,25 @@
     }
     .gsib-row {
       display: flex; align-items: center; gap: 12px;
-      padding: 11px 8px; margin: 0 -8px;
+      padding: 11px 12px; margin: 2px 0;
       border-radius: var(--radius-sm);
-      cursor: pointer; transition: background 0.12s;
+      border: 1.5px solid var(--gray-200);
+      cursor: pointer; transition: all 0.12s; background: #fff;
     }
-    .gsib-row:hover { background: var(--gray-50); }
-    .gsib-row.selected { background: rgba(26,42,235,0.04); }
+    .gsib-row:hover { border-color: var(--navy); background: rgba(26,42,235,0.02); }
+    .gsib-row.selected { border-color: var(--navy); background: rgba(26,42,235,0.05); }
     .gsib-checkbox {
-      width: 18px; height: 18px; border-radius: 4px;
-      border: 2px solid var(--gray-300); flex-shrink: 0;
+      width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
+      border: 2px solid #aab; background: #fff;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.12s;
     }
+    .gsib-row:hover .gsib-checkbox { border-color: var(--navy); }
     .gsib-row.selected .gsib-checkbox {
       background: var(--navy); border-color: var(--navy);
     }
     .gsib-row.selected .gsib-checkbox::after {
-      content: '✓'; color: white; font-size: 11px; font-weight: 800;
+      content: '✓'; color: white; font-size: 12px; font-weight: 800; line-height: 1;
     }
     .gsib-name { font-size: 15px; font-weight: 500; color: var(--text); }
 
