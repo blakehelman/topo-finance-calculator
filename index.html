@@ -318,12 +318,17 @@
     }
     .welcome-info-item.open .welcome-info-arrow { transform: rotate(90deg); }
     .welcome-info-body {
-      display: none;
-      padding: 0 0 16px 32px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 0 0 32px;
       font-size: 15px; color: var(--gray-600); line-height: 1.75;
       text-align: left;
     }
-    .welcome-info-item.open .welcome-info-body { display: block; }
+    .welcome-info-item.open .welcome-info-body {
+      max-height: 600px;
+      padding: 0 0 16px 32px;
+    }
 
     /* ─── GEOGRAPHY CARDS ─── */
     .geo-grid {
@@ -1295,8 +1300,13 @@ function renderWelcome() {
         </div>
         <div class="welcome-info-body">Topo Finance works directly with organisations to turn this high-level picture into a full, actionable analysis, including a detailed breakdown by institution, a strategy for engaging your banks, or support aligning your treasury with your broader climate commitments. Reach out to the team at any point. There is no cost for an initial conversation.</div>
       </div>
-      <div class="notice notice-soft" style="margin-top:20px;">
-        <strong>Data limitations:</strong> Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology. Actual financed emissions vary by institution, loan book composition, and reporting year. Results should be treated as indicative estimates only.
+      <div class="welcome-info-item">
+        <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
+          <span class="welcome-info-icon">&#x26A0;&#xFE0F;</span>
+          <div class="welcome-info-content"><div class="welcome-info-label">Data limitations</div></div>
+          <span class="welcome-info-arrow">\u203a</span>
+        </div>
+        <div class="welcome-info-body">Emission factors are illustrative, based on banks' own public disclosures and PCAF methodology. Actual financed emissions vary by institution, loan book composition, and reporting year. Results should be treated as indicative estimates only.</div>
       </div>
     </div>
     </div>
