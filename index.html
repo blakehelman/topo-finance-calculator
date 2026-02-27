@@ -1408,7 +1408,7 @@ function renderMmf() {
         <input type="number" min="0" placeholder="0"
           value="${data.mmfDeposits[c.id] || ''}"
           oninput="setMmfDeposit('${c.id}', this.value)">
-        <span class="unit">$M</span>
+        <span class="unit">${c.symbol}M</span>
       </div>
     </div>`).join('');
   return `
@@ -1450,7 +1450,7 @@ function renderReview() {
   const mmfRows = mmfHasEntries
     ? MMF_CURRENCIES.filter(c => parseFloat(data.mmfDeposits[c.id]) > 0).map(c => {
         const dep = parseFloat(data.mmfDeposits[c.id]) || 0;
-        return `<div class="review-row"><span class="review-label">${c.flag}\u2002${c.label}</span><span class="review-value">$${dep.toLocaleString()}M</span></div>`;
+        return `<div class="review-row"><span class="review-label">${c.flag}\u2002${c.label}</span><span class="review-value">${c.symbol}${dep.toLocaleString()}M</span></div>`;
       }).join('')
     : '<div class="review-empty">No money market funds entered</div>';
 
