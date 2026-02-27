@@ -137,14 +137,15 @@
     .welcome-columns {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 1px 1fr;
+      grid-template-columns: 1fr 160px 1fr;
       gap: 0;
       min-height: 0;
     }
     .welcome-divider {
+      width: 1px;
       background: var(--gray-200);
       align-self: stretch;
-      margin: 40px 80px;
+      margin: 40px auto;
     }
     @media (max-width: 720px) {
       .welcome-wrap { height: auto; min-height: 100vh; padding-bottom: 40px; }
