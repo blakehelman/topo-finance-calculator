@@ -1033,17 +1033,14 @@
 // DATA
 // ══════════════════════════════════════════
 
-// All 29 FSB-designated Global Systemically Important Banks (G-SIBs)
-// Topo Finance to confirm list and replace factors with verified data
+// FSB-designated Global Systemically Important Banks (G-SIBs)
+// Source: Topo Finance data analytics (intensities, average+rank), 30.10.2025
 const GSIBS = [
   { name: 'JPMorgan Chase',               country: 'United States',  flag: '🇺🇸' },
   { name: 'Bank of America',              country: 'United States',  flag: '🇺🇸' },
   { name: 'Citigroup',                    country: 'United States',  flag: '🇺🇸' },
   { name: 'Goldman Sachs',               country: 'United States',  flag: '🇺🇸' },
-  { name: 'Morgan Stanley',              country: 'United States',  flag: '🇺🇸' },
   { name: 'Wells Fargo',                 country: 'United States',  flag: '🇺🇸' },
-  { name: 'Bank of New York Mellon',     country: 'United States',  flag: '🇺🇸' },
-  { name: 'State Street',               country: 'United States',  flag: '🇺🇸' },
   { name: 'HSBC',                        country: 'United Kingdom', flag: '🇬🇧' },
   { name: 'Barclays',                    country: 'United Kingdom', flag: '🇬🇧' },
   { name: 'Standard Chartered',          country: 'United Kingdom', flag: '🇬🇧' },
@@ -1059,10 +1056,6 @@ const GSIBS = [
   { name: 'Mitsubishi UFJ FG',          country: 'Japan',           flag: '🇯🇵' },
   { name: 'Mizuho Financial Group',     country: 'Japan',           flag: '🇯🇵' },
   { name: 'Sumitomo Mitsui FG',         country: 'Japan',           flag: '🇯🇵' },
-  { name: 'ICBC',                       country: 'China',           flag: '🇨🇳' },
-  { name: 'China Construction Bank',    country: 'China',           flag: '🇨🇳' },
-  { name: 'Agricultural Bank of China', country: 'China',           flag: '🇨🇳' },
-  { name: 'Bank of China',              country: 'China',           flag: '🇨🇳' },
   { name: 'Royal Bank of Canada',       country: 'Canada',          flag: '🇨🇦' },
   { name: 'TD Bank',                    country: 'Canada',          flag: '🇨🇦' },
 ];
@@ -1071,14 +1064,12 @@ const GSIBS = [
 // Source: Topo Finance data analytics (intensities, average+rank), 30.10.2025
 const GSIB_FACTORS = {
   'JPMorgan Chase': 470.4, 'Bank of America': 345.5, 'Citigroup': 461.3,
-  'Goldman Sachs': 997.7, 'Morgan Stanley': 125, 'Wells Fargo': 363.1,
-  'Bank of New York Mellon': 95, 'State Street': 90,
+  'Goldman Sachs': 997.7, 'Wells Fargo': 363.1,
   'HSBC': 215.4, 'Barclays': 222.4, 'Standard Chartered': 461.5,
   'BNP Paribas': 136.0, 'Soci\u00e9t\u00e9 G\u00e9n\u00e9rale': 285.9,
   'Cr\u00e9dit Agricole': 265.6, 'BPCE / Natixis': 58.6,
   'Deutsche Bank': 302.5, 'UBS': 147.7, 'UniCredit': 116.6, 'ING': 165.5, 'Santander': 260.3,
   'Mitsubishi UFJ FG': 720.5, 'Mizuho Financial Group': 328.3, 'Sumitomo Mitsui FG': 712.0,
-  'ICBC': 145, 'China Construction Bank': 148, 'Agricultural Bank of China': 152, 'Bank of China': 140,
   'Royal Bank of Canada': 291.6, 'TD Bank': 247.3,
 };
 
