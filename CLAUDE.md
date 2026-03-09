@@ -16,10 +16,11 @@ Single self-contained HTML file. No dependencies, no frameworks, no external cal
 ---
 
 ## Deployment
-- Hosted on **Netlify** via manual drag-and-drop deploy
-- To update: drag the HTML file onto the Netlify site's Deploys page
-- Next step: connect to a GitHub repo for auto-deploy on file change
-- Target URL: `calculator.topofinance.org` (subdomain not yet configured)
+- Hosted on **GitHub Pages** — no Netlify, no build pipeline
+- Live URL: `https://blakehelman.github.io/topo-finance-calculator`
+- Any `git push` to main auto-deploys within ~1 minute
+- **Claude commits locally only. Blake pushes to GitHub.**
+- Target custom domain: `calculator.topofinance.org` (DNS CNAME not yet configured)
 
 ---
 
@@ -115,10 +116,15 @@ Regional banks (European and US) are entered as a single aggregate figure, not p
 - [ ] Receive and plug in real PCAF-based emission factors from client
 - [ ] Confirm/update bank lists with client
 - [ ] Wire up email CTA to actual CRM / Mailchimp / Formspree
-- [ ] Set up GitHub repo → connect to Netlify for auto-deploy
 - [ ] Configure `calculator.topofinance.org` subdomain (DNS CNAME → Netlify)
-- [ ] Decide on white vs blue logo in header (currently white — same colour as background makes it invisible if header bg ever changes)
 - [ ] Client review of methodology disclaimer copy
+- [ ] Replace "BEX and JOEL" note with real legal documentation link when ready
+
+## Deployment (updated)
+- GitHub repo: `https://github.com/blakehelman/topo-finance-calculator`
+- Live site: `https://blakehelman.github.io/topo-finance-calculator`
+- Hosted on GitHub Pages — Netlify is no longer used
+- **Claude commits locally only. Do NOT `git push` — Blake pushes manually.**
 
 ---
 
@@ -186,7 +192,82 @@ The entire tool was built from scratch in a single session as a self-contained H
 - Info-expand sections (the `+` accordions) explain GSIB/DSIB terminology inline — avoids intimidating users who don't know the jargon
 - Methodology note on results is intentionally visible and prominent — tool is a lead-gen piece, not a regulatory instrument, and the disclaimer reinforces that Topo Finance can provide the real analysis
 
-### Session 2 — Context reload (this session)
+### Session 2 — Context reload
 - Reloaded full project context into a new tab from CLAUDE.md and HTML file
 - User requested CLAUDE.md be kept as a full session reference log going forward (to substitute for not being able to share conversation history across tabs)
 - Updated MEMORY.md to enforce this pattern on all future projects
+
+### Session 4 — Design polish, mobile fixes, UX tweaks
+
+**Enterprise design refresh (steps only, homepage untouched):**
+- `--radius`: 16px → 4px, `--radius-sm`: 10px → 2px — sharper, more spreadsheet-appropriate
+- Buttons: pill → 4px radius, EXCEPT major CTAs (Get Started, Next, Back, Skip) which stay pill
+- Yes/No option buttons, badges, eyebrows: all squared off
+- Geo cards: removed hover lift (`translateY`) — clean border change only
+- Bar chart fills: rounded → flat (radius 0)
+- Focus rings: removed soft glow, clean border only
+- Shadows: neutral/subtle, removed blue tinting
+
+**Layout & spacing:**
+- `.step-wrap` max-width: 660px → 900px — much more breathing room across all steps
+- Bank rows: padding increased, font 13px → 14px, input 100px → 120px
+- `white-space: nowrap` on bank labels (prevents "Middle East & Africa" wrapping) + single column on mobile
+- `step-subtitle` margin-bottom: 32px → 40px
+
+**Welcome page vertical centering fix:**
+- Root cause: `#main` kept `padding-bottom: 96px` even on welcome (footer hidden). JS `render()` now zeroes both top AND bottom padding on welcome screen
+- Added `grid-template-rows: 1fr` to `.welcome-columns` so grid row fills viewport height
+
+**Mobile (iOS Safari) fixes:**
+- `viewport-fit=cover` + `env(safe-area-inset-bottom)` on footer — home indicator no longer covers Next button
+- Header: title and step label hidden on mobile (≤640px) — just logo shows
+- Footer buttons: scaled down on mobile so all three fit on screen
+- Bank grid: single column on mobile
+- `inputmode="decimal"` on all number inputs — triggers numeric keypad on iOS (type="number" alone wasn't enough)
+
+**Results page:**
+- Total number: accent yellow → white
+- Scope % redesigned from small pill to large hero block: 42px accent number, label, subtext, divider
+
+**Other UX:**
+- Enter key advances to Next on all steps (skips textarea, results, disabled buttons)
+- Scope tab label: "One total figure" → "Scope 1+2+3 Combined", properly flex-centered
+- Data limitations accordion icon: ≈ → 🚧
+- Info-expand body padding: added 12px top padding so text isn't flush against trigger
+- All accordions on welcome screen start closed
+
+**What still needs to be done:**
+- Real PCAF emission factors from Topo Finance
+- Wire up email CTA to CRM/Mailchimp/Formspree
+- Configure calculator.topofinance.org subdomain
+- Replace "BEX and JOEL" placeholder with real legal link
+
+---
+
+### Session 3 — Welcome page layout + responsive fixes
+
+**Welcome page two-column layout:**
+- Redesigned to two-column layout: left = hero (logo, title, subtitle, CTA), right = accordion
+- Multiple iterations to get column spacing right — the key lesson: `margin` on a `1px` grid column does NOT create real gap. Only an explicit column width (e.g. `1fr 160px 1fr`) or CSS grid `gap` creates actual space between content
+- Final layout: `grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: clamp(32px, 8vw, 120px)` — intrinsically responsive, no media query needed for stacking
+- Added `grid-template-rows: 1fr` so the single grid row fills the full column height (without this, grid items were content-height only)
+- Removed vertical divider line per user request
+
+**Accordion vertical centering:**
+- `.welcome-info-list` is a flex column with `height: 100%; overflow-y: auto`
+- `.welcome-info-inner` uses `margin: auto 0` — centers when content fits, anchors to top when overflowing. This is the correct CSS trick for "center if fits, scroll if not"
+- All accordion items start closed on page load (removed `open` class from first item)
+
+**Accordion animation:**
+- Attempted `grid-template-rows: 0fr → 1fr` transition (the modern replacement for jerky `max-height` animation). User reverted — something broke. Staying on `max-height 0.2s ease` for now
+- Arrow rotates 90deg on open via `transition: transform 0.2s`
+
+**Responsive design:**
+- `height: 100dvh` instead of `100vh` — `dvh` accounts for mobile browser chrome (URL bar). `vh` on iOS includes area behind the address bar, causing content to be mispositioned
+- `@media (max-width: 820px)`: switches to `height: auto; min-height: 100dvh` with `clamp(40px, 8vh, 72px)` top/bottom padding so logo has breathing room on mobile
+- Mobile: `welcome-hero` switches to `justify-content: flex-start`, accordion overrides to `height: auto; overflow-y: visible`, inner margin reset to 0
+- `@media (max-width: 520px)`: title shrinks to 32px, geo-grid goes single column
+
+**Critical bug fix — content biased to top:**
+- Root cause: `#main` had `padding-bottom: 96px` (for footer) even on welcome screen where footer is hidden. This 96px dead space at bottom shifted the vertical center calculation upward
+- Fix: in `render()` JS function, set both `paddingTop` and `paddingBottom` to `'0'` when `isWelcome`. Previously only `paddingTop` was being zeroed out
