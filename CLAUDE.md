@@ -28,7 +28,7 @@ Single self-contained HTML file. No dependencies, no frameworks, no external cal
 | Token | Value |
 |---|---|
 | Primary blue | `#1A2AEB` |
-| Accent yellow-green | `#C4E635` |
+| Accent yellow-green | `#EDFE53` |
 | Background | `#f9fafb` |
 | White | `#ffffff` |
 | Body font | System sans-serif stack |
