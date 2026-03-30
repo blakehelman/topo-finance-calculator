@@ -1402,17 +1402,17 @@ function renderGsibSelect() {
   return `
   <div class="step-wrap">
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
-    <h2 class="step-title">Which Global Banks (G-SIBs) do you bank with?</h2>
+    <h2 class="step-title">Which Global Banks do you bank with?</h2>
     <p class="step-subtitle">Select all banks where your company holds cash deposits. You'll enter specific amounts on the next screen.</p>
     <div class="gsib-select-count${count > 0 ? ' has-selection' : ''}">${count > 0 ? count + ' bank' + (count > 1 ? 's' : '') + ' selected' : 'No banks selected yet. Tap any bank to add it.'}</div>
     <div class="gsib-list">${listHtml}</div>
     <div class="info-expand">
       <button class="info-trigger" id="info-btn-gsib" onclick="toggleInfo('gsib')">
-        <span>\ud83d\udca1 What is a G-SIB?</span>
+        <span>\ud83d\udca1 What is a Global Bank?</span>
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-gsib">
-        <p>Global Systemically Important Banks (G-SIBs) are the world's largest banks, designated annually by the Financial Stability Board — 29 institutions in total. Topo Finance has verified emission intensity data for 27 of them, so your result here is bank-specific rather than a regional average.</p>
+        <p>Global Banks are the world's largest banks, designated annually by the Financial Stability Board — 29 institutions in total. Topo Finance has verified emission intensity data for 27 of them, so your result here is bank-specific rather than a regional average.</p>
         <p style="margin-top:10px;">If you would like verified, up-to-date factors based on Topo's proprietary data rather than these illustrative figures, <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">get in touch.</a></p>
       </div>
     </div>
@@ -1442,9 +1442,10 @@ function renderGsibInput() {
     <p class="step-subtitle">Enter the approximate USD equivalent of cash deposits at each bank. Leave blank or enter 0 if you're unsure.</p>
     <div class="bank-grid">${rows}</div>
     <div class="total-preview">
-      <span>Total G-SIB deposits entered</span>
+      <span>Total Global Bank deposits entered</span>
       <strong id="gsib-total">$${total > 0 ? total.toLocaleString() : '0'}M</strong>
     </div>
+    <!-- TEMPORARILY REMOVED — client feedback
     <div class="info-expand">
       <button class="info-trigger" id="info-btn-gsib-factor" onclick="toggleInfo('gsib-factor')">
         <span>\ud83d\udca1 About these emission factors</span>
@@ -1455,6 +1456,7 @@ function renderGsibInput() {
         <p style="margin-top:10px;">Topo Finance uses verified, proprietary data for client analysis, more granular and more current than the illustrative figures used here. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch.</a></p>
       </div>
     </div>
+    -->
   </div>`;
 }
 
@@ -1527,7 +1529,7 @@ function renderReview() {
         const bank = GSIBS.find(b => b.name === name);
         return `<div class="review-row"><span class="review-label">${bank ? bank.flag + '\u2002' : ''}${name}</span><span class="review-value">${dep > 0 ? '$' + dep.toLocaleString() + 'M' : '-'}</span></div>`;
       }).join('')
-    : '<div class="review-empty">No G-SIBs selected</div>';
+    : '<div class="review-empty">No Global Banks selected</div>';
 
   // TEMPORARILY REMOVED — client feedback: no regional bank assessment
   // const dsibHasEntries = DSIB_REGIONS.some(r => parseFloat(data.dsibDeposits[r.id]) > 0);
@@ -1553,7 +1555,7 @@ function renderReview() {
 
     <div class="review-block">
       <div class="review-block-header">
-        <span class="review-block-title">Global Banks (G-SIBs)</span>
+        <span class="review-block-title">Global Banks</span>
       </div>
       ${gsibRows}
     </div>
@@ -1820,9 +1822,9 @@ function renderResults() {
     <div class="whatif-label">Scenario: European Banking Switch</div>
     <div class="whatif-value">−${fmtNum(whatIfSaving)} tCO₂e</div>
     <div class="whatif-sub">
-      If your US GSIB deposits were held at European-equivalent banks, your estimated financed emissions
+      If your US Global Bank deposits were held at European-equivalent banks, your estimated financed emissions
       could be approximately <strong>${fmtNum(whatIfSaving)} tCO₂e lower</strong>, a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
-      US GSIBs carry a 23% higher emission factor per dollar than European GSIBs.
+      US Global Banks carry a 23% higher emission factor per dollar than European Global Banks.
     </div>
   </div>` : '';
 
