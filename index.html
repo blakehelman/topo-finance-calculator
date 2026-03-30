@@ -1411,7 +1411,7 @@ function renderGsibSelect() {
   return `
   <div class="step-wrap">
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
-    <h2 class="step-title">Which Global Banks do you bank with?</h2>
+    <h2 class="step-title">Which Global Banks (mostly among the G-SIBs) do you bank with?</h2>
     <p class="step-subtitle">Select all the banks where your company holds current, deposit accounts. You\u2019ll enter amounts on the next screen.</p>
     <div class="gsib-select-count${count > 0 ? ' has-selection' : ''}">${count > 0 ? count + ' bank' + (count > 1 ? 's' : '') + ' selected' : 'No banks selected yet. Tap any bank to add it.'}</div>
     <div class="gsib-list">${listHtml}</div>
@@ -1610,8 +1610,8 @@ function renderScope123() {
     </p>
 
     <div class="scope-tabs">
-      <div class="scope-tab${!isSplit ? ' active' : ''}" onclick="data.scopeMode='total'; setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">Reported CO2e Emissions: Total scope 1, scope 2 and scope 3 aggregated</div>
-      <div class="scope-tab${isSplit ? ' active' : ''}" onclick="data.scopeMode='split'; setField('scopeTotal',''); render();">Reported CO2e Emissions: Enter each scope separately</div>
+      <div class="scope-tab${!isSplit ? ' active' : ''}" onclick="data.scopeMode='total'; setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">Total Scope 1, 2, and 3 CO2e emissions</div>
+      <div class="scope-tab${isSplit ? ' active' : ''}" onclick="data.scopeMode='split'; setField('scopeTotal',''); render();">Enter each emissions scope separately</div>
     </div>
 
     ${!isSplit ? `
