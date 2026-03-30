@@ -1165,7 +1165,8 @@ function visible() {
   if (data.selectedGsibs.length > 0) {
     s.push({ id: 'gsib-input', label: 'Bank Deposits' });
   }
-  s.push({ id: 'dsib',        label: 'Regional Banking' });
+  // TEMPORARILY REMOVED — client feedback: no regional bank page
+  // s.push({ id: 'dsib',        label: 'Regional Banking' });
   s.push({ id: 'mmf',         label: 'Money Market Funds' });
   s.push({ id: 'review',      label: 'Review' });
   s.push({ id: 'scope123',    label: 'Company Emissions' });
@@ -1247,10 +1248,11 @@ function calcEmissions() {
     if (dep > 0) cats.push({ label: name, val: dep * fac });
   });
 
-  DSIB_REGIONS.forEach(r => {
-    const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
-    if (dep > 0) cats.push({ label: r.label + ' Regional Banks', val: dep * r.factor });
-  });
+  // TEMPORARILY REMOVED — client feedback: no regional bank assessment
+  // DSIB_REGIONS.forEach(r => {
+  //   const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
+  //   if (dep > 0) cats.push({ label: r.label + ' Regional Banks', val: dep * r.factor });
+  // });
 
   MMF_CURRENCIES.forEach(c => {
     const dep = parseFloat(data.mmfDeposits[c.id]) || 0;
@@ -1524,13 +1526,14 @@ function renderReview() {
       }).join('')
     : '<div class="review-empty">No G-SIBs selected</div>';
 
-  const dsibHasEntries = DSIB_REGIONS.some(r => parseFloat(data.dsibDeposits[r.id]) > 0);
-  const dsibRows = dsibHasEntries
-    ? DSIB_REGIONS.filter(r => parseFloat(data.dsibDeposits[r.id]) > 0).map(r => {
-        const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
-        return `<div class="review-row"><span class="review-label">${r.flag}\u2002${r.label}</span><span class="review-value">$${dep.toLocaleString()}M</span></div>`;
-      }).join('')
-    : '<div class="review-empty">No regional banking entered</div>';
+  // TEMPORARILY REMOVED — client feedback: no regional bank assessment
+  // const dsibHasEntries = DSIB_REGIONS.some(r => parseFloat(data.dsibDeposits[r.id]) > 0);
+  // const dsibRows = dsibHasEntries
+  //   ? DSIB_REGIONS.filter(r => parseFloat(data.dsibDeposits[r.id]) > 0).map(r => {
+  //       const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
+  //       return `<div class="review-row"><span class="review-label">${r.flag}\u2002${r.label}</span><span class="review-value">$${dep.toLocaleString()}M</span></div>`;
+  //     }).join('')
+  //   : '<div class="review-empty">No regional banking entered</div>';
 
   const mmfHasEntries = MMF_CURRENCIES.some(c => parseFloat(data.mmfDeposits[c.id]) > 0);
   const mmfRows = mmfHasEntries
@@ -1552,12 +1555,14 @@ function renderReview() {
       ${gsibRows}
     </div>
 
+    ${ /* TEMPORARILY REMOVED — client feedback: no regional bank assessment
     <div class="review-block">
       <div class="review-block-header">
         <span class="review-block-title">Regional &amp; Domestic Banks</span>
       </div>
       ${dsibRows}
     </div>
+    */ '' }
 
     <div class="review-block">
       <div class="review-block-header">
@@ -1646,7 +1651,8 @@ function renderResults() {
   // ─── Intensity ───
   const totalExp =
     data.selectedGsibs.reduce((s, n) => s + (parseFloat(data.gsibDeposits[n]) || 0), 0) +
-    DSIB_REGIONS.reduce((s, r) => s + (parseFloat(data.dsibDeposits[r.id]) || 0), 0) +
+    // TEMPORARILY REMOVED — client feedback: no regional bank assessment
+    // DSIB_REGIONS.reduce((s, r) => s + (parseFloat(data.dsibDeposits[r.id]) || 0), 0) +
     MMF_CURRENCIES.reduce((s, c) => s + (parseFloat(data.mmfDeposits[c.id]) || 0), 0);
   const intensity = (totalExp > 0 && total > 0) ? Math.round(total / totalExp) : null;
 
@@ -1945,7 +1951,8 @@ function render() {
     case 'welcome':     html = renderWelcome();     break;
     case 'gsib-select': html = renderGsibSelect();  break;
     case 'gsib-input':  html = renderGsibInput();   break;
-    case 'dsib':        html = renderDsib();         break;
+    // TEMPORARILY REMOVED — client feedback: no regional bank assessment
+    // case 'dsib':        html = renderDsib();         break;
     case 'mmf':         html = renderMmf();          break;
     case 'review':      html = renderReview();       break;
     case 'scope123':    html = renderScope123();     break;
