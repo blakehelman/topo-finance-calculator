@@ -1376,35 +1376,34 @@ function renderWelcome() {
 }
 
 function renderGsibSelect() {
-  // ORIGINAL: grouped by country
-  // const byCountry = {};
-  // GSIBS.forEach(b => {
-  //   if (!byCountry[b.country]) byCountry[b.country] = [];
-  //   byCountry[b.country].push(b);
-  // });
-  // const countryOrder = ['United States','United Kingdom','France','Germany','Switzerland','Italy','Netherlands','Spain','Japan','China','Canada'];
-  // const listHtml = countryOrder.map(country => {
-  //   if (!byCountry[country]) return '';
-  //   return `
-  //   <div class="gsib-country-group">
-  //     <div class="gsib-country-header">${byCountry[country][0].flag}\u2002${country}</div>
-  //     ${byCountry[country].map(b => {
-  //       const sel = data.selectedGsibs.includes(b.name);
-  //       return `<div class="gsib-row${sel ? ' selected' : ''}" onclick="toggleGsib('${b.name}')">
-  //       <div class="gsib-checkbox"></div>
-  //       <span class="gsib-name">${b.name}</span>
-  //     </div>`;
-  //     }).join('')}
-  //   </div>`;
-  // }).join('');
-
-  // Alphabetical order — client feedback
-  const sorted = [...GSIBS].sort((a, b) => a.name.localeCompare(b.name));
-  const listHtml = sorted.map(b => {
-    const sel = data.selectedGsibs.includes(b.name);
-    return `<div class="gsib-row${sel ? ' selected' : ''}" onclick="toggleGsib('${b.name}')">
-      <div class="gsib-checkbox"></div>
-      <span class="gsib-name">${b.flag}\u2002${b.name}</span>
+  // Grouped by continent, alphabetical within each
+  const CONTINENT_MAP = {
+    'Australia': 'Asia-Pacific', 'Japan': 'Asia-Pacific',
+    'Canada': 'North America', 'United States': 'North America',
+    'Denmark': 'Europe', 'France': 'Europe', 'Germany': 'Europe',
+    'Italy': 'Europe', 'Netherlands': 'Europe', 'Spain': 'Europe',
+    'Switzerland': 'Europe', 'United Kingdom': 'Europe',
+  };
+  const CONTINENT_ORDER = ['Europe', 'North America', 'Asia-Pacific'];
+  const byContinent = {};
+  GSIBS.forEach(b => {
+    const cont = CONTINENT_MAP[b.country] || 'Other';
+    if (!byContinent[cont]) byContinent[cont] = [];
+    byContinent[cont].push(b);
+  });
+  Object.values(byContinent).forEach(arr => arr.sort((a, b) => a.name.localeCompare(b.name)));
+  const listHtml = CONTINENT_ORDER.map(cont => {
+    if (!byContinent[cont]) return '';
+    return `
+    <div class="gsib-country-group">
+      <div class="gsib-country-header">${cont}</div>
+      ${byContinent[cont].map(b => {
+        const sel = data.selectedGsibs.includes(b.name);
+        return `<div class="gsib-row${sel ? ' selected' : ''}" onclick="toggleGsib('${b.name}')">
+        <div class="gsib-checkbox"></div>
+        <span class="gsib-name">${b.flag}\u2002${b.name}</span>
+      </div>`;
+      }).join('')}
     </div>`;
   }).join('');
 
