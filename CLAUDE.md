@@ -1,25 +1,26 @@
-# Topo Finance — Financed Emissions Calculator
+# Topo Finance — Financed Emissions Estimator
 
 ## What this project is
-A single-file, browser-based calculator that helps treasury professionals estimate their company's **financed emissions** (Scope 3, Category 15) across banking relationships, money market funds, and sovereign bond holdings. Built as a lead-generation and awareness tool for Topo Finance, ending with an email CTA for deeper engagement.
+A single-file, browser-based estimator that helps treasury professionals estimate their company's **financed emissions** (Scope 3, Category 15) across banking relationships and money market fund holdings. Built as a lead-generation and awareness tool for Topo Finance, ending with an email CTA for deeper engagement.
 
-The tool is a **mockup/prototype** — emission factors are illustrative. Real PCAF-based data has not yet been provided by the client.
+The tool now uses **real emission factor data** from Topo Finance (per-bank GSIB factors from "Data Analytics (Intensities..) 30.10.2025.xlsx" and MMF/transition risk data from "Topo Finance — Financed Emissions Estimator Data.xlsx").
 
 ---
 
 ## The file
 ```
-Documents/Claude Projects/topo-finance/topo-finance-calculator.html
+Documents/Claude Projects/Topo Finance/Financed Emissions Calculator/index.html
 ```
 Single self-contained HTML file. No dependencies, no frameworks, no external calls. All CSS and JS are inline. Works by opening directly in any browser.
 
 ---
 
 ## Deployment
+- GitHub repo: `https://github.com/blakehelman/topo-finance-calculator`
+- Live site: `https://blakehelman.github.io/topo-finance-calculator`
 - Hosted on **GitHub Pages** — no Netlify, no build pipeline
-- Live URL: `https://blakehelman.github.io/topo-finance-calculator`
 - Any `git push` to main auto-deploys within ~1 minute
-- **Claude commits locally only. Blake pushes to GitHub.**
+- Claude may push to GitHub when asked
 - Target custom domain: `calculator.topofinance.org` (DNS CNAME not yet configured)
 
 ---
@@ -34,240 +35,136 @@ Single self-contained HTML file. No dependencies, no frameworks, no external cal
 | Body font | System sans-serif stack |
 
 - All `--navy` references in the CSS use `#1A2AEB`
-- Logo file: `Topo-Finance-Logo-Blue.svg` (stored in Downloads, embedded as base64 PNG inside the HTML)
-- Logo renders **white** in the header (via color override), **blue** on the welcome screen
+- Logo embedded as base64 PNG inside the HTML (`LOGO_B64` constant)
+- Logo renders **white** in the header, **blue** on the welcome screen
 - Header bar is **hidden on the welcome screen** and appears from Step 1 onwards
 
 ---
 
 ## User flow & step logic
-Steps are dynamically ordered based on user selections. The `visible()` function builds the step array at runtime.
+Steps are dynamically ordered. The `visible()` function builds the step array at runtime.
 
-### Step sequence
-| Step ID | Label | Condition |
+### Current step sequence
+| Step ID | Label | Notes |
 |---|---|---|
-| `welcome` | Welcome screen | Always |
-| `geography` | Where you bank (European / US / Both) | Always |
-| `primary-region` | Which region is majority? | Only if "Both" |
-| `eu-gsibs` | European Global Banks (GSIBs) | European or Both |
-| `eu-dsibs` | European Domestic Banks (DSIBs) | European or Both |
-| `eu-regional` | European Regional Banks | European or Both |
-| `us-gsibs` | US Global Banks (GSIBs) | US or Both |
-| `us-regional` | US Regional Banks | US or Both |
-| `mmf-eu` | MMF: European Sovereign | Always (skippable) |
-| `mmf-us` | MMF: US Sovereign | Always (skippable) |
-| `sovereign-gate` | Do you hold sovereign bonds? | Always |
-| `eu-sovereign` | European Sovereign Debt | Only if sovereign gate = yes |
-| `us-sovereign` | US Treasury Bonds | Only if sovereign gate = yes |
-| `scope123` | Reported Scope 1/2/3 emissions | Always (skippable) |
-| `results` | Results + email CTA | Always |
+| `welcome` | Welcome screen | Always shown |
+| `gsib-select` | Select Your Banks | 27 Global Banks listed alphabetically |
+| `gsib-input` | Bank Deposits | Only if banks selected |
+| `mmf` | Money Market Funds | Optional/skippable |
+| `review` | Review | Summary of all inputs |
+| `scope123` | Company Emissions | Optional/skippable |
+| `results` | Your Results | Emissions breakdown + email CTA |
+
+### Temporarily removed steps (code commented out, not deleted)
+- **`dsib` (Regional Banking)** — removed per client feedback (agreed with Paul). Code preserved with `// TEMPORARILY REMOVED` comments.
 
 ### Key logic
-- If "Both" → asks which region is primary → does that region first, then the other
-- "EU" is referred to as "European" throughout all user-facing text
-- Internal variable/function names still use `eu` prefix (e.g. `euGsibs`, `isEU()`) — do not rename these
+- Banks listed alphabetically (previously grouped by country — old code preserved as comments)
+- User-facing text says "Global Banks" (not "G-SIBs"), but internal variable names still use `gsib` prefix — do not rename these
+- "Financed Emissions Estimator" (not "Calculator") throughout
 
 ---
 
-## Emission factors (illustrative — AWAITING REAL DATA)
-| Category | Current factor (tCO₂e per $1M) |
+## Data sources
+
+### Per-bank emission factors (GSIB_FACTORS)
+Source: `Data Analytics (Intensities..) 30.10.2025.xlsx`
+- 27 banks with individual tCO2e per $1M factors
+- Stored in `GSIB_FACTORS` object — values range from ~56 to ~998
+
+### MMF factors (MMF_CURRENCIES)
+Source: `Topo Finance — Financed Emissions Estimator Data.xlsx`
+| Currency | Factor (tCO2e per $1M) |
 |---|---|
-| European GSIBs | 130 |
-| European DSIBs | 105 |
-| European Regional Banks | 85 |
-| MMF: European Sovereign | 45 |
-| MMF: US Sovereign | 70 |
-| European Sovereign Debt | 55 |
-| US Sovereign Debt | 80 |
-| US GSIBs | 160 |
-| US Regional Banks | 115 |
+| USD | 311 |
+| GBP | 313 |
+| EUR | 303 |
 
-**To update:** The user will provide a spreadsheet or table. Replace values in the `FACTORS` object in the JS. Do not change the key names.
+### Transition risk ratings (TRANSITION_RISK)
+Source: `Topo Finance — Financed Emissions Estimator Data.xlsx`
+- Per-bank high/medium/low ratings
+- Banks with "NA" in spreadsheet defaulted to medium
+- **High:** JPMorgan Chase, Wells Fargo, Citigroup, Barclays, HSBC, Royal Bank of Canada
+- **Low:** ING, UBS
+- **Medium:** all others
 
 ---
 
-## Bank lists
-### European GSIBs
-BNP Paribas, HSBC, Deutsche Bank, Barclays, UBS, Société Générale, UniCredit, ING
+## Bank list (27 banks)
+Commonwealth Bank, ANZ Bank, Royal Bank of Canada, TD Bank, Danske Bank, BNP Paribas, BPCE / Natixis, Crédit Agricole, Société Générale, Deutsche Bank, UniCredit, Mitsubishi UFJ FG, Mizuho Financial Group, Sumitomo Mitsui FG, ING, BBVA, Santander, UBS, Barclays, HSBC, Lloyds, Standard Chartered, Bank of America, Citigroup, Goldman Sachs, JPMorgan Chase, Wells Fargo
 
-### European DSIBs
-ABN AMRO, Commerzbank, Santander, CaixaBank, Erste Group
+---
 
-### US GSIBs
-JPMorgan, Bank of America, Citigroup, Wells Fargo, Goldman Sachs, Morgan Stanley
+## Welcome screen accordions
+| Heading | Icon |
+|---|---|
+| What it does | 📐 |
+| What it is not | ⚠️ |
+| Data Privacy | 🔒 |
+| Want more information? | 📤 |
+| ~~Data limitations~~ | ~~🚧~~ (commented out — replaced by footer disclaimer) |
 
-Regional banks (European and US) are entered as a single aggregate figure, not per-bank.
+Footer disclaimer at bottom of welcome page with "Full disclaimer" link (URL TBD).
 
 ---
 
 ## UI decisions made
 - Header is `#1A2AEB` (Topo brand blue) throughout
-- Welcome page hides the header entirely — title "Financed Emissions Calculator" appears in full blue on one line
-- Persistent header title: "Financed Emissions Calculator" centred in the header bar
+- Welcome page hides the header entirely — title "Financed Emissions Estimator" appears in full blue
+- Persistent header title: "Financed Emissions Estimator" centred in the header bar
 - Back / Next / Skip buttons are 50% larger than other buttons (targeted via `#site-footer .btn`)
 - Progress bar sits below the header, fills as user advances through steps
-- Step counter format: "Step X of Y" — Y updates dynamically as selections are made
+- Step counter format: "Step X of Y" — Y updates dynamically
 - Results bar chart is CSS-only, no libraries, bars animate in on load
 - Print/PDF button triggers `window.print()` with a clean print stylesheet
+- Banks sorted alphabetically (not by country)
 
 ---
 
 ## What still needs to be done
-- [ ] Receive and plug in real PCAF-based emission factors from client
-- [ ] Confirm/update bank lists with client
 - [ ] Wire up email CTA to actual CRM / Mailchimp / Formspree
-- [ ] Configure `calculator.topofinance.org` subdomain (DNS CNAME → Netlify)
-- [ ] Client review of methodology disclaimer copy
-- [ ] Replace "BEX and JOEL" note with real legal documentation link when ready
-
-## Deployment (updated)
-- GitHub repo: `https://github.com/blakehelman/topo-finance-calculator`
-- Live site: `https://blakehelman.github.io/topo-finance-calculator`
-- Hosted on GitHub Pages — Netlify is no longer used
-- **Claude commits locally only. Do NOT `git push` — Blake pushes manually.**
+- [ ] Configure `calculator.topofinance.org` subdomain
+- [ ] Add URL for "Full disclaimer" link on welcome page footer
+- [ ] Client to confirm if regional bank step should be restored in future
 
 ---
 
 ## What NOT to change without checking
-- Internal JS variable names (`euGsibs`, `usGsibs`, `isEU`, etc.) — user-facing copy uses "European" but code uses `eu`
-- The `LOGO_B64` constant — this is the base64 PNG extracted from `Topo-Finance-Logo-Blue.svg`
-- The `logoSVG(uid, w, h, color)` function — generates the logo at any size/color, called twice (header + welcome)
-- Step IDs (`eu-gsibs`, `eu-dsibs`, etc.) — these are internal identifiers, not displayed to users
+- Internal JS variable names (`selectedGsibs`, `GSIB_FACTORS`, `gsibDeposits`, etc.) — user-facing copy uses "Global Banks" but code uses `gsib`
+- The `LOGO_B64` constant — base64 PNG of the Topo Finance logo
+- The `logoSVG(uid, w, h, color)` function — generates the logo at any size/color
+- Step IDs (`gsib-select`, `gsib-input`, etc.) — internal identifiers, not displayed to users
 
 ---
 
 ## Session log
 
 ### Session 1 — Initial build
-**What was built:**
-The entire tool was built from scratch in a single session as a self-contained HTML file. No framework, no external dependencies — intentional decision so it can be deployed by dragging a single file onto Netlify with zero build steps.
-
-**Core architecture decisions:**
-- **Single HTML file:** Chosen for simplicity of deployment and sharing. Client (Topo Finance) can host it anywhere, email it, or drop it on Netlify without a build pipeline.
-- **No JS framework:** Vanilla JS with a `render()` function that re-renders the current step into a `#app` div. Simple enough that a framework would add overhead with no benefit.
-- **Dynamic step list (`visible()` function):** Steps are not hardcoded in order. The `visible()` function builds the array at runtime based on user selections (geography, sovereign gate). This means step count and order change live as the user answers — the "Step X of Y" counter updates accordingly.
-- **Data object (`data`):** All user inputs live in a single flat `data` object. Resetting the form is just `data = freshData()`.
-
-**Geography / region logic:**
-- User picks European, US, or Both
-- If Both → asked which is the primary region → that region's bank steps appear first
-- This was a deliberate UX choice: walk through the bigger/more relevant chunk first, then circle back
-- Internally `eu` prefix is used throughout JS (e.g. `euGsibs`, `isEU()`). User-facing copy always says "European." Decision made to not rename internals to avoid breaking things.
-
-**Bank input design:**
-- GSIBs and DSIBs: per-bank input rows (named banks, individual fields)
-- Regional banks: single aggregate input (not per-bank) — client confirmed regional banks don't need itemisation
-- Running total shown below each bank group — updates live as user types
-
-**Emission factors:**
-- All factors are illustrative placeholders based on publicly available PCAF methodology
-- Stored in a `FACTORS` object with stable key names — when client provides real data, only the values need updating, not the keys or any logic
-- Factors are also printed verbatim in the methodology note on the results page
-
-**Results page:**
-- CSS-only animated bar chart — no charting library. Bars animate in using a double `requestAnimationFrame` trick to trigger the CSS transition after render.
-- Largest bar gets the accent colour (`#C4E635`), others get navy
-- Total shown as a large number with smart formatting (`fmtNum`: shows "1.2M" instead of "1,200,000")
-- Optional: if user entered Scope 1/2/3 total, shows financed emissions as a % of that
-
-**Logo:**
-- Logo file (`Topo-Finance-Logo-Blue.svg`) was converted to a base64 PNG and embedded as a constant `LOGO_B64`
-- A `logoSVG()` function wraps it in an SVG with a colour mask — allows rendering at any size and in any colour (white in header, blue on welcome screen) from one source image
-- Header is hidden entirely on the welcome screen — welcome screen has its own full logo lockup
-
-**Branding decisions:**
-- Header: `#1A2AEB` (Topo primary blue) with white text and white logo
-- Welcome screen: no header — title and logo in blue on white background, feels like a landing page not a form
-- Progress bar: 3px accent-coloured bar under the header, hidden on welcome screen
-- Back/Next/Skip buttons: 50% larger than standard buttons (targeting `#site-footer .btn`) — felt cramped at the default size
-
-**Deployment:**
-- First deployed to Netlify via manual drag-and-drop
-- Goal is to move to GitHub repo → Netlify auto-deploy so updates go live on push
-- Target subdomain: `calculator.topofinance.org` (DNS CNAME to Netlify not yet configured)
-
-**Copy decisions:**
-- Welcome screen cards explain scope (what it covers, what it isn't, privacy, CTA)
-- Each step has a subtitle explaining what to enter
-- Info-expand sections (the `+` accordions) explain GSIB/DSIB terminology inline — avoids intimidating users who don't know the jargon
-- Methodology note on results is intentionally visible and prominent — tool is a lead-gen piece, not a regulatory instrument, and the disclaimer reinforces that Topo Finance can provide the real analysis
+Built the entire tool from scratch as a single self-contained HTML file. Vanilla JS with a `render()` function, dynamic step list via `visible()`, flat `data` object for all user inputs. Originally had geography-based flow (European/US/Both) with per-region bank steps, sovereign bonds, and DSIBs.
 
 ### Session 2 — Context reload
-- Reloaded full project context into a new tab from CLAUDE.md and HTML file
-- User requested CLAUDE.md be kept as a full session reference log going forward (to substitute for not being able to share conversation history across tabs)
-- Updated MEMORY.md to enforce this pattern on all future projects
-
-### Session 4 — Design polish, mobile fixes, UX tweaks
-
-**Enterprise design refresh (steps only, homepage untouched):**
-- `--radius`: 16px → 4px, `--radius-sm`: 10px → 2px — sharper, more spreadsheet-appropriate
-- Buttons: pill → 4px radius, EXCEPT major CTAs (Get Started, Next, Back, Skip) which stay pill
-- Yes/No option buttons, badges, eyebrows: all squared off
-- Geo cards: removed hover lift (`translateY`) — clean border change only
-- Bar chart fills: rounded → flat (radius 0)
-- Focus rings: removed soft glow, clean border only
-- Shadows: neutral/subtle, removed blue tinting
-
-**Layout & spacing:**
-- `.step-wrap` max-width: 660px → 900px — much more breathing room across all steps
-- Bank rows: padding increased, font 13px → 14px, input 100px → 120px
-- `white-space: nowrap` on bank labels (prevents "Middle East & Africa" wrapping) + single column on mobile
-- `step-subtitle` margin-bottom: 32px → 40px
-
-**Welcome page vertical centering fix:**
-- Root cause: `#main` kept `padding-bottom: 96px` even on welcome (footer hidden). JS `render()` now zeroes both top AND bottom padding on welcome screen
-- Added `grid-template-rows: 1fr` to `.welcome-columns` so grid row fills viewport height
-
-**Mobile (iOS Safari) fixes:**
-- `viewport-fit=cover` + `env(safe-area-inset-bottom)` on footer — home indicator no longer covers Next button
-- Header: title and step label hidden on mobile (≤640px) — just logo shows
-- Footer buttons: scaled down on mobile so all three fit on screen
-- Bank grid: single column on mobile
-- `inputmode="decimal"` on all number inputs — triggers numeric keypad on iOS (type="number" alone wasn't enough)
-
-**Results page:**
-- Total number: accent yellow → white
-- Scope % redesigned from small pill to large hero block: 42px accent number, label, subtext, divider
-
-**Other UX:**
-- Enter key advances to Next on all steps (skips textarea, results, disabled buttons)
-- Scope tab label: "One total figure" → "Scope 1+2+3 Combined", properly flex-centered
-- Data limitations accordion icon: ≈ → 🚧
-- Info-expand body padding: added 12px top padding so text isn't flush against trigger
-- All accordions on welcome screen start closed
-
-**What still needs to be done:**
-- Real PCAF emission factors from Topo Finance
-- Wire up email CTA to CRM/Mailchimp/Formspree
-- Configure calculator.topofinance.org subdomain
-- Replace "BEX and JOEL" placeholder with real legal link
-
----
+Reloaded project context. Established CLAUDE.md as persistent session reference.
 
 ### Session 3 — Welcome page layout + responsive fixes
+Two-column welcome layout (hero left, accordions right). CSS grid with intrinsic responsiveness. Fixed vertical centering, mobile viewport issues (`100dvh` vs `100vh`), accordion animation.
 
-**Welcome page two-column layout:**
-- Redesigned to two-column layout: left = hero (logo, title, subtitle, CTA), right = accordion
-- Multiple iterations to get column spacing right — the key lesson: `margin` on a `1px` grid column does NOT create real gap. Only an explicit column width (e.g. `1fr 160px 1fr`) or CSS grid `gap` creates actual space between content
-- Final layout: `grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: clamp(32px, 8vw, 120px)` — intrinsically responsive, no media query needed for stacking
-- Added `grid-template-rows: 1fr` so the single grid row fills the full column height (without this, grid items were content-height only)
-- Removed vertical divider line per user request
+### Session 4 — Design polish, mobile fixes, UX tweaks
+Enterprise design refresh: sharper corners, squared-off buttons (except major CTAs), increased step-wrap width to 900px. Mobile fixes for iOS Safari. Results page scope comparison redesign.
 
-**Accordion vertical centering:**
-- `.welcome-info-list` is a flex column with `height: 100%; overflow-y: auto`
-- `.welcome-info-inner` uses `margin: auto 0` — centers when content fits, anchors to top when overflowing. This is the correct CSS trick for "center if fits, scroll if not"
-- All accordion items start closed on page load (removed `open` class from first item)
-
-**Accordion animation:**
-- Attempted `grid-template-rows: 0fr → 1fr` transition (the modern replacement for jerky `max-height` animation). User reverted — something broke. Staying on `max-height 0.2s ease` for now
-- Arrow rotates 90deg on open via `transition: transform 0.2s`
-
-**Responsive design:**
-- `height: 100dvh` instead of `100vh` — `dvh` accounts for mobile browser chrome (URL bar). `vh` on iOS includes area behind the address bar, causing content to be mispositioned
-- `@media (max-width: 820px)`: switches to `height: auto; min-height: 100dvh` with `clamp(40px, 8vh, 72px)` top/bottom padding so logo has breathing room on mobile
-- Mobile: `welcome-hero` switches to `justify-content: flex-start`, accordion overrides to `height: auto; overflow-y: visible`, inner margin reset to 0
-- `@media (max-width: 520px)`: title shrinks to 32px, geo-grid goes single column
-
-**Critical bug fix — content biased to top:**
-- Root cause: `#main` had `padding-bottom: 96px` (for footer) even on welcome screen where footer is hidden. This 96px dead space at bottom shifted the vertical center calculation upward
-- Fix: in `render()` JS function, set both `paddingTop` and `paddingBottom` to `'0'` when `isWelcome`. Previously only `paddingTop` was being zeroed out
+### Session 5 — Client feedback & data integration
+Major changes based on client review:
+- **Renamed** "Calculator" → "Estimator" throughout
+- **Renamed** "G-SIB" → "Global Banks" in all user-facing text
+- **Removed** regional bank step (dsib) per client agreement with Paul — code commented out
+- **Removed** "Data limitations" accordion — replaced by footer disclaimer
+- **Removed** "About these emission factors" accordion from bank deposits page
+- **Removed** "How these figures are calculated" from results page
+- **Removed** review page notice box
+- **Added** footer disclaimer on welcome page with placeholder "Full disclaimer" link
+- **Sorted** banks alphabetically instead of by country
+- **Applied** revised copy from "Topo Finance — Site Copy.xlsx" spreadsheet across all screens (welcome subtitle, accordion texts, step titles/subtitles, scope tab labels, review page copy)
+- **Updated** MMF factors to real data (USD: 311, GBP: 313, EUR: 303)
+- **Updated** transition risk ratings from final data spreadsheet (H/M/L per bank, NA → medium)
+- **Updated** CTA copy on results page per client
+- Per-bank emission factors retained from earlier "Data Analytics (Intensities..)" file
+- Session changes take priority over spreadsheet where conflicts exist (e.g. "Estimator" not "Lens")
