@@ -1096,42 +1096,41 @@ const DSIB_REGIONS = [
 
 // MMF factors by currency (tCO2e per $1M) - Topo Finance to replace with verified figures
 const MMF_CURRENCIES = [
-  { id: 'usd', label: 'US Dollar (USD)', symbol: '$', flag: '🇺🇸', factor: 70 },
-  { id: 'gbp', label: 'British Pound (GBP)', symbol: '\u00a3', flag: '🇬🇧', factor: 55 },
-  { id: 'eur', label: 'Euro (EUR)', symbol: '\u20ac', flag: '🇪🇺', factor: 45 },
+  { id: 'usd', label: 'US Dollar (USD)', symbol: '$', flag: '🇺🇸', factor: 311 },
+  { id: 'gbp', label: 'British Pound (GBP)', symbol: '\u00a3', flag: '🇬🇧', factor: 313 },
+  { id: 'eur', label: 'Euro (EUR)', symbol: '\u20ac', flag: '🇪🇺', factor: 303 },
 ];
 
-// Transition risk ratings - illustrative, based on publicly available fossil fuel financing data
+// Transition risk ratings — from Topo Finance Financed Emissions Estimator Data spreadsheet
+// Banks with NA in spreadsheet default to medium for now
 const TRANSITION_RISK = {
-  'JPMorgan Chase':               { level: 'high',   note: "World's largest fossil fuel financier since the Paris Agreement" },
-  'Bank of America':              { level: 'medium', note: 'Net-zero commitment; ongoing fossil fuel financing' },
-  'Citigroup':                    { level: 'high',   note: 'Top-5 global fossil fuel financier' },
-  'Goldman Sachs':                { level: 'medium', note: 'Investment banking exposure to fossil fuel sectors' },
-  'Morgan Stanley':               { level: 'medium', note: 'Net-zero commitment; active transition finance' },
-  'Wells Fargo':                  { level: 'high',   note: 'Significant fossil fuel lending; limited public disclosure' },
-  'Bank of New York Mellon':      { level: 'low',    note: 'Primarily custody and asset servicing; lower direct lending exposure' },
-  'State Street':                 { level: 'low',    note: 'Primarily asset management; lower direct fossil fuel financing' },
-  'HSBC':                         { level: 'high',   note: 'Net-zero pledge under scrutiny; ongoing fossil fuel financing' },
-  'Barclays':                     { level: 'high',   note: "One of Europe's largest fossil fuel financiers" },
-  'Standard Chartered':           { level: 'medium', note: 'Asia-focused; moderate fossil fuel exposure' },
+  'Commonwealth Bank':            { level: 'medium', note: 'Rating pending detailed assessment' },
+  'ANZ Bank':                     { level: 'medium', note: 'Rating pending detailed assessment' },
+  'Royal Bank of Canada':         { level: 'high',   note: 'Top global fossil fuel financier; significant oil sands exposure' },
+  'TD Bank':                      { level: 'medium', note: 'North American fossil fuel exposure; net-zero pledge' },
+  'Danske Bank':                  { level: 'medium', note: 'Rating pending detailed assessment' },
   'BNP Paribas':                  { level: 'medium', note: 'Paris-aligned pledge; moderate fossil fuel exposure' },
-  'Soci\u00e9t\u00e9 G\u00e9n\u00e9rale': { level: 'medium', note: 'Active fossil fuel reduction commitments' },
-  'Cr\u00e9dit Agricole':         { level: 'medium', note: 'Green bank commitments; moderate fossil exposure' },
   'BPCE / Natixis':               { level: 'medium', note: 'Responsible investment focus; moderate transition risk' },
+  'Cr\u00e9dit Agricole':         { level: 'medium', note: 'Green bank commitments; moderate fossil exposure' },
+  'Soci\u00e9t\u00e9 G\u00e9n\u00e9rale': { level: 'medium', note: 'Active fossil fuel reduction commitments' },
   'Deutsche Bank':                { level: 'medium', note: 'Reducing coal exposure; ongoing fossil fuel financing' },
-  'UBS':                          { level: 'low',    note: 'Lower fossil fuel exposure relative to peers' },
   'UniCredit':                    { level: 'medium', note: 'Moderate transition risk; EU-focused loan book' },
-  'ING':                          { level: 'low',    note: 'Terra approach; below-average fossil fuel exposure' },
-  'Santander':                    { level: 'medium', note: 'Significant LatAm exposure including fossil fuels' },
   'Mitsubishi UFJ FG':            { level: 'medium', note: 'Reducing coal financing; moderate fossil exposure' },
   'Mizuho Financial Group':       { level: 'medium', note: 'Coal financing history; active reduction commitments' },
   'Sumitomo Mitsui FG':           { level: 'medium', note: 'Japanese energy transition exposure; moderate risk' },
-  'ICBC':                         { level: 'high',   note: 'Major Chinese state bank; significant coal financing' },
-  'China Construction Bank':      { level: 'high',   note: 'Major Chinese state bank; significant fossil fuel exposure' },
-  'Agricultural Bank of China':   { level: 'high',   note: 'Significant coal and fossil fuel lending in China' },
-  'Bank of China':                { level: 'high',   note: 'Major fossil fuel financier; limited decarbonisation commitments' },
-  'Royal Bank of Canada':         { level: 'high',   note: 'Top global fossil fuel financier; significant oil sands exposure' },
-  'TD Bank':                      { level: 'medium', note: 'North American fossil fuel exposure; net-zero pledge' },
+  'ING':                          { level: 'low',    note: 'Terra approach; below-average fossil fuel exposure' },
+  'BBVA':                         { level: 'medium', note: 'Rating pending detailed assessment' },
+  'Santander':                    { level: 'medium', note: 'Significant LatAm exposure including fossil fuels' },
+  'UBS':                          { level: 'low',    note: 'Lower fossil fuel exposure relative to peers' },
+  'Barclays':                     { level: 'high',   note: "One of Europe's largest fossil fuel financiers" },
+  'HSBC':                         { level: 'high',   note: 'Net-zero pledge under scrutiny; ongoing fossil fuel financing' },
+  'Lloyds':                       { level: 'medium', note: 'Rating pending detailed assessment' },
+  'Standard Chartered':           { level: 'medium', note: 'Asia-focused; moderate fossil fuel exposure' },
+  'Bank of America':              { level: 'medium', note: 'Net-zero commitment; ongoing fossil fuel financing' },
+  'Citigroup':                    { level: 'high',   note: 'Top-5 global fossil fuel financier' },
+  'Goldman Sachs':                { level: 'medium', note: 'Investment banking exposure to fossil fuel sectors' },
+  'JPMorgan Chase':               { level: 'high',   note: "World's largest fossil fuel financier since the Paris Agreement" },
+  'Wells Fargo':                  { level: 'high',   note: 'Significant fossil fuel lending; limited public disclosure' },
 };
 
 function freshData() {
