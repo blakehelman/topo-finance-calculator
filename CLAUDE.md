@@ -133,8 +133,8 @@ Commonwealth Bank, ANZ Bank, Royal Bank of Canada, TD Bank, Danske Bank, BNP Par
 ### Scope (optional)
 - **Title:** Your company CO2e emissions (in tons of CO2e) (Optional)
 - **Subtitle:** If your company has publicly reported their Carbon Emissions, you have the option to enter them here. This will be used to compare the estimated financed emissions to your total reported footprint.
-- **Tab 1:** Reported CO2e Emissions: Total scope 1, scope 2 and scope 3 aggregated
-- **Tab 2:** Reported CO2e Emissions: Enter each scope separately
+- **Tab 1:** Total Scope 1, 2, and 3 CO2e emissions
+- **Tab 2:** Enter each emissions scope separately
 
 ### Results CTA
 - **Title:** Go deeper with Topo Finance, at no cost
@@ -151,7 +151,7 @@ Commonwealth Bank, ANZ Bank, Royal Bank of Canada, TD Bank, Danske Bank, BNP Par
 - Step counter format: "Step X of Y" — Y updates dynamically
 - Results bar chart is CSS-only, no libraries, bars animate in on load
 - Print/PDF button triggers `window.print()` with a clean print stylesheet
-- Banks sorted alphabetically (not by country)
+- Banks grouped by continent (Europe, North America, Asia-Pacific), alphabetical within each
 
 ---
 
