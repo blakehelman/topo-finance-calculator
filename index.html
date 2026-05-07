@@ -1336,7 +1336,7 @@ function submitEmail() {
     data.email = val;
     const subject = encodeURIComponent('Financed Emissions Estimator — Interest');
     const body = encodeURIComponent('Hi Topo Finance,\n\nI used the Financed Emissions Estimator and would like to learn more about a deeper assessment of our financed emissions.\n\nMy email: ' + val + '\n\nThank you');
-    window.open('mailto:paul@topofinance.org?subject=' + subject + '&body=' + body, '_self');
+    window.open('mailto:contact@topofinance.org?subject=' + subject + '&body=' + body, '_self');
     document.getElementById('email-form').style.display = 'none';
     document.getElementById('email-done').style.display  = 'block';
   } else {
@@ -1415,7 +1415,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">Want more information?</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">Topo Finance works directly with corporate treasury teams to go beyond this tool: providing a more comprehensive financed emissions analysis, a deeper assessment of banking partners\u2019 climate-related financial risk, and practical guidance on engaging those partners. There is no cost for a consultation. Reach out at <a href="mailto:paul@topofinance.org" style="color:var(--navy);font-weight:600;">paul@topofinance.org</a>.</div>
+        <div class="welcome-info-body">Topo Finance works directly with corporate treasury teams to go beyond this tool: providing a more comprehensive financed emissions analysis, a deeper assessment of banking partners\u2019 climate-related financial risk, and practical guidance on engaging those partners. There is no cost for a consultation. Reach out at <a href="mailto:contact@topofinance.org" style="color:var(--navy);font-weight:600;">contact@topofinance.org</a>.</div>
       </div>
       <!-- TEMPORARILY REMOVED — replaced by footer disclaimer
       <div class="welcome-info-item">
