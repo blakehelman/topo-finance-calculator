@@ -1122,7 +1122,15 @@ const GSIB_FACTORS = {
   'JPMorgan Chase': 470.4, 'Wells Fargo': 363.1,
 };
 
-// Regional DSIB averages (tCO2e per $1M) - Topo Finance to replace with verified figures
+// Regional average emission factors (tCO2e per $1M deposited)
+// Calculated as simple average of per-bank GSIB_FACTORS within each region
+const BANK_REGIONS = [
+  { id: 'europe',        label: 'Europe',         flag: '\ud83c\uddea\ud83c\uddfa', factor: 211.0 },
+  { id: 'north-america', label: 'North America',  flag: '\ud83c\uddfa\ud83c\uddf8', factor: 453.8 },
+  { id: 'asia-pacific',  label: 'Asia-Pacific',   flag: '\ud83c\uddef\ud83c\uddf5', factor: 396.2 },
+];
+
+// DSIB_REGIONS preserved for potential future use
 const DSIB_REGIONS = [
   { id: 'north-america', label: 'North America',        flag: '🌎', factor: 115 },
   { id: 'europe',        label: 'Europe (incl. UK)',    flag: '🌍', factor: 90  },
@@ -1172,8 +1180,9 @@ const TRANSITION_RISK = {
 
 function freshData() {
   return {
-    selectedGsibs:       [],  // array of GSIB bank names
-    gsibDeposits:        {},  // { bankName: '$M string' }
+    regionDeposits:      {},  // { regionId: '$M string' }
+    selectedGsibs:       [],  // preserved for potential future use
+    gsibDeposits:        {},  // preserved for potential future use
     selectedDsibRegions: [],  // array of region IDs
     dsibDeposits:        {},  // { regionId: '$M string' }
     mmfDeposits:         {},  // { currencyId: '$M string' }
@@ -1196,12 +1205,13 @@ const OPTIONAL = new Set(['dsib', 'mmf', 'scope123']);
 
 function visible() {
   const s = [];
-  s.push({ id: 'welcome',     label: 'Welcome' });
-  s.push({ id: 'gsib-select', label: 'Select Your Banks' });
-  if (data.selectedGsibs.length > 0) {
-    s.push({ id: 'gsib-input', label: 'Bank Deposits' });
-  }
-  // TEMPORARILY REMOVED — client feedback: no regional bank page
+  s.push({ id: 'welcome',       label: 'Welcome' });
+  s.push({ id: 'region-input',  label: 'Bank Deposits' });
+  // TEMPORARILY REMOVED — replaced by region-input for legal reasons
+  // s.push({ id: 'gsib-select', label: 'Select Your Banks' });
+  // if (data.selectedGsibs.length > 0) {
+  //   s.push({ id: 'gsib-input', label: 'Bank Deposits' });
+  // }
   // s.push({ id: 'dsib',        label: 'Regional Banking' });
   s.push({ id: 'mmf',         label: 'Money Market Funds' });
   s.push({ id: 'review',      label: 'Review' });
@@ -1262,6 +1272,12 @@ function toggleDsibRegion(id) {
   render();
 }
 
+function setRegionDeposit(id, val) {
+  data.regionDeposits[id] = val;
+  const total = BANK_REGIONS.reduce((s, r) => s + (parseFloat(data.regionDeposits[r.id]) || 0), 0);
+  const el = document.getElementById('region-total');
+  if (el) el.textContent = '$' + total.toLocaleString() + 'M';
+}
 function setDsibDeposit(id, val)  { data.dsibDeposits[id]  = val; }
 function setMmfDeposit(id, val)   { data.mmfDeposits[id]   = val; }
 function setField(key, val)       { data[key] = val; }
@@ -1278,17 +1294,10 @@ function getScopeTotal() {
 function calcEmissions() {
   const cats = [];
 
-  data.selectedGsibs.forEach(name => {
-    const dep = parseFloat(data.gsibDeposits[name]) || 0;
-    const fac = GSIB_FACTORS[name] || 130;
-    if (dep > 0) cats.push({ label: name, val: dep * fac });
+  BANK_REGIONS.forEach(r => {
+    const dep = parseFloat(data.regionDeposits[r.id]) || 0;
+    if (dep > 0) cats.push({ label: r.label + ' Banking', val: dep * r.factor });
   });
-
-  // TEMPORARILY REMOVED — client feedback: no regional bank assessment
-  // DSIB_REGIONS.forEach(r => {
-  //   const dep = parseFloat(data.dsibDeposits[r.id]) || 0;
-  //   if (dep > 0) cats.push({ label: r.label + ' Regional Banks', val: dep * r.factor });
-  // });
 
   MMF_CURRENCIES.forEach(c => {
     const dep = parseFloat(data.mmfDeposits[c.id]) || 0;
@@ -1325,6 +1334,9 @@ function submitEmail() {
   const val = input.value.trim();
   if (val && val.includes('@') && val.includes('.')) {
     data.email = val;
+    const subject = encodeURIComponent('Financed Emissions Estimator — Interest');
+    const body = encodeURIComponent('Hi Topo Finance,\n\nI used the Financed Emissions Estimator and would like to learn more about a deeper assessment of our financed emissions.\n\nMy email: ' + val + '\n\nThank you');
+    window.open('mailto:paul@topofinance.org?subject=' + subject + '&body=' + body, '_self');
     document.getElementById('email-form').style.display = 'none';
     document.getElementById('email-done').style.display  = 'block';
   } else {
@@ -1403,7 +1415,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">Want more information?</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">Topo Finance works directly with corporate treasury teams to go beyond this tool: providing a more comprehensive financed emissions analysis, a deeper assessment of banking partners\u2019 climate-related financial risk, and practical guidance on engaging those partners. There is no cost for a consultation. Reach out at contact@topofinance.org.</div>
+        <div class="welcome-info-body">Topo Finance works directly with corporate treasury teams to go beyond this tool: providing a more comprehensive financed emissions analysis, a deeper assessment of banking partners\u2019 climate-related financial risk, and practical guidance on engaging those partners. There is no cost for a consultation. Reach out at <a href="mailto:paul@topofinance.org" style="color:var(--navy);font-weight:600;">paul@topofinance.org</a>.</div>
       </div>
       <!-- TEMPORARILY REMOVED — replaced by footer disclaimer
       <div class="welcome-info-item">
@@ -1419,6 +1431,31 @@ function renderWelcome() {
     </div>
     </div>
     <p style="text-align:center;font-size:13px;color:#888;margin:32px 0 48px;padding:0 24px;line-height:1.5;">Topo Finance is not a financial advisor and is not regulated by financial authorities. Nothing in this tool should be treated as financial advice. <a href="#" onclick="openDisclaimer();return false;" style="color:var(--navy);font-weight:600;">Disclaimer</a></p>
+  </div>`;
+}
+
+function renderRegionInput() {
+  const total = BANK_REGIONS.reduce((s, r) => s + (parseFloat(data.regionDeposits[r.id]) || 0), 0);
+  const rows = BANK_REGIONS.map(r => `
+    <div class="bank-row">
+      <span class="bank-name">${r.flag}\u2002${r.label}</span>
+      <div class="bank-field">
+        <input type="number" inputmode="decimal" min="0" placeholder="0"
+          value="${data.regionDeposits[r.id] || ''}"
+          oninput="setRegionDeposit('${r.id}', this.value)">
+        <span class="unit">$M</span>
+      </div>
+    </div>`).join('');
+  return `
+  <div class="step-wrap">
+    <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
+    <h2 class="step-title">How much does your company hold in bank deposits?</h2>
+    <p class="step-subtitle">Enter the approximate amount held at banks in each region, in USD millions. Approximate figures work. If you are unsure of the exact split, your best estimate is fine.</p>
+    <div class="bank-grid">${rows}</div>
+    <div class="total-preview">
+      <span>Total bank deposits</span>
+      <strong id="region-total">$${total > 0 ? total.toLocaleString() : '0'}M</strong>
+    </div>
   </div>`;
 }
 
@@ -1578,13 +1615,13 @@ function renderMmf() {
 }
 
 function renderReview() {
-  const gsibRows = data.selectedGsibs.length > 0
-    ? data.selectedGsibs.map(name => {
-        const dep = parseFloat(data.gsibDeposits[name]) || 0;
-        const bank = GSIBS.find(b => b.name === name);
-        return `<div class="review-row"><span class="review-label">${bank ? bank.flag + '\u2002' : ''}${name}</span><span class="review-value">${dep > 0 ? '$' + dep.toLocaleString() + 'M' : '-'}</span></div>`;
+  const regionHasEntries = BANK_REGIONS.some(r => parseFloat(data.regionDeposits[r.id]) > 0);
+  const regionRows = regionHasEntries
+    ? BANK_REGIONS.filter(r => parseFloat(data.regionDeposits[r.id]) > 0).map(r => {
+        const dep = parseFloat(data.regionDeposits[r.id]) || 0;
+        return `<div class="review-row"><span class="review-label">${r.flag}\u2002${r.label}</span><span class="review-value">$${dep.toLocaleString()}M</span></div>`;
       }).join('')
-    : '<div class="review-empty">No Global Banks selected</div>';
+    : '<div class="review-empty">No bank deposits entered</div>';
 
   // TEMPORARILY REMOVED — client feedback: no regional bank assessment
   // const dsibHasEntries = DSIB_REGIONS.some(r => parseFloat(data.dsibDeposits[r.id]) > 0);
@@ -1610,9 +1647,9 @@ function renderReview() {
 
     <div class="review-block">
       <div class="review-block-header">
-        <span class="review-block-title">Global Banks</span>
+        <span class="review-block-title">Bank Deposits</span>
       </div>
-      ${gsibRows}
+      ${regionRows}
     </div>
 
     ${ /* TEMPORARILY REMOVED — client feedback: no regional bank assessment
@@ -1712,9 +1749,7 @@ function renderResults() {
 
   // ─── Intensity ───
   const totalExp =
-    data.selectedGsibs.reduce((s, n) => s + (parseFloat(data.gsibDeposits[n]) || 0), 0) +
-    // TEMPORARILY REMOVED — client feedback: no regional bank assessment
-    // DSIB_REGIONS.reduce((s, r) => s + (parseFloat(data.dsibDeposits[r.id]) || 0), 0) +
+    BANK_REGIONS.reduce((s, r) => s + (parseFloat(data.regionDeposits[r.id]) || 0), 0) +
     MMF_CURRENCIES.reduce((s, c) => s + (parseFloat(data.mmfDeposits[c.id]) || 0), 0);
   const intensity = (totalExp > 0 && total > 0) ? Math.round(total / totalExp) : null;
 
@@ -1725,11 +1760,11 @@ function renderResults() {
   const concLevel = topPct >= 60 ? 'high' : topPct >= 35 ? 'medium' : 'low';
   const concLabel = topPct >= 60 ? 'HIGH' : topPct >= 35 ? 'MEDIUM' : 'LOW';
 
-  const heldBanks = data.selectedGsibs.filter(n => (parseFloat(data.gsibDeposits[n]) || 0) > 0);
-
-  const highRiskCount = heldBanks.filter(b => TRANSITION_RISK[b] && TRANSITION_RISK[b].level === 'high').length;
-  const transLevel = highRiskCount > 0 ? 'high' : heldBanks.some(b => TRANSITION_RISK[b] && TRANSITION_RISK[b].level === 'medium') ? 'medium' : 'low';
-  const transLabel = transLevel === 'high' ? 'HIGH' : transLevel === 'medium' ? 'MEDIUM' : 'LOW';
+  // Per-bank transition risk not applicable in regional mode
+  const heldBanks = [];
+  const highRiskCount = 0;
+  const transLevel = 'medium';
+  const transLabel = 'MEDIUM';
 
   // ─── Hero ───
   const heroContent = total > 0 ? `
@@ -1819,8 +1854,8 @@ function renderResults() {
     </div>
     <div class="risk-tile risk-tile-${transLevel}">
       <div class="risk-tile-label">Transition Risk</div>
-      <div class="risk-tile-level">${heldBanks.length > 0 ? transLabel : '-'}</div>
-      <div class="risk-tile-sub">${highRiskCount > 0 ? `${highRiskCount} high-risk bank${highRiskCount > 1 ? 's' : ''} identified` : heldBanks.length > 0 ? 'No high-risk banks held' : 'Enter named banks to assess'}</div>
+      <div class="risk-tile-level">VARIES</div>
+      <div class="risk-tile-sub">Depends on specific banking relationships. Contact Topo Finance for assessment.</div>
     </div>
     <div class="risk-tile risk-tile-monitor">
       <div class="risk-tile-label">Regulatory Exposure</div>
@@ -1924,12 +1959,12 @@ function renderResults() {
     <div class="email-cta-card">
       <div class="email-cta-title">Go deeper with Topo Finance, at no cost</div>
       <div class="email-cta-sub">
-        Topo Finance is a nonprofit that works directly with corporate treasury teams to help them measure and manage their climate-related financial risk. If you would like a deeper assessment of your financed emissions, a more comprehensive analysis of your banking relationships, or practical guidance on next steps, please reach out. There is no cost for this support.
+        Topo Finance is a nonprofit that works directly with corporate treasury teams to help them measure and manage their climate-related financial risk. If you would like a deeper assessment of your financed emissions, a more comprehensive analysis of your banking relationships, or practical guidance on next steps, please reach out. There is no cost for this support. Learn more at <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">topofinance.org</a>.
       </div>
       <div id="email-form">
         <div class="email-row">
           <input type="email" class="email-field" id="email-input"
-            placeholder="you@company.com" value="${data.email}">
+            placeholder="you@company.com" value="${data.email}" autocomplete="off" name="nofill-${Date.now()}">
           <button class="btn btn-accent" onclick="submitEmail()">Get in Touch →</button>
         </div>
       </div>
@@ -2012,10 +2047,11 @@ function render() {
   // Content
   let html = '';
   switch (stepId) {
-    case 'welcome':     html = renderWelcome();     break;
-    case 'gsib-select': html = renderGsibSelect();  break;
-    case 'gsib-input':  html = renderGsibInput();   break;
-    // TEMPORARILY REMOVED — client feedback: no regional bank assessment
+    case 'welcome':      html = renderWelcome();      break;
+    case 'region-input': html = renderRegionInput();  break;
+    // Preserved for potential future use:
+    // case 'gsib-select': html = renderGsibSelect();  break;
+    // case 'gsib-input':  html = renderGsibInput();   break;
     // case 'dsib':        html = renderDsib();         break;
     case 'mmf':         html = renderMmf();          break;
     case 'review':      html = renderReview();       break;
