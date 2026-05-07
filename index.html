@@ -1334,11 +1334,24 @@ function submitEmail() {
   const val = input.value.trim();
   if (val && val.includes('@') && val.includes('.')) {
     data.email = val;
-    const subject = encodeURIComponent('Financed Emissions Estimator — Interest');
-    const body = encodeURIComponent('Hi Topo Finance,\n\nI used the Financed Emissions Estimator and would like to learn more about a deeper assessment of our financed emissions.\n\nMy email: ' + val + '\n\nThank you');
-    window.open('mailto:contact@topofinance.org?subject=' + subject + '&body=' + body, '_self');
-    document.getElementById('email-form').style.display = 'none';
-    document.getElementById('email-done').style.display  = 'block';
+    fetch('https://formspree.io/f/mrejaqdy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: val,
+        _subject: 'Financed Emissions Estimator — New Interest',
+        message: 'A user of the Financed Emissions Estimator would like to learn more about a deeper assessment of their financed emissions.'
+      })
+    }).then(res => {
+      if (res.ok) {
+        document.getElementById('email-form').style.display = 'none';
+        document.getElementById('email-done').style.display  = 'block';
+      } else {
+        alert('Something went wrong. Please try again or email contact@topofinance.org directly.');
+      }
+    }).catch(() => {
+      alert('Something went wrong. Please try again or email contact@topofinance.org directly.');
+    });
   } else {
     input.style.borderColor = '#ef4444';
     input.focus();
