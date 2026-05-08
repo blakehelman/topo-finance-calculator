@@ -1031,8 +1031,12 @@
       #main { padding: 0; }
       .step-wrap { max-width: 100%; padding: 20px; }
       body { background: white; }
-      .results-hero { background: #1a2a4a !important; -webkit-print-color-adjust: exact; }
-      .chart-card, .method-box { break-inside: avoid; }
+      .results-hero { background: #1a2a4a !important; -webkit-print-color-adjust: exact; margin-bottom: 0 !important; }
+      .chart-card { margin-top: 0 !important; break-inside: avoid; }
+      .method-box { break-inside: avoid; }
+      .insight-grid { margin-bottom: 8px !important; }
+      .risk-row { margin-bottom: 8px !important; }
+      .equiv-strip { margin-bottom: 8px !important; }
     }
   </style>
 </head>
@@ -1141,9 +1145,9 @@ const DSIB_REGIONS = [
 
 // MMF factors by currency (tCO2e per $1M) - Topo Finance to replace with verified figures
 const MMF_CURRENCIES = [
-  { id: 'usd', label: 'US Dollar (USD)', symbol: '$', flag: '🇺🇸', factor: 311 },
-  { id: 'gbp', label: 'British Pound (GBP)', symbol: '\u00a3', flag: '🇬🇧', factor: 313 },
   { id: 'eur', label: 'Euro (EUR)', symbol: '\u20ac', flag: '🇪🇺', factor: 303 },
+  { id: 'gbp', label: 'British Pound (GBP)', symbol: '\u00a3', flag: '🇬🇧', factor: 313 },
+  { id: 'usd', label: 'US Dollar (USD)', symbol: '$', flag: '🇺🇸', factor: 311 },
 ];
 
 // Transition risk ratings — from Topo Finance Financed Emissions Estimator Data spreadsheet
@@ -1329,33 +1333,38 @@ function toggleInfo(id) {
 // EMAIL
 // ══════════════════════════════════════════
 function submitEmail() {
-  const input = document.getElementById('email-input');
-  if (!input) return;
-  const val = input.value.trim();
-  if (val && val.includes('@') && val.includes('.')) {
-    data.email = val;
-    fetch('https://formspree.io/f/mrejaqdy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: val,
-        _subject: 'Financed Emissions Estimator — New Interest',
-        message: 'A user of the Financed Emissions Estimator would like to learn more about a deeper assessment of their financed emissions.'
-      })
-    }).then(res => {
-      if (res.ok) {
-        document.getElementById('email-form').style.display = 'none';
-        document.getElementById('email-done').style.display  = 'block';
-      } else {
-        alert('Something went wrong. Please try again or email paul@topofinance.org directly.');
-      }
-    }).catch(() => {
-      alert('Something went wrong. Please try again or email paul@topofinance.org directly.');
-    });
-  } else {
-    input.style.borderColor = '#ef4444';
-    input.focus();
+  const email = (document.getElementById('email-input')?.value || '').trim();
+  const name = (document.getElementById('contact-name')?.value || '').trim();
+  const position = (document.getElementById('contact-position')?.value || '').trim();
+  const org = (document.getElementById('contact-org')?.value || '').trim();
+  const message = (document.getElementById('contact-message')?.value || '').trim();
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    const el = document.getElementById('email-input');
+    if (el) { el.style.borderColor = '#ef4444'; el.focus(); }
+    return;
   }
+  data.email = email;
+  fetch('https://formspree.io/f/mrejaqdy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      name: name || '(not provided)',
+      position: position || '(not provided)',
+      organisation: org || '(not provided)',
+      message: message || '(no message)',
+      _subject: 'Financed Emissions Estimator \u2014 New Interest from ' + (org || email)
+    })
+  }).then(res => {
+    if (res.ok) {
+      document.getElementById('email-form').style.display = 'none';
+      document.getElementById('email-done').style.display  = 'block';
+    } else {
+      alert('Something went wrong. Please try again or email paul@topofinance.org directly.');
+    }
+  }).catch(() => {
+    alert('Something went wrong. Please try again or email paul@topofinance.org directly.');
+  });
 }
 
 // ══════════════════════════════════════════
@@ -1412,7 +1421,7 @@ function renderWelcome() {
           <div class="welcome-info-content"><div class="welcome-info-label">What it is not</div></div>
           <span class="welcome-info-arrow">\u203a</span>
         </div>
-        <div class="welcome-info-body">The figures this tool produces are indicative estimates. They are a useful starting point, not a verified disclosure. Wherever possible, emission factors are drawn from banks\u2019 own public disclosures. Where that data is not available, we apply regional averages. Your actual figures will vary depending on your specific banking relationships and the composition of your holdings.<br><br>Results are not suitable for regulatory filing, third-party audit, or formal emissions inventory. If you need that level of rigour, the Topo Finance team can provide it.<br><br>This tool assumes standard banking and fund products. If you hold ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than shown.</div>
+        <div class="welcome-info-body">The figures this tool produces are indicative estimates. They are a useful starting point, not a verified disclosure. Wherever possible, emission factors are drawn from banks\u2019 own public disclosures. Where that data is not available, we apply regional and sectoral averages. Your actual figures will vary depending on your specific banking relationships and the composition of your holdings.<br><br>Results are not suitable for regulatory filing, third-party audit, or formal emissions inventory. If you need that level of rigour, the Topo Finance team can provide it.<br><br>This tool assumes standard banking and fund products. If you hold ESG-designated deposits or specialist sustainable funds, your actual emissions may be lower than shown.</div>
       </div>
       <div class="welcome-info-item">
         <div class="welcome-info-trigger" onclick="toggleInfoItem(this.parentElement)">
@@ -1462,7 +1471,7 @@ function renderRegionInput() {
   return `
   <div class="step-wrap">
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
-    <h2 class="step-title">How much does your company hold in bank deposits?</h2>
+    <h2 class="step-title">Cash Deposit Holdings</h2>
     <p class="step-subtitle">Enter the approximate amount held at banks in each region, in USD millions. Approximate figures work. If you are unsure of the exact split, your best estimate is fine.</p>
     <div class="bank-grid">${rows}</div>
     <div class="total-preview">
@@ -1557,7 +1566,7 @@ function renderGsibInput() {
         <div class="info-icon">+</div>
       </button>
       <div class="info-body" id="info-body-gsib-factor">
-        <p>Each bank's emission factor is based on its own publicly disclosed financed emissions data, so the figures here are bank-specific rather than averaged. Factors range from approximately 90 to 165 tCO\u2082e per $1M deposited depending on the institution.</p>
+        <p>Each bank's emission factor is based on its own publicly disclosed financed emissions data, so the figures here are bank-specific rather than averaged. Factors range from approximately 90 to 165 tCO2e per $1M deposited depending on the institution.</p>
         <p style="margin-top:10px;">Topo Finance uses verified, proprietary data for client analysis, more granular and more current than the illustrative figures used here. <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">Get in touch.</a></p>
       </div>
     </div>
@@ -1655,8 +1664,8 @@ function renderReview() {
 
   return `
   <div class="step-wrap">
-    <h2 class="step-title">Review of your information</h2>
-    <p class="step-subtitle">Check everything looks right before we calculate your results. Use the Back button to make changes.</p>
+    <h2 class="step-title">Information Review</h2>
+    <p class="step-subtitle">Please review the information below to ensure it is correct before we calculate your results. Use the Back button to make any changes.</p>
 
     <div class="review-block">
       <div class="review-block-header">
@@ -1701,12 +1710,12 @@ function renderScope123() {
     <div class="step-eyebrow">Step ${stepNum()} of ${workingTotal()}</div>
     <h2 class="step-title">Company Reported Emissions <span class="optional-badge">Optional</span></h2>
     <p class="step-subtitle">
-      If your company has publicly reported its carbon emissions, input them here. You can enter your total combined emissions or break them down by Scope 1, 2 and 3 separately. You can generally find these emissions report breakdowns in your company\u2019s annual report or sustainability disclosure.
+      If your company has publicly reported its carbon emissions, please enter them here. You may enter your total combined emissions or break them down by Scope 1, 2 and 3 separately. These figures can typically be found in your company\u2019s annual report or sustainability disclosure.
     </p>
 
     <div class="scope-tabs">
-      <div class="scope-tab${!isSplit ? ' active' : ''}" onclick="data.scopeMode='total'; setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">Reported CO2e Emissions: Total scope 1, scope 2 and scope 3 aggregated</div>
-      <div class="scope-tab${isSplit ? ' active' : ''}" onclick="data.scopeMode='split'; setField('scopeTotal',''); render();">Reported CO2e Emissions: Enter each scope separately</div>
+      <div class="scope-tab${!isSplit ? ' active' : ''}" onclick="data.scopeMode='total'; setField('scope1',''); setField('scope2',''); setField('scope3',''); render();">Reported CO2e Emissions: Enter Total Scope 1, 2 and 3</div>
+      <div class="scope-tab${isSplit ? ' active' : ''}" onclick="data.scopeMode='split'; setField('scopeTotal',''); render();">Reported CO2e Emissions: Enter Each Scope Separately</div>
     </div>
 
     ${!isSplit ? `
@@ -1715,7 +1724,7 @@ function renderScope123() {
         <input type="number" inputmode="decimal" min="0" placeholder="0"
           value="${data.scopeTotal || ''}"
           oninput="setField('scopeTotal', this.value)">
-        <span class="big-input-unit">tCO\u2082e</span>
+        <span class="big-input-unit">tCO2e</span>
       </div>
     </div>` : `
     <div class="bank-grid" style="gap:14px;">
@@ -1729,7 +1738,7 @@ function renderScope123() {
           <input type="number" inputmode="decimal" min="0" placeholder="0"
             value="${data[s.key] || ''}"
             oninput="setField('${s.key}', this.value)">
-          <span class="unit">tCO\u2082e</span>
+          <span class="unit">tCO2e</span>
         </div>
       </div>`).join('')}
     </div>`}
@@ -1783,12 +1792,11 @@ function renderResults() {
   const heroContent = total > 0 ? `
     <div class="results-tag">Estimated Financed Emissions</div>
     <div class="results-number">${fmtNum(total)}</div>
-    <div class="results-unit">tCO\u2082e / year (indicative estimate)</div>
+    <div class="results-unit">tCO2e / year</div>
     ${pct ? `
     <div class="results-scope-block">
-      <div class="results-scope-label">of your reported Scope 1, 2 &amp; 3 emissions</div>
-      <div class="results-scope-pct">≈ ${pct}%</div>
-      <div class="results-scope-sub">Your financed emissions represent ${pct}% of your total reported emissions</div>
+      <div class="results-scope-pct">\u2248 ${pct}%</div>
+      <div class="results-scope-sub">Your financed emissions represent ${pct}% of your total reported emissions (Scope 1, 2 and 3).</div>
     </div>` : ''}
   ` : `
     <div class="results-tag">Estimated Financed Emissions</div>
@@ -1820,8 +1828,8 @@ function renderResults() {
   const topCat = cats[0];
   const topEmitterCard = topCat ? `
     <div class="insight-card">
-      <div class="insight-label">Highest-Impact Relationship</div>
-      <div class="insight-value">${fmtNum(topCat.val)} tCO₂e</div>
+      <div class="insight-label">Highest-Impact Holding</div>
+      <div class="insight-value">${fmtNum(topCat.val)} tCO2e</div>
       <div class="insight-sub">${topCat.label}, your single largest source of financed emissions</div>
     </div>` : '';
 
@@ -1829,16 +1837,16 @@ function renderResults() {
   if (showSplit) {
     rightCard = `
     <div class="insight-card">
-      <div class="insight-label">Banks vs Money Market Funds</div>
-      <div class="insight-value">${bankPct}% Banking · ${mmfPct}% MMF</div>
+      <div class="insight-label">Deposits vs MMFs</div>
+      <div class="insight-value">${bankPct}% Deposits \u00b7 ${mmfPct}% MMFs</div>
       <div class="split-bar-wrap">
         <div class="split-bar-track">
           <div class="split-bar-eu" data-target="${bankPct}"></div>
           <div class="split-bar-us" data-target="${mmfPct}"></div>
         </div>
         <div class="split-legend">
-          <div class="split-legend-item"><div class="split-dot" style="background:var(--navy)"></div>${fmtNum(bankTotal)} tCO₂e from banking</div>
-          <div class="split-legend-item"><div class="split-dot" style="background:var(--accent)"></div>${fmtNum(mmfTotal)} tCO₂e from MMFs</div>
+          <div class="split-legend-item"><div class="split-dot" style="background:var(--navy)"></div>${fmtNum(bankTotal)} tCO2e from deposits</div>
+          <div class="split-legend-item"><div class="split-dot" style="background:var(--accent)"></div>${fmtNum(mmfTotal)} tCO2e from MMFs</div>
         </div>
       </div>
     </div>`;
@@ -1846,7 +1854,7 @@ function renderResults() {
     rightCard = `
     <div class="insight-card">
       <div class="insight-label">Emissions Intensity</div>
-      <div class="insight-value">${intensity} tCO₂e / $1M</div>
+      <div class="insight-value">${intensity} tCO2e / $1M</div>
       <div class="insight-sub">Average emission factor across your $${fmtNum(totalExp)}M total exposure</div>
     </div>`;
   }
@@ -1913,7 +1921,7 @@ function renderResults() {
       <div class="bar-item">
         <div class="bar-meta">
           <span class="bar-label">${c.label}</span>
-          <span class="bar-value">${fmtNum(c.val)} tCO₂e</span>
+          <span class="bar-value">${fmtNum(c.val)} tCO2e</span>
         </div>
         <div class="bar-track">
           <div class="bar-fill ${i===0?'hi':''}" style="width:${(c.val/maxV*100).toFixed(1)}%"></div>
@@ -1925,10 +1933,10 @@ function renderResults() {
   const whatIfHtml = whatIfSaving > 500 ? `
   <div class="whatif-card">
     <div class="whatif-label">Scenario: European Banking Switch</div>
-    <div class="whatif-value">−${fmtNum(whatIfSaving)} tCO₂e</div>
+    <div class="whatif-value">−${fmtNum(whatIfSaving)} tCO2e</div>
     <div class="whatif-sub">
       If your US Global Bank deposits were held at European-equivalent banks, your estimated financed emissions
-      could be approximately <strong>${fmtNum(whatIfSaving)} tCO₂e lower</strong>, a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
+      could be approximately <strong>${fmtNum(whatIfSaving)} tCO2e lower</strong>, a reduction of ${total > 0 ? ((whatIfSaving/total)*100).toFixed(0) : 0}% on your total.
       US Global Banks carry a 23% higher emission factor per dollar than European Global Banks.
     </div>
   </div>` : '';
@@ -1941,12 +1949,12 @@ function renderResults() {
       <div>
         <div class="scope-compare-sublabel">Reported Scope 1, 2 &amp; 3</div>
         <div class="scope-compare-number" style="color:var(--gray-500)">${fmtNum(scope)}</div>
-        <div class="scope-compare-unit">tCO₂e</div>
+        <div class="scope-compare-unit">tCO2e</div>
       </div>
       <div>
         <div class="scope-compare-sublabel">Financed Emissions</div>
         <div class="scope-compare-number" style="color:var(--navy)">${fmtNum(total)}</div>
-        <div class="scope-compare-unit">tCO₂e · ${pct}% of total</div>
+        <div class="scope-compare-unit">tCO2e · ${pct}% of total</div>
       </div>
     </div>
     <div class="scope-compare-note">
@@ -1975,11 +1983,18 @@ function renderResults() {
         Topo Finance is a nonprofit that works directly with corporate treasury teams to help them measure and manage their climate-related financial risk. If you would like a deeper assessment of your financed emissions, a more comprehensive analysis of your banking relationships, or practical guidance on next steps, please reach out. There is no cost for this support. Learn more at <a href="https://topofinance.org" target="_blank" style="color:var(--navy);font-weight:600;">topofinance.org</a>.
       </div>
       <div id="email-form">
-        <div class="email-row">
-          <input type="email" class="email-field" id="email-input"
-            placeholder="you@company.com" value="${data.email}" autocomplete="off" name="nofill-${Date.now()}">
-          <button class="btn btn-accent" onclick="submitEmail()">Get in Touch →</button>
+        <div style="display:grid; gap:10px; margin-bottom:12px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <input type="text" class="email-field" id="contact-name" placeholder="Name" autocomplete="off">
+            <input type="text" class="email-field" id="contact-position" placeholder="Position" autocomplete="off">
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <input type="text" class="email-field" id="contact-org" placeholder="Organisation" autocomplete="off">
+            <input type="email" class="email-field" id="email-input" placeholder="Email" autocomplete="off" name="nofill-${Date.now()}">
+          </div>
+          <textarea class="email-field" id="contact-message" placeholder="Message (optional)" rows="3" style="resize:vertical; font-family:inherit; padding:12px 14px;"></textarea>
         </div>
+        <button class="btn btn-accent" onclick="submitEmail()" style="width:100%;">Get in Touch \u2192</button>
       </div>
       <div id="email-done" class="email-success-note" style="display:none">
         Thanks! The Topo Finance team will reach out shortly.
